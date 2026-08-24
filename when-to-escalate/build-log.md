@@ -376,3 +376,170 @@ every other number in the project does. Three corrections came out of that
 discipline — 11 cases at the least-negative value rather than 8, 6.25% rather than
 ~6.3%, and the conditional-impossibility finding in item 5, which no ad-hoc probe
 had surfaced.
+
+### Gate 2a — logprob elicitation, built offline (2026-08-24)
+
+Gate 2 asks whether reading the token logprobs behind `needs_human` recovers a
+better-calibrated belief than the rounded decimal the model writes. 2a is
+everything that does not touch the network: the code, the tests, the
+pre-registration, and proof that the reproduction path works. **No API call has
+been made.** `data/logprob_cache.json` does not exist.
+
+**1. Two elicitors, one criterion.** `src/elicit.py` implements
+`digit_expectation` (v1's `SYSTEM_PROMPT` sent byte-identical, scoring the
+expectation over numeric alternatives at the value token) and `yes_no_probability`
+(`P(Yes) / (P(Yes) + P(No))` at the first content token). Both at
+`temperature=0`, `top_logprobs=20` — the API ceiling, asserted in
+`test_top_logprobs_is_within_the_api_limit`.
+
+The two are only comparable if they ask about the same event, so
+`NEEDS_HUMAN_CRITERION` is extracted and asserted to appear verbatim inside both
+v1's prompt and elicitor B's (`test_needs_human_criterion_is_verbatim_from_v1`).
+A reworded v1 prompt fails that test rather than silently changing what B means.
+
+The digit scorer has three tokenisation paths, because the tokeniser does not
+promise which one it will use: `0` `.` `2` (weight the fraction digit), `0.85` as
+one token (weight whole values), and a bare integer (alternatives are 0 and 1).
+All three are tested with hand-computed expectations. Out-of-range alternatives
+are dropped rather than clamped — a probability cannot be 5.0 — and duplicate
+surface forms are summed rather than overwritten, since a dict assignment would
+silently lose probability mass and show up as a wrong score rather than an error.
+
+**2. One real bug found by writing the tests.** `score_yes_no` read `reads[0]`
+blindly. With `max_tokens=3`, a model that emits a leading space would have made
+an entirely ordinary response raise. It now scans to the first *content* token and
+reports `leading_whitespace_tokens`. Found by
+`test_yes_no_ignores_leading_whitespace_token`, which was written because the
+whitespace case was plausible, not because anything had failed.
+
+**3. The cache stores payloads, not scores.** An extraction bug must be fixable
+offline, which is only possible if the token reads survive. `cache_entry` is
+asserted to contain no `score` field anywhere in its JSON
+(`test_cache_entry_stores_the_payload_not_the_score`), and `--rescore` recomputes
+every number from the stored payloads with zero calls.
+
+Three integrity guards, each verified by tampering with a copy of the cache and
+confirming the specific refusal:
+
+| tampered field | refusal |
+| --- | --- |
+| `observation_hash` | "does not match ... recomputed from cases.json. The message or context changed after the call" |
+| `prompt_hash` | "does not match the current prompt. Scores across cases are only comparable if every case was asked the same question" |
+| `schema_version` | "99 is not the expected 1 ... silently mixing schema versions is how a cache stops meaning one thing" |
+
+`elicit.observation_hash` is the same function as v1's `belief.input_hash`
+(`test_observation_hash_matches_v1s`), so the two caches can be joined per case.
+
+**4. A contamination bug, found and fixed.** `--rescore` pointed at the dry-run
+cache wrote a fully **reportable** `results/logprob-elicitation.json` out of stub
+payloads, because `reportable` was keyed on the `--dry-run` flag rather than on
+where the data came from. Provenance now travels with the payload
+(`STUB_MARKER = "offline_stub"`), `reportable` is derived from the absence of that
+marker across all rows, and the output stem is keyed on `reportable`. Re-verified:
+`--rescore` against the stub cache emits "**NOT REPORTABLE.** 200 of 200 rows come
+from the offline stub", writes only `_DRY` files, and creates no
+`results/logprob-elicitation.json`. The contaminated file was deleted.
+
+**5. Determinism verified.** Two consecutive `--dry-run` invocations produced a
+byte-identical cache; run 2 made **0 calls against 200 cache hits**. The two
+reports differ in exactly three fields — `generated_at`, `calls` 200→0,
+`cache_hits` 0→200 — and with those stripped the remaining 135,673 bytes of
+analysis are byte-identical. That is the property that lets the reproduction check
+be a diff.
+
+Four refusal paths verified: `--cache-only` on a missing cache refuses (exit 2,
+"not in the cache, and this mode makes no calls"); `--dry-run --cache-only` is
+rejected outright ("one invents payloads, the others refuse to"); a live run with
+no key refuses through v1's existing config error; and the contamination case
+above.
+
+**6. The pre-registration is executable, not just written.**
+`decisions/v2-gate2-preregistration.md` fixes the elicitor rule, the map rule, the
+collapse diagnostic and the metric split — but the rules themselves are functions
+in `src/calibrate.py` with their thresholds as module constants, so the rule is run
+rather than remembered. `test_preregistration_matches_the_constants_it_reports`
+fails if the document and the code drift apart. All 18 test names cited in the
+document were checked to exist.
+
+Two choices worth stating here because they were made before the data existed.
+The collapse threshold of 9 distinct values is set against v1's grid, which has 8
+— an elicitor producing 8 or fewer has recovered nothing it did not already have.
+And R7's preference for an order-preserving map is enforced as a 0.02-bit margin
+rather than a prohibition: isotonic regression merges distinct scores by
+construction, the VoI half of this project reads the ordering of beliefs and not
+only their level, so a merge has a cost cross-entropy does not price.
+
+**7. Platt scaling can fail, and the failure is reported rather than absorbed.**
+The dry run surfaced this: perfectly separable scores make the logistic MLE
+diverge, and no finite `(a, b)` exists. The first error message blamed a singular
+Hessian, which was the wrong cause. There is now a `SeparableError` raised from an
+explicit separation check with a correct message; the driver catches it, drops
+Platt from the candidate set, and records the exclusion in `maps_excluded`. No L2
+prior was added — a prior is a knob, and a knob chosen after seeing the fit fail is
+exactly what this gate pre-registers away. The stub's scores were also made to
+overlap the labels, so a dry run exercises the ordinary path rather than the
+degenerate one.
+
+**8. The `.gitignore` conflict is fixed** (pulled forward from Gate 8, since the
+reliability diagram is Gate 2's first figure). Line 32's negation
+`!when-to-escalate/paper/figures/*.pdf` was being defeated by a later line
+re-ignoring that exact figure — last match wins — so `paper/main.tex` could not
+compile from a fresh clone. Verified with `git status --porcelain --ignored=matching`,
+not `git check-ignore`: check-ignore exits 0 on *any* match including a negation,
+so it reports the opposite of the truth here. A PDF in `paper/figures/` is now
+addable (`??`); root-level `figures/` scratch and all three DRY artifacts remain
+ignored (`!!`).
+
+**9. The cache is now written incrementally, because 2b is the one irreversible
+step in this gate.** Found while writing the handover: the driver saved the cache
+once, after the loop. A rate-limit error or a scoring bug at call 190 would have
+discarded 189 calls that were already paid for, and the only way back to the
+failure point would have been to pay for all of them again. The loop is now
+wrapped in `try/finally` with a `flush()` that persists every ten calls
+(`CHECKPOINT_EVERY = 10`) and once more on the way out, whatever the way out is —
+success, an API error, or a Ctrl-C. `save_cache` writes to a temporary file and
+renames, so an interrupt during a flush leaves the previous cache intact rather
+than a truncated one.
+
+`flush()` is guarded on `calls > saved_at`, which matters more than it looks: the
+refusal paths raise before any call, so without that guard a refusal would leave
+an *empty* `data/logprob_cache.json` behind, and a later `--cache-only` run would
+serve it as a legitimately empty cache. Verified that all four refusals still
+create no cache file at all.
+
+Checkpointing verified by running 24 stub calls and watching the writes land at
+10, 20 and 24. The `finally` path verified by deleting a required field from the
+fourth case, so the loop raises after that case's first call: the run crashed with
+`KeyError: 'split'` and the cache on disk held 7 entries for the 7 calls that had
+been made, with no checkpoint having fired. Both checks were run against a
+throwaway cache path, not the DRY artifact.
+
+This driver has no unit tests, which is v1's convention for `experiments/` — the
+drivers are verified by running them. Recording that here rather than implying the
+new code is covered: the two checks above are the evidence, and they are ad-hoc.
+
+**10. Verification.** 474 tests pass — the 337 from v1 unchanged, plus 88 in
+`test_calibrate.py` and 49 in `test_elicit.py`. Every expected value in the new
+tests is derived in the test body rather than copied from a run, because a test
+asserting whatever the code produced today cannot catch the code being wrong
+today. Two boundary tests needed care: a margin comparison can only be exercised
+exactly at its threshold when the subtraction is exact in binary, since
+`0.51 - 0.50` is `0.010000000000000009` and lands strictly outside a 0.01 margin.
+Both the exact boundary and the near-boundary case are asserted.
+
+Determinism was re-checked after the incremental-save change, from an empty cache
+rather than a warm one, so the comparison is against bytes produced by the old
+code path. The rebuilt cache differs from the pre-change cache in exactly one
+field, `generated_at`, across all 200 entries; the entry key sets are identical.
+The analysis JSON differs in exactly four fields — `generated_at`, `calls`,
+`cache_hits` and `mode` — and in nothing else. A second consecutive run made 0
+calls against 200 cache hits and left the cache hash unchanged.
+
+**What 2b costs.** 200 calls to `gpt-4o-mini` — 100 cases, two elicitors. Nothing
+downstream of it has been run.
+
+**What 2a has not verified.** Payload extraction is tested against hand-built
+fixtures matching OpenAI's documented logprob response shape. No live call has
+confirmed the real shape. `--limit 1` is a two-call smoke test for exactly this,
+and those two calls are not wasted — they land in the cache and are served as hits
+by the full run.

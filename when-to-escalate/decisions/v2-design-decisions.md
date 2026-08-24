@@ -265,3 +265,80 @@ figure from being committed.
 | G9 | `build-log.md` rows 1/45/47 keep their cohort wording; an append-only log is not edited to match a later naming rule | (Kaps-decided) | **confirmed** |
 | G10 | The 11 v1 commit messages are not rewritten; history integrity beats word-scrubbing and the words identify nothing | (Kaps-decided) | **confirmed** |
 | G11 | `v1.0.0` is tagged retroactively at Gate 8, before `v2.0.0` | (Kaps-decided) | **noted** |
+
+## Resolutions after Gate 2a
+
+The pre-registered choices — which elicitor, which map, the collapse threshold,
+the metric split — are **not repeated here**. They live in
+`decisions/v2-gate2-preregistration.md` with their own provenance index (P1–P13),
+and duplicating that table into this file is how two records drift apart. What
+follows is everything Gate 2a decided that the pre-registration does not cover.
+
+- **Q1 — the elicitation cache stores raw payloads, never scores.** An extraction
+  bug found after the calls have been paid for must be fixable without paying
+  again, and that is only possible if the token reads survive. `--rescore`
+  recomputes every number from stored payloads with zero calls. Asserted by
+  `test_cache_entry_stores_the_payload_not_the_score`, which checks that the
+  string `score` appears nowhere in the serialised entry.
+
+- **Q2 — `reportable` is derived from the payload, not from the CLI flag.**
+  Changed during 2a, after the original design failed. Keying `reportable` on
+  `--dry-run` meant `--rescore` pointed at the dry cache produced a fully
+  reportable results file out of stub payloads. Provenance now travels with the
+  data (`STUB_MARKER = "offline_stub"` on every stub row) and both `reportable`
+  and the output filename stem are derived from its absence. The general lesson,
+  worth carrying to later gates: a provenance claim keyed on *how the program was
+  invoked* is one flag away from being false, whereas one keyed on *what the data
+  says about itself* survives being re-entered by a different route.
+
+- **Q3 — `score_yes_no` scans to the first content token.** Changed during 2a. It
+  read `reads[0]`, so a model emitting a leading space under `max_tokens=3` would
+  have raised on entirely ordinary output. The count of skipped whitespace tokens
+  is reported rather than discarded, so the condition stays visible if it turns out
+  to be common.
+
+- **Q4 — the `.gitignore` figure conflict is fixed by anchoring the scratch
+  pattern, not by broadening the negation.** The root-level `figures/*` rule keeps
+  its mid-pattern separator, which anchors it to the repository root and leaves
+  `paper/figures/` alone. Broadening it to `**/figures/*` would re-ignore the
+  figure `main.tex` needs. Also recorded: `git check-ignore -v` is **not** a valid
+  "is this ignored" test, because it exits 0 on any match *including a negation*.
+  The authoritative test is `git status --porcelain --ignored=matching`, where `??`
+  means addable and `!!` means ignored.
+
+- **Q5 — the reliability diagram is written after 2b, not before it.** It consumes
+  2b's output, and there is nothing honest to plot from stub payloads. Its
+  substance is already pre-registered (empty bins kept, counts reported alongside),
+  so what remains is rendering. The `.gitignore` prerequisite is done and verified,
+  so the figure will be committable the moment it exists.
+
+- **Q6 — the 2a/2b split is a network boundary, and 2a ends with a handover.**
+  Everything that can be built and verified without a paid call was built and
+  verified first; the pre-registration is locked before the single 2b command is
+  handed over. This is what makes "the rule was fixed before the data arrived" a
+  checkable claim about the commit order rather than an assurance.
+
+- **Q7 — the elicitation cache is written every ten calls and again on the way
+  out, not once at the end.** 2b is the only step in this gate that costs money and
+  cannot be repeated for free, so a failure part-way through must not discard the
+  calls already paid for. The loop is wrapped in `try/finally` around a `flush()`
+  that fires at `CHECKPOINT_EVERY = 10` and once more on exit, whatever the exit —
+  success, an API error, or a Ctrl-C. Ten bounds the loss to ten calls for about
+  twenty writes of a 1.3 MB file, which is nothing against the latency of the calls.
+  `flush()` is guarded on `calls > saved_at`, which is what keeps a refusal path
+  from leaving an empty cache behind for a later `--cache-only` run to serve as
+  legitimate. Verified by watching the writes land at 10, 20 and 24 over 24 stub
+  calls, and by crashing the loop mid-case and confirming the 7 paid calls were on
+  disk. This driver has no unit tests — v1's convention for `experiments/` — so
+  those two checks are ad-hoc, and the build log says so rather than implying
+  coverage.
+
+| # | Resolution | Provenance | Status |
+| --- | --- | --- | --- |
+| Q1 | The elicitation cache stores raw payloads and never scores, so an extraction fix is re-runnable offline | (AI-proposed) | **confirmed** |
+| Q2 | `reportable` is derived from a per-row stub marker, not from the `--dry-run` flag | (AI-proposed) | **changed** |
+| Q3 | `score_yes_no` scans to the first content token and reports skipped whitespace | (AI-proposed) | **changed** |
+| Q4 | Root `figures/*` stays anchored by its mid-pattern separator; `git status --ignored=matching` is the authoritative ignore test, not `git check-ignore` | (AI-proposed) | **confirmed** |
+| Q5 | The reliability diagram is written after 2b, since it consumes 2b's output | (AI-proposed) | **noted** |
+| Q6 | 2a is built and verified entirely offline; the pre-registration is committed before the 2b command is handed over | (Kaps-decided) | **confirmed** |
+| Q7 | The cache is checkpointed every ten calls and flushed in `finally`, so a mid-run failure keeps every paid call | (AI-proposed) | **changed** |
