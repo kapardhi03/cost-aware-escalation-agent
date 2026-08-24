@@ -93,12 +93,12 @@ own wording turned out to be wrong the outcome says so rather than restating it.
 | Q3 | `DEFAULT_CACHE_PATH` is relative to the working directory. | **Closed** | Read from `.env`, resolved against the repo root. See decision 8. |
 | Q4 | Reasons for rows `0e`, `3`, `10`, `13`, `14`, `17`, `18`, `20`, `22`, `24`, `29`, `30`, `39` and `44` were blank. `0c` is filled. This list originally omitted `44`, which was blank too. | **Closed** | All filled 2026-08-22. Rows proposed by Claude and ratified are marked as such in the cell, so the provenance survives the fill. |
 | Q5 | `belief.py` does not yet use `config.py`. | **Closed** | Rewired. See decision 12. |
-| Q6 | Is the belief calibrated enough to threshold on (research-file Q1)? Cannot be answered while any cached belief may be keyword-derived — ECE over a mixed cache is not LLM calibration. | **Closed** | Answered, and the answer is no. The strict run happened on KK's machine: `provider_summary` in `results/run.json` records `openai=100`, so the precondition this row set is met — the reported cache is LLM-only and its ECE is a real calibration number, not an average over two different belief sources. It is **0.142** on the `needs_human` marginal (95% bootstrap CI `[0.100, 0.249]`; 0.168 dev, 0.184 test), and the 0.2–0.3 bin that contains the threshold is over-confident, so the belief is **not** well calibrated. The decision is nevertheless insensitive to that on this case set: every elicited `b_h` sits at one decimal place, so `3/13 ≈ 0.2308` falls in the empty gap `(0.2, 0.3]` and every threshold in that interval decides identically. Thresholding survives here by an accident of the quantization, not because the belief is calibrated — which is why recalibration is reported as an in-sample ceiling rather than a fix. §6.6 and Figure 1; `ece_interval` and `recalibration` in `results/robustness.json`. |
+| Q6 | Is the belief calibrated enough to threshold on (research-file Q1)? Cannot be answered while any cached belief may be keyword-derived — ECE over a mixed cache is not LLM calibration. | **Closed** | Answered, and the answer is no. The strict run happened on Kaps's machine: `provider_summary` in `results/run.json` records `openai=100`, so the precondition this row set is met — the reported cache is LLM-only and its ECE is a real calibration number, not an average over two different belief sources. It is **0.142** on the `needs_human` marginal (95% bootstrap CI `[0.100, 0.249]`; 0.168 dev, 0.184 test), and the 0.2–0.3 bin that contains the threshold is over-confident, so the belief is **not** well calibrated. The decision is nevertheless insensitive to that on this case set: every elicited `b_h` sits at one decimal place, so `3/13 ≈ 0.2308` falls in the empty gap `(0.2, 0.3]` and every threshold in that interval decides identically. Thresholding survives here by an accident of the quantization, not because the belief is calibrated — which is why recalibration is reported as an in-sample ceiling rather than a fix. §6.6 and Figure 1; `ece_interval` and `recalibration` in `results/robustness.json`. |
 | Q7 | Providers still live inside `belief.py`. | **Closed** | Extracted to `src/providers/`. See decision 16. |
 | Q8 | No test file exists. | **Closed** | 208 tests under `tests/`. See decision 19. |
 | Q9 | `BELIEF_ALLOW_RULE_FALLBACK` defaults to true, so an unconfigured run can produce a mixed cache. | **Closed** | Default flipped to false. See decision 21. |
 | Q10 | No synthetic case set exists in `data/`. | **Closed** | 100 cases written and validated. See decisions 31–32. |
-| Q12 | Cost numbers for the five actions are unset. | **Closed** | Set by KK with per-cost reasoning. See decisions 33–38. |
+| Q12 | Cost numbers for the five actions are unset. | **Closed** | Set by Kaps with per-cost reasoning. See decisions 33–38. |
 | Q13 | The cost matrix is a **ranking**, not a full (action × state) table. Costs for correct actions are 0 and correct pause is 1, but the mapping from these five error costs onto all 5 actions × 6 states is not yet written down. | **Closed** | Written down in full. `COST` in `src/costs.py` gives all 5 actions × 6 states as 30 explicit cells and decision 40 approved them; the same 30 cells are printed as Table 2 in the paper and are re-read from the `cost_matrix` block of `results/run.json` by every downstream check, so the ranking is no longer the only record of the pricing. |
 | Q14 | The 42% `needs_human` rate is far above a real inbound base rate, so precision and recall on this set will not transfer to production. Deliberate — needed for measurability — but must be stated as a limitation. | **Closed, with this row's own claim narrowed — see L9.** | Carried into the paper's limitations section (§8.1) and recorded as L1, which is what this row asked for. The transfer warning survives: the 42% rate was set for measurability rather than sampled, so precision and recall are properties of this case set. The *comparison* in the question — that 42% is "far above a real inbound base rate" — is withdrawn, because no measured base rate for this channel exists to compare against. The paper states the withdrawal rather than quietly dropping the phrase. |
 | Q11 | Nothing downstream of the belief exists yet: no cost matrix, no policy, no baseline. The decision rule (now 25) and hard constraint (0c) are unimplemented. | **Closed** | All of it exists. `src/costs.py` holds the 30-cell matrix, the expected-cost computation and the myopic argmin decision rule (25), plus `CONSTRAINT_FORBIDS` for the hard constraint (0c); `experiments/run_policies.py` runs the cost-aware policy against four fixed-action baselines over the 100 cases and writes `results/run.json` and `results/run.md`. Hard-constraint behaviour, including that no belief can buy past it, is covered under `tests/`. |
@@ -161,7 +161,117 @@ Caught by a test, not by reading the code. Fixed by decision 30. Full note in
 
 ## Environment note
 
-The `.env` holding the real OpenAI and Gemini keys exists on KK's machine and is
+The `.env` holding the real OpenAI and Gemini keys exists on Kaps's machine and is
 gitignored, so it is correctly **not** present in the build container. Any step
 that needs a live LLM call has to run locally; the container can only exercise
 offline paths.
+
+---
+
+## v2
+
+v1 above is closed and is not edited. v2 work appends here, chronologically.
+Design decisions with provenance tags live in `decisions/v2-design-decisions.md`;
+this section records what was done and what it measured.
+
+### Gate 0 — cache audit (2026-08-24)
+
+Two questions gated the rest of v2: does a pre-quantization raw belief exist, and
+do emoji or code-switched inputs score worse. Both were answered by inspection of
+committed artifacts only. No LLM call was made.
+
+**1. There is no discarded raw layer, because nothing in v1 ever quantized.**
+
+The belief path holds no rounding step. `extract_json` is a plain `json.loads`
+(`src/providers/json_utils.py:28`); `to_belief` clamps `needs_human` into [0, 1]
+and normalises the readiness distribution, and rounds neither
+(`src/belief.py:238`); the result is cached verbatim. Positive evidence that the
+parsed values reached the cache untouched: readiness entries such as
+`0.10000000000000002` in `data/belief_cache.json` are float residue from dividing
+by a total of `1.0000000000000002`. That is normalisation arithmetic applied to
+parsed values — a quantization grid would have produced an exact `0.1`.
+
+So the coarseness is `gpt-4o-mini`'s own output granularity at `temperature=0`,
+not the harness's. Re-running the same prompt reproduces the same values.
+
+**The grid is 0.1, not 0.2.** Eight distinct `needs_human` values over 100 cases,
+all exact multiples of 0.1 (counts from `data/belief_cache.json`):
+
+| `needs_human` | 0.0 | 0.1 | 0.2 | 0.3 | 0.4 | 0.7 | 0.8 | 0.9 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| n | 4 | 15 | **35** | 17 | 6 | 6 | 5 | 12 |
+| observed frequency of `needs_human=True` | 0.250 | 0.400 | 0.171 | 0.588 | 0.333 | 0.333 | 0.800 | 0.917 |
+
+0.2 is the modal value, 35 of 100. v1 had already recorded the one-decimal
+granularity — see Q6 in the open-questions table above, and correction C4 in
+`results/wrong-decisions.md`. What is new here is the confirmation that it
+originates upstream of the harness, and that **0.5 and 0.6 never occur**: the
+model steps 0.4 → 0.7 and will not report a near-coin-flip. That gap is why the
+0.1 grid alone leaves a value-of-information analysis with no high-entropy cases
+to price.
+
+**2. An input normalizer is not justified, and this data cannot justify one.**
+
+Only 4 of 100 messages contain an emoji: `a06-mild-061`, `a08-reaction-075`,
+`a08-reaction-076`, `a08-reaction-078`. They score *better* than plain inputs, not
+worse — mean `|p − y|` 0.100 against 0.379, Brier 0.015 against 0.225, readiness
+argmax 4/4 against 52/96.
+
+That comparison is confounded rather than informative. All four carry the label
+`needs_human=False` and sit in the cold/warm corner; **no emoji case has
+`needs_human=True`**, so the subgroup has no power where a normalizer would
+matter. The tightest within-archetype comparison, archetype 8 "media, no text",
+runs the same way: emoji reactions mean `|p − y|` 0.067 (n=3) against non-emoji
+placeholders — `[sticker]` and four voice notes — at 0.200 (n=5).
+
+**Code-switched inputs: zero.** No Devanagari and no romanised-Hindi markers
+anywhere in `data/cases.json`. The construct is absent from the case set, so the
+question is unanswerable rather than answered.
+
+Normalizer dropped (v2 decision D4). Deciding it would require authoring emoji and
+code-switched variants of cases that already carry `needs_human=True` and
+re-scoring them — a data-collection task, not a normalizer task.
+
+**3. Unplanned finding: v1 already ran a recalibration, so v2 must not claim the
+result as new.**
+
+`results/robustness.json` carries a `recalibration` block —
+`experiments/robustness.py:446`, a histogram-bin lookup fit on all 100 labels and
+documented in its own docstring as an in-sample upper bound. It reports mean cost
+1.65 → 1.25 and misses 16 → 8, escalations 43 → 60, recall 0.619 → 0.810,
+precision 0.605 → 0.567, with 9 misses fixed, 1 created (`a06-frustrated-055`,
+`escalate_notify` → `hold`) and 7 surviving (1 at `b_h=0.00`, 6 at `b_h=0.20`).
+
+v2's contribution is therefore doing recalibration *honestly*, not doing it at
+all: held out rather than in-sample, a genuine monotone calibration map rather
+than a per-bin oracle, and reported with cross-entropy and a reliability diagram
+alongside ECE. Stated this way in the paper so nothing overclaims (D2).
+
+**4. Unplanned finding: two different v1 baselines exist and they disagree on
+cost.**
+
+`choose_action` defaults to the safe tie-break and accepts
+`legacy_tie_break=True` for the ACTIONS-order rule that produced the committed
+run (`src/costs.py:231`). Re-run over `results/run.json` beliefs:
+
+| tie-break | mean cost | missed escalations | reported in |
+| --- | --- | --- | --- |
+| legacy, ties → `answer` | **1.720** | 16 | `results/run.json`, the paper |
+| safe, ties → `escalate_notify` | 1.650 | 16 | `experiments/robustness.py` |
+
+Both agree on 16 misses; only the cost differs. v2 quotes legacy **1.720 / 16** as
+the headline baseline because that is what the committed run and the paper report,
+and notes the safe tie-break alongside it (D3).
+
+**Feasibility probe — not a result.** Pool-adjacent-violators isotonic on the
+exact cached values collapses the eight values into four blocks. Fit on the 50 dev
+cases and evaluated on the 50 held-out test cases, the map
+`{0.0, 0.1, 0.2} → 0.269`, `{0.3, 0.4, 0.7} → 0.400`, `{0.8, 0.9} → 0.889` gives
+test mean cost 1.200 against 1.720 for the identity map, and 3 missed escalations
+against 8. Two warnings travel with it: `answer` falls to zero on test (15 → 0),
+so every case becomes `hold` or `escalate_notify`; and merging `{0.3, 0.4, 0.7}`
+into one block destroys the score ordering that VoI needs in Gate 4.
+
+These probe numbers were computed ad hoc during the audit and are **not** a
+committed artifact. Gate 2 must reproduce them from a committed script before any
+of them enters the paper.
