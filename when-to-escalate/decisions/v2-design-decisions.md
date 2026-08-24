@@ -255,6 +255,15 @@ what its history already recorded.
   repository; `v1.0.0` was never created even though v1 is complete and
   published. It gets tagged at the v1 head commit as part of the Gate 8
   reproducibility pass, before `v2.0.0`.
+- **G12 — `build-log.md` row 27 keeps its wording too.** Added at the Gate 2
+  close: a sweep for cohort language found a *fourth* row G9 had not enumerated.
+  Row 27 (2026-08-18) reads "too many locked pieces moving at once for Week 1" in
+  its Why column — the words sit in the reasoning, not in a path, which is why the
+  earlier path-oriented sweep missed them. Resolved the same way as G9 and for the
+  same reason: it is a dated entry in an append-only log. The transferable point is
+  that G9's enumeration was a list, not a rule, so it could not catch a row nobody
+  had looked at. G9 and G12 together are now the rule: **no historical
+  `build-log.md` row is edited for wording, whether or not it appears in a list.**
 
 What remains genuinely open at Gate 8 is therefore one technical item: the
 `.gitignore` line 32 versus line 38 conflict, which may prevent the paper's
@@ -265,6 +274,7 @@ figure from being committed.
 | G9 | `build-log.md` rows 1/45/47 keep their cohort wording; an append-only log is not edited to match a later naming rule | (Kaps-decided) | **confirmed** |
 | G10 | The 11 v1 commit messages are not rewritten; history integrity beats word-scrubbing and the words identify nothing | (Kaps-decided) | **confirmed** |
 | G11 | `v1.0.0` is tagged retroactively at Gate 8, before `v2.0.0` | (Kaps-decided) | **noted** |
+| G12 | `build-log.md` row 27 keeps its wording; G9's list becomes a rule covering every historical row | (Kaps-decided) | **confirmed** |
 
 ## Resolutions after Gate 2a
 
@@ -342,3 +352,153 @@ follows is everything Gate 2a decided that the pre-registration does not cover.
 | Q5 | The reliability diagram is written after 2b, since it consumes 2b's output | (AI-proposed) | **noted** |
 | Q6 | 2a is built and verified entirely offline; the pre-registration is committed before the 2b command is handed over | (Kaps-decided) | **confirmed** |
 | Q7 | The cache is checkpointed every ten calls and flushed in `finally`, so a mid-run failure keeps every paid call | (AI-proposed) | **changed** |
+
+---
+
+## Resolutions after Gate 2b
+
+2b made the 200 calls and ran the pre-registered rules against real data. Every
+number below traces to `results/logprob-elicitation.json` or
+`results/rebaseline.json`; the three-arm comparison is rendered in
+`results/rebaseline.md`. As in 2a, the pre-registered rules themselves are not
+restated here — they are in `decisions/v2-gate2-preregistration.md`.
+
+- **Q8 — `digit_expectation` is the chosen elicitor, and the *metric* is what
+  disqualified the alternative.** Dev cross-entropy 0.9934 bits against 1.8004,
+  a gap of 0.8071 bits, far outside the 0.01-bit tie margin, so `tie_break_used`
+  is `false` and ECE never came into it. This reverses the prior lean toward
+  Yes/No — which was stated in discussion before the run and, notably, *never
+  written into any file*, so the pre-registration is the only reason it could not
+  quietly become the choice after the fact. (Kaps-decided, in discussion: "the
+  method I'd have picked blind was the one that failed.") Worth stating plainly
+  because it is the whole case for pre-registering: had the elicitor been picked
+  on judgement rather than on a rule fixed beforehand, the worse one would have
+  been picked.
+
+  Both raw elicitors are worse on dev than a constant predictor at the base rate,
+  whose cross-entropy is the label entropy 0.9815 bits: Yes/No by 0.819 bits,
+  `digit_expectation` by 0.012. Reading the logprobs does not by itself produce a
+  useful probability. That is what the calibration step is for, and it is why
+  Gate 2's claim is the held-out *improvement* rather than the raw score.
+
+- **Q9 — the collapse diagnostic returned `False` for both elicitors, and its
+  pooled distinctness count is a blind spot that is documented rather than
+  retuned.** `disqualified` is `[]`. Yes/No is the exact pathology §5 was written
+  to catch — median top-1 probability 0.99999987, essentially all mass on one
+  token, and a cross-entropy worse than predicting the base rate — and it cleared
+  the gate, because collapse requires **both** halves and Yes/No produced 19
+  distinct values against a threshold of 9. Those 19 values are residual mass,
+  not recovered spread.
+
+  The reason it cleared is specific and general. §5 fixes distinctness over **all
+  100 cases**, on the stated ground that collapse is a property of the elicitor
+  and not of a split. But pooling can only ever *raise* a distinct-value count,
+  so the pooled form of that half is strictly the more permissive one. Running
+  the pre-registered `calibrate.collapse_verdict` per split shows what that
+  bought:
+
+  | elicitor | split | distinct | median top-1 | `collapsed` |
+  | --- | --- | ---: | ---: | --- |
+  | `digit_expectation` | dev | 48 | 0.77778299 | `False` |
+  | `digit_expectation` | test | 43 | 0.75991074 | `False` |
+  | `digit_expectation` | pooled | 85 | 0.77305676 | `False` |
+  | `yes_no_probability` | dev | **8** | 0.99999993 | **`True`** |
+  | `yes_no_probability` | test | 14 | 0.99999983 | `False` |
+  | `yes_no_probability` | pooled | **19** | 0.99999987 | `False` |
+
+  On dev — the split the elicitor choice is actually made on — Yes/No lands on
+  exactly 8 distinct values, v1's grid size, and would have been **disqualified**.
+  The two splits land on different subsets of the residual values, so pooling more
+  than doubled the count past the threshold. The transferable lesson: a threshold
+  on a count of distinct values is not scale-free, and pooling `n` upward loosens
+  it monotonically. A count threshold has to travel with the `n` it is counted
+  over.
+
+  **The thresholds are not retuned and §5 is not rewritten.** (Kaps-decided:
+  documenting the blind spot beats hiding it.) The rule fired exactly as written,
+  the metric caught what the diagnostic missed, and a threshold edited after
+  seeing the data it governs is worth nothing. Recorded here so Gate 4 and the
+  paper carry the caveat rather than the clean story.
+
+- **Q10 — `isotonic` is the chosen map, taken within R7's margin, and
+  `order_preserved_on_test: false` is carried forward as an open flag.** On dev:
+  identity 0.9934 bits, Platt 0.9103, isotonic 0.8356. Isotonic beats the best
+  order-preserving candidate by 0.0747 bits, more than R7's 0.02 margin, so
+  `override_applied` is `false` and the merge is bought honestly. `maps_excluded`
+  is empty — the `SeparableError` that dropped Platt during the dry run was an
+  artifact of the stub's separable scores and did not recur on real data.
+
+  The cost of the merge is real and is now measured rather than predicted:
+  isotonic is `strictly_monotone: false` with 12 knots, six of which sit at
+  1.0, and ordering is **not** preserved on test. This is the Gate 2 / Gate 4
+  tension flagged at the audit, arriving exactly where R7 said it would.
+
+- **Q11 — the 11-in-100 temperature-0 drift is recorded as unreproducible beliefs,
+  not as a diagnosed cause, and it is never attributed to the calibration map.**
+  Elicitor A sends v1's prompt byte-identical at `temperature=0`, so the value it
+  writes should equal the value in `data/belief_cache.json`. It does for 89 of 100
+  cases; 11 differ, 0 are unparseable. **What changed is not determinable from the
+  record**: both runs requested the alias `gpt-4o-mini`, but v1 stored the alias it
+  asked for while v2 stores the snapshot the API resolved to
+  (`gpt-4o-mini-2024-07-18`), so a snapshot change between 2026-08-19 and 2026-08-24
+  and serving-side nondeterminism at `temperature=0` fit the evidence equally well.
+  That is a v1 record-keeping gap, and the fix — store the resolved model id, which
+  v2's cache does — is already in place for every comparison from here on. Recorded
+  as limitation **L10** in `build-log.md`. The consequence for this gate holds
+  whatever the cause: any v1-versus-v2 cost comparison mixes the map with whatever
+  moved, so `experiments/rebaseline.py` re-runs v1's decision rule on the fresh
+  beliefs and the before/after is taken **within** the fresh beliefs.
+  (Kaps-decided: re-baseline both sides so the contrast isolates calibration.)
+
+- **Q12 — on the decision metrics the map is a trade-off, not a win, and Gate 2's
+  claim is the calibration metrics.** Held out on test, calibration improves every
+  calibration-quality measure: cross-entropy 0.8546 → 0.8136 bits, ECE 0.1526 →
+  0.0696, Brier 0.2063 → 0.1962. The decomposition attributes the gain where it
+  should be: miscalibration 0.1643 → 0.0988 bits.
+
+  The decision metrics move in opposite directions. Missed escalations fall 7 → 2
+  while mean cost **rises** 1.4000 → 1.5000, because the map lifts the low scores
+  enough that the myopic rule escalates 41 of 50 cases instead of 21 — recall
+  0.6667 → 0.9048, precision 0.6667 → 0.4634. Better-calibrated probabilities slide
+  the operating point toward recall; they do not dominate the uncalibrated arm.
+  `always_notify`, which ignores the belief entirely and therefore cannot be moved
+  by drift, sits at mean cost 1.7400 with 0 misses, and stays in the report as the
+  yardstick any heavily-escalating arm has to be held against.
+
+  The −5 misses does exceed R5's "one or two misses is not evidence" floor, and is
+  written as exceeding it *while arriving with a cost increase and a precision
+  drop* — an operating-point shift, not a free improvement. This is a finding about
+  the fixed cost matrix and the one-step rule, not a defect in the map.
+
+- **Q13 — the published-versus-re-baselined aggregate is unchanged by coincidence,
+  and the per-case table is the record.** Both arms report mean cost 1.7200, 8
+  missed escalations, and identical action counts, which reads as snapshot
+  stability and is not. Six written values moved on test; three crossed a decision
+  boundary, and their realised-cost deltas cancel exactly — `a02-deep-017` 0→10,
+  `a10-persistent-091` 3→0, `a11-repeated-100` 10→3 — while the action counts
+  cancel term for term. The missed-escalation *set* changed even though its size
+  did not: drift fixed `a10-persistent-091` and introduced `a02-deep-017`. Had this
+  been reported as an aggregate only, the write-up would have carried a false
+  stability claim. Cross-snapshot aggregates get a per-case table from here on.
+
+### Open flag carried to Gate 4
+
+One item leaves Gate 2 unresolved on purpose. Nothing is changed now.
+
+**`order_preserved_on_test: false`** — the chosen isotonic map merges distinct
+beliefs, so the ordering of calibrated scores on test is not the ordering of the
+raw scores. Gate 4's value-of-information ceiling reads the ordering of beliefs and
+not only their level, so the ceiling re-run must state which scores it is computed
+on and must not assume the merge is harmless. The flag exists because R7 priced
+the merge in bits and bits are not what Gate 4 reads. Source:
+`results/logprob-elicitation.json` → `analysis.calibration.order_preserved_on_test`.
+
+| # | Resolution | Provenance | Status |
+| --- | --- | --- | --- |
+| Q8 | `digit_expectation` chosen on dev cross-entropy by 0.8071 bits; the metric, not the diagnostic, did the disqualifying. Reverses the earlier Yes/No lean | (AI-proposed) | **changed** |
+| Q9 | The collapse diagnostic returned `False` for both; its pooled distinctness count is a documented blind spot — Yes/No collapses on dev alone (8 distinct) — and the §5 thresholds are **not** retuned | (Kaps-decided) | **noted** |
+| Q10 | `isotonic` chosen within R7's 0.02-bit margin (0.0747 clear of Platt); `maps_excluded` empty; the merge's cost is `order_preserved_on_test: false` | (AI-proposed) | **confirmed** |
+| Q11 | The 11/100 temperature-0 drift is recorded as unreproducible beliefs with an undetermined cause (v1 stored the alias, not the resolved snapshot), noted as L10; the before/after is taken within the fresh beliefs so it isolates the map | (Kaps-decided) | **changed** |
+| Q12 | Gate 2's claim is the held-out calibration metrics; the decision metrics are a trade-off — misses 7→2, cost 1.40→1.50, escalations 21→41 of 50 | (Kaps-decided) | **changed** |
+| Q13 | The unchanged published→re-baselined aggregate is a coincidence, not stability; cross-snapshot aggregates now carry a per-case table | (AI-proposed) | **noted** |
+| — | `order_preserved_on_test: false` carried to Gate 4 as an open flag; nothing changed in Gate 2 | (Kaps-decided) | **noted** |

@@ -122,6 +122,7 @@ rather than from memory.
 | L7 | **F7 names a failure class this test set cannot exhibit by construction.** Every case in `data/cases.json` carries `message` as a single string and `context` as `{turn_index, repeat_count}`, and the harness evaluates one message per turn, so a turn containing two messages — one routine, one carrying the only `needs_human` signal — cannot occur in the set. This is narrower and more concrete than L1–L6: it is a specific instance of what the realism-for-measurability trade in L4 hides, namely an entire failure class that is invisible to a one-message-per-case harness rather than merely distorted by it. Surfacing it would require multi-message-per-turn cases and a per-message evaluation step before the turn is acted on; this experiment has neither, so no number reported here bears on it. | F7, `data/cases.json` schema |
 | L8 | **The design scans for critical signals but never guarantees that no message is silently dropped.** The response to F7 is a per-message scan for hard-stop intents before the turn is scored, which lowers the chance of missing the expensive message but leaves the underlying property untouched: a message can still be dropped, because nothing in the design requires it to be resolved. The stronger form, raised by a practitioner in the F7 thread rather than by me, is to make every inbound item durable — a queue entry with an explicit acknowledge-or-close step, so that priority may be fuzzy but existence may not, and an unacknowledged request for a human keeps returning until something closes it. That is a different kind of fix from anything in this paper: the policy prices actions, whereas this constrains the transport underneath it, and no cost matrix can compensate for an input the agent never sees. Not implemented and not measured here. | r/AI_Agents F7 thread — Sufficient-Bear-460; see `discussion-record.md` |
 | L9 | **Supersedes the base-rate comparison in L1.** L1 records the 42% `needs_human` rate as "far above a real inbound stream". That is an unsourced comparison: no measured base rate for this channel exists in this repo or in any source read for it, so "far above" asserts a magnitude nothing here establishes. Withdrawn. What survives is narrower and still enough to carry the limitation: the rate was **set for measurability rather than sampled**, so the precision and recall reported here are properties of this case set and should not be expected to transfer to production **in either direction** — the direction of the error is unknown, not just its size. The readiness distribution is off the design's own prior in the same way (the belief module assumes 85% cold, the case set is 39% cold), and the paper reports the reweighting to that prior instead of asserting a comparison. Everything else in L1 stands, including the transfer warning itself. | Q14; the paper's limitations section carries the withdrawal explicitly |
+| L10 | **Temperature-0 reproduction is 89 of 100, not 100 of 100, so no number in this repo compares cleanly across cache dates.** Elicitor A sends v1's `SYSTEM_PROMPT` byte-identical at `temperature=0`, so the `needs_human` value it writes should equal the value already in `data/belief_cache.json` for the same case. It does for 89 cases; **11 differ** and 0 are unparseable. The largest single move is `a04-booking-040`, 0.9 → 0.3. **The cause is not determinable from the record, and this is a record-keeping failure in v1 rather than a finding about the provider.** Both runs requested the same alias, `config.DEFAULT_OPENAI_MODEL = "gpt-4o-mini"`, but v1 stored the alias it *asked for* (`model: "gpt-4o-mini"`, cached 2026-08-19) while v2 stores the snapshot the API *resolved to* (`gpt-4o-mini-2024-07-18`, cached 2026-08-24). Which snapshot served v1 was never written down, so a snapshot change five days apart is consistent with the evidence but unproven; serving-side nondeterminism at `temperature=0` is equally consistent. `temperature=0` pins the sampler, not the weights or the kernels, and pins neither if the alias re-resolves. **Lesson, applied from v2 on: record the resolved model id, not the requested alias** — v2's cache does, so comparisons *against* v2 will be checkable in a way this one is not. The structural consequence stands either way: v1's published 1.720/16 was computed against beliefs that cannot now be reproduced, so any v1-versus-v2 comparison mixes the effect being measured with whatever moved. `experiments/rebaseline.py` is the response — it re-runs v1's decision rule on the fresh beliefs so the before/after is taken **within** one snapshot. Two further consequences to carry: the only baselines that compare across cache dates without a caveat are the belief-free trivial policies, whose realised cost is a function of the labels alone (`always_notify` = 1.7400 on test, verified by recomputing from labels); and a cross-date aggregate can look unchanged while individual decisions move, which is exactly what happened here — see the coincidence recorded in `results/rebaseline.md`. | `results/logprob-elicitation.json` → `reproduction_check`; model ids from `data/belief_cache.json` and `data/logprob_cache.json`; pre-registered in `decisions/v2-gate2-preregistration.md` §6 as report-do-not-smooth |
 
 ---
 
@@ -543,3 +544,174 @@ fixtures matching OpenAI's documented logprob response shape. No live call has
 confirmed the real shape. `--limit 1` is a two-call smoke test for exactly this,
 and those two calls are not wasted — they land in the cache and are served as hits
 by the full run.
+
+### Gate 2b — the live run, and calibration measured held-out (2026-08-25)
+
+The elicitation ran live. `data/logprob_cache.json` holds 200 entries, all
+`gpt-4o-mini-2024-07-18`, all stamped 2026-08-24 — and the two `a01-first-001` rows
+are stamped 13:53:38/40 against 13:55:31 for the next pair, which is the `--limit 1`
+smoke test having already banked them, so the incremental cache from item 9 above
+served those two as hits rather than re-buying them. The full run's own paid-vs-hit
+counters were printed to the terminal and are not in any committed file; the cache
+timestamps above are what the record supports, and 198 paid is inference from them,
+not a logged number. What *is* committed is the reproduction path exercised for
+real: `--rescore` recomputes the entire analysis from stored payloads with
+**`calls: 0`, `cache_hits: 200`**, 0 stub rows, `reportable: true`, and that
+`mode: rescore` state is what this commit contains. Sources for everything below:
+`results/logprob-elicitation.json`, `data/logprob_cache.json`, and
+`results/rebaseline.json`.
+
+**1. The pre-registered elicitor rule fired, and it overturned the prior
+preference.** `digit_expectation` won on dev cross-entropy by a wide margin:
+
+| elicitor | dev CE (bits) | dev ECE | dev Brier | distinct (pooled) | median top-1 | `collapsed` |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `digit_expectation` | **0.9934** | **0.1616** | **0.2294** | 85 | 0.7731 | `false` |
+| `yes_no_probability` | 1.8004 | 0.3352 | 0.3224 | 19 | 0.9999999 | `false` |
+
+The gap is 0.8071 bits against a 0.01-bit tie margin, so `tie_break_used: false`
+and ECE never entered it. The lean before the run was toward Yes/No, and it was
+never written into a file — which is precisely why the rule being fixed in advance
+mattered. Picked on judgement, the worse elicitor would have been picked.
+
+Both raw elicitors are *worse on dev than predicting the base rate*, whose
+cross-entropy is the label entropy 0.9815 bits: Yes/No by 0.819 bits,
+`digit_expectation` by 0.012. Reading logprobs does not by itself produce a useful
+probability. The calibration step is what makes it one, which is why the claim
+below is the held-out improvement and not the raw score.
+
+**2. The collapse diagnostic missed what the metric caught, and the threshold is
+not being retuned.** `collapsed` came back `false` for **both** elicitors and
+`disqualified` is `[]`. Yes/No is the exact pathology §5 was written to catch —
+median top-1 0.99999987, essentially all mass on one token, cross-entropy worse
+than a constant — and it cleared the gate, because §5 requires **both** halves and
+Yes/No produced 19 distinct values against a threshold of 9.
+
+The reason is worth recording because it generalises. §5 fixes distinctness over
+all 100 cases, on the stated ground that collapse is a property of the elicitor
+rather than of a split. But pooling can only ever *raise* a distinct-value count,
+so the pooled form of that half is strictly the more permissive one. Re-running the
+pre-registered `calibrate.collapse_verdict` per split:
+
+| elicitor | split | distinct | median top-1 | `collapsed` |
+| --- | --- | ---: | ---: | --- |
+| `digit_expectation` | dev | 48 | 0.77778299 | `false` |
+| `digit_expectation` | test | 43 | 0.75991074 | `false` |
+| `digit_expectation` | pooled | 85 | 0.77305676 | `false` |
+| `yes_no_probability` | dev | **8** | 0.99999993 | **`true`** |
+| `yes_no_probability` | test | 14 | 0.99999983 | `false` |
+| `yes_no_probability` | pooled | **19** | 0.99999987 | `false` |
+
+On dev — the split the elicitor is actually chosen on — Yes/No sits on exactly 8
+distinct values, v1's grid size, and would have been **disqualified**. The two
+splits land on different subsets of the residual values, so pooling more than
+doubled the count past the threshold. The transferable form: *a threshold on a
+count of distinct values is not scale-free, and pooling `n` upward loosens it
+monotonically* — a count threshold has to travel with the `n` it is counted over.
+
+The thresholds are not changed and §5 is not rewritten. The rule fired as written,
+the metric caught what the diagnostic missed, and a threshold edited after seeing
+the data it governs is worth nothing. Recorded as Q9 rather than quietly fixed.
+
+**3. Isotonic won inside R7's margin, and the merge cost is now measured.** On dev:
+identity 0.9934 bits, Platt 0.9103, isotonic 0.8356. Isotonic beats the best
+order-preserving candidate by 0.0747 bits — more than R7's 0.02 — so
+`override_applied: false`. `maps_excluded` is empty: the `SeparableError` that
+dropped Platt in the dry run was an artifact of the stub's separable scores and did
+not recur on real data, so item 7 above describes a path that real data never took.
+
+The predicted cost of the merge showed up exactly where R7 said it would. The
+chosen map is `strictly_monotone: false` with 12 knots, seven of them at 1.0, and
+`order_preserved_on_test: false`. **Carried to Gate 4 as an open flag**, unchanged
+here: the VoI ceiling reads the ordering of beliefs and not only their level, so the
+ceiling re-run has to state which scores it uses and must not assume the merge is
+free. R7 priced the merge in bits; bits are not what Gate 4 reads.
+
+**4. The Gate 2 result, held out.** Fitted on dev, evaluated on test, never the
+other way:
+
+| metric | raw | calibrated |
+| --- | ---: | ---: |
+| cross-entropy (bits) | 0.8546 | **0.8136** |
+| ECE | 0.1526 | **0.0696** |
+| Brier | 0.2063 | **0.1962** |
+
+The decomposition puts the gain where it belongs: miscalibration falls 0.1643 →
+0.0988 bits, while the irreducible conditional label entropy rises 0.6893 → 0.7321
+as the merge coarsens the bins. Residual −0.0172 bits on the calibrated side.
+ECE more than halves. That is the honest, held-out, measurably-better-agent half of
+v2, and it is the Gate 2 claim.
+
+**5. Temperature-0 reproduction is 89 of 100, and v1 cannot say why.** Elicitor A
+sends v1's prompt byte-identical at `temperature=0`, so the value it writes should
+equal `data/belief_cache.json`. It does for 89 cases; 11 differ, 0 unparseable,
+largest move `a04-booking-040` 0.9 → 0.3. Both runs requested the same alias
+(`config.DEFAULT_OPENAI_MODEL = "gpt-4o-mini"`), but v1 stored the alias it asked
+for while v2 stores the snapshot the API resolved to — so a snapshot change between
+2026-08-19 and 2026-08-24 and serving-side nondeterminism fit the evidence equally
+well, and nothing here distinguishes them. That is a v1 record-keeping gap, not a
+finding about the provider, and it is written up as limitation **L10** with the fix
+already in place from v2 on: store the resolved model id, which v2's cache does.
+
+**6. The re-baseline, because the drift makes a naive before/after meaningless.**
+v1's published 1.720/16 was computed on beliefs that cannot be reproduced, so
+comparing it against a calibrated v2 number would conflate the map with the drift.
+`experiments/rebaseline.py` (no API calls, cache-only) scores three arms on the
+test split using v1's own cost matrix, v1's own miss definition and v1's own
+`choose_action`, varying one thing at a time:
+
+| arm | beliefs | `needs_human` from | mean cost | missed esc. | escalates |
+| --- | --- | --- | ---: | ---: | ---: |
+| published (v1, committed) | v1 cache | written digit | 1.7200 | 8 | 20/50 |
+| re-baselined | fresh | written digit | 1.7200 | 8 | 20/50 |
+| raw continuous | fresh | logprob expectation | 1.4000 | 7 | 21/50 |
+| calibrated | fresh | isotonic(raw) | 1.5000 | 2 | 41/50 |
+| *always_notify* (reference) | none | *ignores the belief* | *1.7400* | *0* | *50/50* |
+
+The map is reconstructed from the committed knots rather than refitted — a second
+fit is a second chance to land on different parameters — and verified against every
+stored recalibrated score at a 1e-12 tolerance, which it clears exactly
+(`map_reconstruction_max_delta: 0.0`). The tie-break rule is
+irrelevant here: legacy and fixed give identical mean cost and misses on all three
+arms, reported rather than assumed. `always_notify` is in the table because it
+ignores the belief entirely, so its cost is a function of the labels alone and no
+drift can move it — verified by recomputing it from labels (total 87, mean 1.7400).
+It is the yardstick an arm escalating 82% of the split has to be held against.
+
+**7. On the decision metrics, calibration is a trade-off, not a win.** Misses fall
+7 → 2 while mean cost **rises** 1.4000 → 1.5000. The mechanism is in the action
+counts: the map lifts the low scores enough that the myopic rule escalates 41 of 50
+instead of 21, so recall goes 0.6667 → 0.9048 and precision goes 0.6667 → 0.4634.
+Better-calibrated probabilities slide the operating point toward recall; they do not
+dominate the uncalibrated arm on both metrics at once. The −5 misses does exceed
+R5's "one or two is not evidence" floor, and is written as exceeding it *while
+arriving with a cost increase and a precision drop*. This is a finding about the
+fixed cost matrix and the one-step rule, not a defect in the map — and it is why
+Gate 2's claim is item 4 and not this table.
+
+**8. A false stability claim, caught before it was written.** Published versus
+re-baselined comes out identical — 1.7200, 8 misses, the same action counts — which
+reads as "the beliefs are stable" and is not true. Six written values moved on
+test; three crossed a decision boundary and their realised-cost deltas cancel
+exactly (`a02-deep-017` 0→10, `a10-persistent-091` 3→0, `a11-repeated-100` 10→3),
+while the action counts cancel term for term. The missed-escalation *set* changed
+even though its size did not: drift fixed `a10-persistent-091` and introduced
+`a02-deep-017`. Reported as an aggregate alone, this gate would have carried a
+claim the data contradicts. Cross-date aggregates get a per-case table from here on.
+
+**9. Verification.** 474 tests pass, unchanged from 2a — this gate added a driver,
+not library code. `rebaseline.py` is deterministic across consecutive runs: two
+invocations differ in `generated_at` and nothing else, in both the JSON and the
+rendered report. It makes 0 API calls by construction and refuses outright if the
+elicitation results are absent, marked not reportable, or contain stub rows. Two
+corrections were made to it during review rather than after: duplicate definitions
+of `belief_free_reference` and `drift_on_test` had accumulated, one pair referencing
+an undefined name, and the drift write-up asserted a provider-side cause the record
+cannot support. Like the drivers in `experiments/`, it has no unit tests — v1's
+convention — so those checks are ad-hoc and this entry says so rather than implying
+coverage.
+
+**What Gate 2 has not done.** The reliability diagram (Q5) is still unwritten; it
+consumes this output and is the one deferred item. Nothing downstream of Gate 2 has
+been re-run against the calibrated beliefs, and the `order_preserved_on_test: false`
+flag is carried, not addressed.

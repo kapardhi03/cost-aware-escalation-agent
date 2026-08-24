@@ -1,0 +1,1404 @@
+{
+  "arm_decisions": {
+    "fresh_calibrated": [
+      {
+        "action": "escalate_notify",
+        "case_id": "a01-first-001",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.341932
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a01-first-003",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.324433
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a01-first-004",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.324932
+      },
+      {
+        "action": "hold",
+        "case_id": "a01-blast-009",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.32368
+      },
+      {
+        "action": "hold",
+        "case_id": "a01-blast-010",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.324689
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a02-early-013",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.322812
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a02-early-014",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.322594
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a02-deep-015",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.324581
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a02-deep-017",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.372359
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a03-first-019",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.333064
+      },
+      {
+        "action": "hold",
+        "case_id": "a03-first-021",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.325569
+      },
+      {
+        "action": "hold",
+        "case_id": "a03-followup-023",
+        "needs_human": true,
+        "realised_cost": 4,
+        "value": 0.305634
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a03-followup-026",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.384948
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a04-answerable-028",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.321309
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a04-answerable-029",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.302884
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a04-answerable-030",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.319598
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a04-answerable-031",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.323492
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a04-booking-035",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.327435
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a04-booking-038",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.324307
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a04-booking-040",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.450227
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a04-booking-041",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.393335
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-restricted-043",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.425898
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-restricted-044",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 1.0
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-restricted-046",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 1.0
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-restricted-049",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 1.0
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-public-052",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.5
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-public-054",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.5
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a06-frustrated-055",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.508572
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a06-frustrated-059",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 1.0
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a06-frustrated-060",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 1.0
+      },
+      {
+        "action": "hold",
+        "case_id": "a06-mild-061",
+        "needs_human": false,
+        "realised_cost": 1,
+        "value": 0.322976
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a07-price-064",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.411776
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a07-price-066",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.435259
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a07-internals-068",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.474501
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a07-internals-070",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.399133
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a08-voice-071",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.386376
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a08-voice-072",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.393365
+      },
+      {
+        "action": "hold",
+        "case_id": "a08-reaction-075",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.281128
+      },
+      {
+        "action": "hold",
+        "case_id": "a08-reaction-076",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.296635
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a09-oversharer-082",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.449617
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a09-oversharer-083",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.397794
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a09-oversharer-084",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.776512
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a10-early-085",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.297698
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a10-early-086",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.292794
+      },
+      {
+        "action": "hold",
+        "case_id": "a10-early-089",
+        "needs_human": false,
+        "realised_cost": 1,
+        "value": 0.322016
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a10-persistent-091",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.425403
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a10-persistent-092",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 1.0
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a11-first-096",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.325442
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a11-repeated-098",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.387253
+      },
+      {
+        "action": "hold",
+        "case_id": "a11-repeated-100",
+        "needs_human": true,
+        "realised_cost": 3,
+        "value": 0.322804
+      }
+    ],
+    "fresh_raw": [
+      {
+        "action": "hold",
+        "case_id": "a01-first-001",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.233706
+      },
+      {
+        "action": "answer",
+        "case_id": "a01-first-003",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.200477
+      },
+      {
+        "action": "hold",
+        "case_id": "a01-first-004",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.20205
+      },
+      {
+        "action": "hold",
+        "case_id": "a01-blast-009",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.1981
+      },
+      {
+        "action": "hold",
+        "case_id": "a01-blast-010",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.201282
+      },
+      {
+        "action": "answer",
+        "case_id": "a02-early-013",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.195361
+      },
+      {
+        "action": "hold",
+        "case_id": "a02-early-014",
+        "needs_human": false,
+        "realised_cost": 1,
+        "value": 0.194676
+      },
+      {
+        "action": "answer",
+        "case_id": "a02-deep-015",
+        "needs_human": true,
+        "realised_cost": 10,
+        "value": 0.200943
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a02-deep-017",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.251964
+      },
+      {
+        "action": "hold",
+        "case_id": "a03-first-019",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.227698
+      },
+      {
+        "action": "hold",
+        "case_id": "a03-first-021",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.204058
+      },
+      {
+        "action": "hold",
+        "case_id": "a03-followup-023",
+        "needs_human": true,
+        "realised_cost": 4,
+        "value": 0.141184
+      },
+      {
+        "action": "hold",
+        "case_id": "a03-followup-026",
+        "needs_human": true,
+        "realised_cost": 4,
+        "value": 0.260485
+      },
+      {
+        "action": "answer",
+        "case_id": "a04-answerable-028",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.190622
+      },
+      {
+        "action": "answer",
+        "case_id": "a04-answerable-029",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.132511
+      },
+      {
+        "action": "answer",
+        "case_id": "a04-answerable-030",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.185227
+      },
+      {
+        "action": "answer",
+        "case_id": "a04-answerable-031",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.197507
+      },
+      {
+        "action": "answer",
+        "case_id": "a04-booking-035",
+        "needs_human": true,
+        "realised_cost": 10,
+        "value": 0.209942
+      },
+      {
+        "action": "answer",
+        "case_id": "a04-booking-038",
+        "needs_human": true,
+        "realised_cost": 10,
+        "value": 0.200078
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a04-booking-040",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.489558
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a04-booking-041",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.289917
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-restricted-043",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.404183
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-restricted-044",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.866709
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-restricted-046",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.872916
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-restricted-049",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.89954
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-public-052",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.699562
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-public-054",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.73238
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a06-frustrated-055",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.750557
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a06-frustrated-059",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.877274
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a06-frustrated-060",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.898714
+      },
+      {
+        "action": "hold",
+        "case_id": "a06-mild-061",
+        "needs_human": false,
+        "realised_cost": 1,
+        "value": 0.195881
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a07-price-064",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.354629
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a07-price-066",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.437032
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a07-internals-068",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.574737
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a07-internals-070",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.310262
+      },
+      {
+        "action": "hold",
+        "case_id": "a08-voice-071",
+        "needs_human": false,
+        "realised_cost": 1,
+        "value": 0.265497
+      },
+      {
+        "action": "hold",
+        "case_id": "a08-voice-072",
+        "needs_human": false,
+        "realised_cost": 1,
+        "value": 0.29002
+      },
+      {
+        "action": "answer",
+        "case_id": "a08-reaction-075",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.063895
+      },
+      {
+        "action": "hold",
+        "case_id": "a08-reaction-076",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.112801
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a09-oversharer-082",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.487415
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a09-oversharer-083",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.305565
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a09-oversharer-084",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.775552
+      },
+      {
+        "action": "answer",
+        "case_id": "a10-early-085",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.116156
+      },
+      {
+        "action": "answer",
+        "case_id": "a10-early-086",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.100688
+      },
+      {
+        "action": "hold",
+        "case_id": "a10-early-089",
+        "needs_human": false,
+        "realised_cost": 1,
+        "value": 0.192853
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a10-persistent-091",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.402446
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a10-persistent-092",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.848092
+      },
+      {
+        "action": "hold",
+        "case_id": "a11-first-096",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.203658
+      },
+      {
+        "action": "hold",
+        "case_id": "a11-repeated-098",
+        "needs_human": true,
+        "realised_cost": 3,
+        "value": 0.268574
+      },
+      {
+        "action": "hold",
+        "case_id": "a11-repeated-100",
+        "needs_human": true,
+        "realised_cost": 3,
+        "value": 0.195337
+      }
+    ],
+    "rebaselined_written": [
+      {
+        "action": "hold",
+        "case_id": "a01-first-001",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.2
+      },
+      {
+        "action": "answer",
+        "case_id": "a01-first-003",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.2
+      },
+      {
+        "action": "hold",
+        "case_id": "a01-first-004",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.2
+      },
+      {
+        "action": "hold",
+        "case_id": "a01-blast-009",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.2
+      },
+      {
+        "action": "hold",
+        "case_id": "a01-blast-010",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.2
+      },
+      {
+        "action": "answer",
+        "case_id": "a02-early-013",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.2
+      },
+      {
+        "action": "hold",
+        "case_id": "a02-early-014",
+        "needs_human": false,
+        "realised_cost": 1,
+        "value": 0.2
+      },
+      {
+        "action": "answer",
+        "case_id": "a02-deep-015",
+        "needs_human": true,
+        "realised_cost": 10,
+        "value": 0.2
+      },
+      {
+        "action": "answer",
+        "case_id": "a02-deep-017",
+        "needs_human": true,
+        "realised_cost": 10,
+        "value": 0.2
+      },
+      {
+        "action": "hold",
+        "case_id": "a03-first-019",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.2
+      },
+      {
+        "action": "hold",
+        "case_id": "a03-first-021",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.2
+      },
+      {
+        "action": "answer",
+        "case_id": "a03-followup-023",
+        "needs_human": true,
+        "realised_cost": 10,
+        "value": 0.1
+      },
+      {
+        "action": "hold",
+        "case_id": "a03-followup-026",
+        "needs_human": true,
+        "realised_cost": 4,
+        "value": 0.3
+      },
+      {
+        "action": "answer",
+        "case_id": "a04-answerable-028",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.2
+      },
+      {
+        "action": "answer",
+        "case_id": "a04-answerable-029",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.1
+      },
+      {
+        "action": "answer",
+        "case_id": "a04-answerable-030",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.2
+      },
+      {
+        "action": "answer",
+        "case_id": "a04-answerable-031",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.2
+      },
+      {
+        "action": "answer",
+        "case_id": "a04-booking-035",
+        "needs_human": true,
+        "realised_cost": 10,
+        "value": 0.2
+      },
+      {
+        "action": "answer",
+        "case_id": "a04-booking-038",
+        "needs_human": true,
+        "realised_cost": 10,
+        "value": 0.2
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a04-booking-040",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.3
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a04-booking-041",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.3
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-restricted-043",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.4
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-restricted-044",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.9
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-restricted-046",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.9
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-restricted-049",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.9
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-public-052",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.7
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a05-public-054",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.7
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a06-frustrated-055",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.7
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a06-frustrated-059",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.9
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a06-frustrated-060",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.9
+      },
+      {
+        "action": "hold",
+        "case_id": "a06-mild-061",
+        "needs_human": false,
+        "realised_cost": 1,
+        "value": 0.2
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a07-price-064",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.3
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a07-price-066",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.4
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a07-internals-068",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.7
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a07-internals-070",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.3
+      },
+      {
+        "action": "hold",
+        "case_id": "a08-voice-071",
+        "needs_human": false,
+        "realised_cost": 1,
+        "value": 0.2
+      },
+      {
+        "action": "hold",
+        "case_id": "a08-voice-072",
+        "needs_human": false,
+        "realised_cost": 1,
+        "value": 0.2
+      },
+      {
+        "action": "answer",
+        "case_id": "a08-reaction-075",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.0
+      },
+      {
+        "action": "answer",
+        "case_id": "a08-reaction-076",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.1
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a09-oversharer-082",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.4
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a09-oversharer-083",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.3
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a09-oversharer-084",
+        "needs_human": false,
+        "realised_cost": 3,
+        "value": 0.8
+      },
+      {
+        "action": "answer",
+        "case_id": "a10-early-085",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.1
+      },
+      {
+        "action": "answer",
+        "case_id": "a10-early-086",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.1
+      },
+      {
+        "action": "hold",
+        "case_id": "a10-early-089",
+        "needs_human": false,
+        "realised_cost": 1,
+        "value": 0.2
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a10-persistent-091",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.4
+      },
+      {
+        "action": "escalate_notify",
+        "case_id": "a10-persistent-092",
+        "needs_human": true,
+        "realised_cost": 0,
+        "value": 0.9
+      },
+      {
+        "action": "hold",
+        "case_id": "a11-first-096",
+        "needs_human": false,
+        "realised_cost": 0,
+        "value": 0.2
+      },
+      {
+        "action": "hold",
+        "case_id": "a11-repeated-098",
+        "needs_human": true,
+        "realised_cost": 3,
+        "value": 0.3
+      },
+      {
+        "action": "hold",
+        "case_id": "a11-repeated-100",
+        "needs_human": true,
+        "realised_cost": 3,
+        "value": 0.2
+      }
+    ]
+  },
+  "arms": {
+    "fresh_calibrated": {
+      "action_counts": {
+        "escalate_notify": 41,
+        "hold": 9
+      },
+      "escalation_precision": 0.4634,
+      "escalation_recall": 0.9048,
+      "mean_cost": 1.5,
+      "missed_escalations": 2,
+      "n": 50,
+      "total_cost": 75
+    },
+    "fresh_raw": {
+      "action_counts": {
+        "answer": 12,
+        "escalate_notify": 21,
+        "hold": 17
+      },
+      "escalation_precision": 0.6667,
+      "escalation_recall": 0.6667,
+      "mean_cost": 1.4,
+      "missed_escalations": 7,
+      "n": 50,
+      "total_cost": 70
+    },
+    "rebaselined_written": {
+      "action_counts": {
+        "answer": 15,
+        "escalate_notify": 20,
+        "hold": 15
+      },
+      "escalation_precision": 0.65,
+      "escalation_recall": 0.619,
+      "mean_cost": 1.72,
+      "missed_escalations": 8,
+      "n": 50,
+      "total_cost": 86
+    }
+  },
+  "belief_free_reference": {
+    "always_answer": {
+      "action_counts": {
+        "answer": 46,
+        "escalate_notify": 4
+      },
+      "mean_cost": 3.4,
+      "missed_escalations": 17,
+      "total_cost": 170
+    },
+    "always_notify": {
+      "action_counts": {
+        "escalate_notify": 50
+      },
+      "mean_cost": 1.74,
+      "missed_escalations": 0,
+      "total_cost": 87
+    }
+  },
+  "calibration_claim": {
+    "calibrated": {
+      "base_rate": 0.42,
+      "base_rate_entropy_bits": 0.9814538950336535,
+      "brier": 0.19617736922836168,
+      "cross_entropy_bits": 0.8136480723586935,
+      "ece": 0.06959819304994638,
+      "n": 50,
+      "n_distinct_scores": 33
+    },
+    "raw": {
+      "base_rate": 0.42,
+      "base_rate_entropy_bits": 0.9814538950336535,
+      "brier": 0.20632531852260594,
+      "cross_entropy_bits": 0.8545785736317595,
+      "ece": 0.15262857327602686,
+      "n": 50,
+      "n_distinct_scores": 43
+    }
+  },
+  "calls": 0,
+  "contrasts": {
+    "calibration": {
+      "arms": [
+        "fresh_raw",
+        "fresh_calibrated"
+      ],
+      "from": 1.4,
+      "mean_cost_delta": 0.1,
+      "missed_delta": -5,
+      "missed_from": 7,
+      "missed_to": 2,
+      "to": 1.5
+    },
+    "drift": {
+      "arms": [
+        "published",
+        "rebaselined_written"
+      ],
+      "from": 1.72,
+      "mean_cost_delta": 0.0,
+      "missed_delta": 0,
+      "missed_from": 8,
+      "missed_to": 8,
+      "to": 1.72
+    }
+  },
+  "drift": {
+    "compared": 100,
+    "drifted": 11,
+    "match_rate": 0.89,
+    "matched": 89
+  },
+  "drift_on_test": {
+    "actions_changed": 3,
+    "cases_compared": 50,
+    "cost_delta_sum": 0,
+    "detail": [
+      {
+        "action": {
+          "fresh": "answer",
+          "v1": "escalate_notify"
+        },
+        "action_changed": true,
+        "case_id": "a02-deep-017",
+        "label_needs_human": true,
+        "needs_human_value": {
+          "fresh": 0.2,
+          "v1": 0.3
+        },
+        "realised_cost": {
+          "fresh": 10,
+          "v1": 0
+        }
+      },
+      {
+        "action": {
+          "fresh": "answer",
+          "v1": "answer"
+        },
+        "action_changed": false,
+        "case_id": "a04-booking-035",
+        "label_needs_human": true,
+        "needs_human_value": {
+          "fresh": 0.2,
+          "v1": 0.1
+        },
+        "realised_cost": {
+          "fresh": 10,
+          "v1": 10
+        }
+      },
+      {
+        "action": {
+          "fresh": "escalate_notify",
+          "v1": "escalate_notify"
+        },
+        "action_changed": false,
+        "case_id": "a04-booking-040",
+        "label_needs_human": true,
+        "needs_human_value": {
+          "fresh": 0.3,
+          "v1": 0.9
+        },
+        "realised_cost": {
+          "fresh": 0,
+          "v1": 0
+        }
+      },
+      {
+        "action": {
+          "fresh": "escalate_notify",
+          "v1": "escalate_notify"
+        },
+        "action_changed": false,
+        "case_id": "a07-internals-068",
+        "label_needs_human": true,
+        "needs_human_value": {
+          "fresh": 0.7,
+          "v1": 0.4
+        },
+        "realised_cost": {
+          "fresh": 0,
+          "v1": 0
+        }
+      },
+      {
+        "action": {
+          "fresh": "escalate_notify",
+          "v1": "hold"
+        },
+        "action_changed": true,
+        "case_id": "a10-persistent-091",
+        "label_needs_human": true,
+        "needs_human_value": {
+          "fresh": 0.4,
+          "v1": 0.2
+        },
+        "realised_cost": {
+          "fresh": 0,
+          "v1": 3
+        }
+      },
+      {
+        "action": {
+          "fresh": "hold",
+          "v1": "answer"
+        },
+        "action_changed": true,
+        "case_id": "a11-repeated-100",
+        "label_needs_human": true,
+        "needs_human_value": {
+          "fresh": 0.2,
+          "v1": 0.1
+        },
+        "realised_cost": {
+          "fresh": 3,
+          "v1": 10
+        }
+      }
+    ],
+    "missed_escalation_sets": {
+      "fixed_by_drift": [
+        "a10-persistent-091"
+      ],
+      "identical_cases": false,
+      "introduced_by_drift": [
+        "a02-deep-017"
+      ],
+      "n_fresh": 8,
+      "n_v1": 8
+    },
+    "values_moved": 6
+  },
+  "generated_at": "2026-08-24T21:59:42.247543+00:00",
+  "map_name": "isotonic",
+  "map_reconstruction_max_delta": 0.0,
+  "model_summary": "gpt-4o-mini-2024-07-18=200",
+  "n": 50,
+  "order_preserved_on_test": false,
+  "published": {
+    "all_100_reference": {
+      "mean_cost": 1.72,
+      "missed_escalations": 16,
+      "total_cost": 172
+    },
+    "test": {
+      "action_counts": {
+        "answer": 15,
+        "escalate_notify": 20,
+        "hold": 15
+      },
+      "mean_cost": 1.72,
+      "missed_escalations": 8,
+      "total_cost": 86
+    }
+  },
+  "reportable": true,
+  "secondary_caveat": "The test split carries only 8 of v1's 16 escalation misses, so a change of one or two misses is not evidence. Mean cost and miss count are reported alongside the calibration metrics and are not the claim.",
+  "split": "test",
+  "tie_break_sensitivity": {
+    "by_rule": {
+      "fixed": {
+        "fresh_calibrated": {
+          "action_counts": {
+            "escalate_notify": 41,
+            "hold": 9
+          },
+          "escalation_precision": 0.4634,
+          "escalation_recall": 0.9048,
+          "mean_cost": 1.5,
+          "missed_escalations": 2,
+          "n": 50,
+          "total_cost": 75
+        },
+        "fresh_raw": {
+          "action_counts": {
+            "answer": 12,
+            "escalate_notify": 21,
+            "hold": 17
+          },
+          "escalation_precision": 0.6667,
+          "escalation_recall": 0.6667,
+          "mean_cost": 1.4,
+          "missed_escalations": 7,
+          "n": 50,
+          "total_cost": 70
+        },
+        "rebaselined_written": {
+          "action_counts": {
+            "answer": 15,
+            "escalate_notify": 20,
+            "hold": 15
+          },
+          "escalation_precision": 0.65,
+          "escalation_recall": 0.619,
+          "mean_cost": 1.72,
+          "missed_escalations": 8,
+          "n": 50,
+          "total_cost": 86
+        }
+      },
+      "legacy": {
+        "fresh_calibrated": {
+          "action_counts": {
+            "escalate_notify": 41,
+            "hold": 9
+          },
+          "escalation_precision": 0.4634,
+          "escalation_recall": 0.9048,
+          "mean_cost": 1.5,
+          "missed_escalations": 2,
+          "n": 50,
+          "total_cost": 75
+        },
+        "fresh_raw": {
+          "action_counts": {
+            "answer": 12,
+            "escalate_notify": 21,
+            "hold": 17
+          },
+          "escalation_precision": 0.6667,
+          "escalation_recall": 0.6667,
+          "mean_cost": 1.4,
+          "missed_escalations": 7,
+          "n": 50,
+          "total_cost": 70
+        },
+        "rebaselined_written": {
+          "action_counts": {
+            "answer": 15,
+            "escalate_notify": 20,
+            "hold": 15
+          },
+          "escalation_precision": 0.65,
+          "escalation_recall": 0.619,
+          "mean_cost": 1.72,
+          "missed_escalations": 8,
+          "n": 50,
+          "total_cost": 86
+        }
+      }
+    },
+    "identical": true
+  }
+}
