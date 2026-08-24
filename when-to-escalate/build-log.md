@@ -165,3 +165,113 @@ The `.env` holding the real OpenAI and Gemini keys exists on Kaps's machine and 
 gitignored, so it is correctly **not** present in the build container. Any step
 that needs a live LLM call has to run locally; the container can only exercise
 offline paths.
+
+---
+
+## v2
+
+v1 above is closed and is not edited. v2 work appends here, chronologically.
+Design decisions with provenance tags live in `decisions/v2-design-decisions.md`;
+this section records what was done and what it measured.
+
+### Gate 0 — cache audit (2026-08-24)
+
+Two questions gated the rest of v2: does a pre-quantization raw belief exist, and
+do emoji or code-switched inputs score worse. Both were answered by inspection of
+committed artifacts only. No LLM call was made.
+
+**1. There is no discarded raw layer, because nothing in v1 ever quantized.**
+
+The belief path holds no rounding step. `extract_json` is a plain `json.loads`
+(`src/providers/json_utils.py:28`); `to_belief` clamps `needs_human` into [0, 1]
+and normalises the readiness distribution, and rounds neither
+(`src/belief.py:238`); the result is cached verbatim. Positive evidence that the
+parsed values reached the cache untouched: readiness entries such as
+`0.10000000000000002` in `data/belief_cache.json` are float residue from dividing
+by a total of `1.0000000000000002`. That is normalisation arithmetic applied to
+parsed values — a quantization grid would have produced an exact `0.1`.
+
+So the coarseness is `gpt-4o-mini`'s own output granularity at `temperature=0`,
+not the harness's. Re-running the same prompt reproduces the same values.
+
+**The grid is 0.1, not 0.2.** Eight distinct `needs_human` values over 100 cases,
+all exact multiples of 0.1 (counts from `data/belief_cache.json`):
+
+| `needs_human` | 0.0 | 0.1 | 0.2 | 0.3 | 0.4 | 0.7 | 0.8 | 0.9 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| n | 4 | 15 | **35** | 17 | 6 | 6 | 5 | 12 |
+| observed frequency of `needs_human=True` | 0.250 | 0.400 | 0.171 | 0.588 | 0.333 | 0.333 | 0.800 | 0.917 |
+
+0.2 is the modal value, 35 of 100. v1 had already recorded the one-decimal
+granularity — see Q6 in the open-questions table above, and correction C4 in
+`results/wrong-decisions.md`. What is new here is the confirmation that it
+originates upstream of the harness, and that **0.5 and 0.6 never occur**: the
+model steps 0.4 → 0.7 and will not report a near-coin-flip. That gap is why the
+0.1 grid alone leaves a value-of-information analysis with no high-entropy cases
+to price.
+
+**2. An input normalizer is not justified, and this data cannot justify one.**
+
+Only 4 of 100 messages contain an emoji: `a06-mild-061`, `a08-reaction-075`,
+`a08-reaction-076`, `a08-reaction-078`. They score *better* than plain inputs, not
+worse — mean `|p − y|` 0.100 against 0.379, Brier 0.015 against 0.225, readiness
+argmax 4/4 against 52/96.
+
+That comparison is confounded rather than informative. All four carry the label
+`needs_human=False` and sit in the cold/warm corner; **no emoji case has
+`needs_human=True`**, so the subgroup has no power where a normalizer would
+matter. The tightest within-archetype comparison, archetype 8 "media, no text",
+runs the same way: emoji reactions mean `|p − y|` 0.067 (n=3) against non-emoji
+placeholders — `[sticker]` and four voice notes — at 0.200 (n=5).
+
+**Code-switched inputs: zero.** No Devanagari and no romanised-Hindi markers
+anywhere in `data/cases.json`. The construct is absent from the case set, so the
+question is unanswerable rather than answered.
+
+Normalizer dropped (v2 decision D4). Deciding it would require authoring emoji and
+code-switched variants of cases that already carry `needs_human=True` and
+re-scoring them — a data-collection task, not a normalizer task.
+
+**3. Unplanned finding: v1 already ran a recalibration, so v2 must not claim the
+result as new.**
+
+`results/robustness.json` carries a `recalibration` block —
+`experiments/robustness.py:446`, a histogram-bin lookup fit on all 100 labels and
+documented in its own docstring as an in-sample upper bound. It reports mean cost
+1.65 → 1.25 and misses 16 → 8, escalations 43 → 60, recall 0.619 → 0.810,
+precision 0.605 → 0.567, with 9 misses fixed, 1 created (`a06-frustrated-055`,
+`escalate_notify` → `hold`) and 7 surviving (1 at `b_h=0.00`, 6 at `b_h=0.20`).
+
+v2's contribution is therefore doing recalibration *honestly*, not doing it at
+all: held out rather than in-sample, a genuine monotone calibration map rather
+than a per-bin oracle, and reported with cross-entropy and a reliability diagram
+alongside ECE. Stated this way in the paper so nothing overclaims (D2).
+
+**4. Unplanned finding: two different v1 baselines exist and they disagree on
+cost.**
+
+`choose_action` defaults to the safe tie-break and accepts
+`legacy_tie_break=True` for the ACTIONS-order rule that produced the committed
+run (`src/costs.py:231`). Re-run over `results/run.json` beliefs:
+
+| tie-break | mean cost | missed escalations | reported in |
+| --- | --- | --- | --- |
+| legacy, ties → `answer` | **1.720** | 16 | `results/run.json`, the paper |
+| safe, ties → `escalate_notify` | 1.650 | 16 | `experiments/robustness.py` |
+
+Both agree on 16 misses; only the cost differs. v2 quotes legacy **1.720 / 16** as
+the headline baseline because that is what the committed run and the paper report,
+and notes the safe tie-break alongside it (D3).
+
+**Feasibility probe — not a result.** Pool-adjacent-violators isotonic on the
+exact cached values collapses the eight values into four blocks. Fit on the 50 dev
+cases and evaluated on the 50 held-out test cases, the map
+`{0.0, 0.1, 0.2} → 0.269`, `{0.3, 0.4, 0.7} → 0.400`, `{0.8, 0.9} → 0.889` gives
+test mean cost 1.200 against 1.720 for the identity map, and 3 missed escalations
+against 8. Two warnings travel with it: `answer` falls to zero on test (15 → 0),
+so every case becomes `hold` or `escalate_notify`; and merging `{0.3, 0.4, 0.7}`
+into one block destroys the score ordering that VoI needs in Gate 4.
+
+These probe numbers were computed ad hoc during the audit and are **not** a
+committed artifact. Gate 2 must reproduce them from a committed script before any
+of them enters the paper.
