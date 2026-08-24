@@ -1,5 +1,16 @@
 Published: https://x.com/kapardhi200903/status/2090948515669381337?s=20
 
+## Corrections
+
+The link in the last post of the thread points at
+`.../tree/main/week1/when-to-escalate`. That path no longer exists: the project
+was moved to the repository root and now lives at
+`.../tree/main/when-to-escalate`. The post body below is left exactly as
+published — a published record is not edited after the fact — so the link in it
+is stale by design and this note is the correction.
+
+---
+
 Built a small agent this week for a problem I hit in production: a lead messages you and you can't tell if they're a real buyer, a competitor, or a bot. Answer, ask, hold, or escalate to a human?
 
 Every wrong choice costs a different amount. Most agents treat them as equal.
