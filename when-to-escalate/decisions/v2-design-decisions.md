@@ -10,6 +10,10 @@ Planning notes for v2. Each entry tagged by who proposed it and its status.
 - Carried from v1: the one-step myopic policy undervalues the `ask` action,
   because asking pays off through a better belief next turn, not through lower
   cost this step. v2 exists to price that payoff.
+  **Superseded at Gate 1 — see G1 in "Resolutions after Gate 1" below.** Pricing
+  the payoff is not sufficient, because the payoff is capped below the price of
+  asking. The bullet is left as written rather than edited, per the
+  no-retroactive-edits rule.
 
 ## Concept notes
 
@@ -140,3 +144,88 @@ the absence of any discarded raw layer (nothing in the v1 code path ever rounded
 and the fact that v1's own records — Q6 in `build-log.md`, correction C4 in
 `results/wrong-decisions.md` — had already noted the one-decimal granularity.
 Both are (AI-proposed), **noted**.
+
+---
+
+## Resolutions after Gate 1
+
+Gate 1 was meant to write definitions. It also produced a theorem, which changed
+the scope premise. Every number referenced here traces to `results/voi-ceiling.json`,
+written by `experiments/voi_ceiling.py`; the derivations are in
+`decisions/v2-definitions.md`.
+
+- **G1 — the scope premise was wrong, and this supersedes the second Scope
+  bullet.** v2 was framed as pricing a payoff the myopic policy undervalues. The
+  Gate 1 ceiling shows there is no payoff to price: `VoI(q | b) ≤ V_act(b) −
+  EC(ask | b)`, and that ceiling is negative for every belief, every question and
+  every answer model on the unconstrained action menu. `max_b V_act(b) = 30/13 =
+  2.3077` against `min_b EC(ask | b) = 2`, and the two do not occur at the same
+  belief. The binding constraint was the price of a question, not the horizon.
+- **G2 — v1's "0 asks in 100 cases" was a necessity, not an observation.**
+  `V_act == V` on 100/100, so `ask` is never even the myopic argmin. v1 read its
+  own action census as evidence about the one-step horizon; it was evidence about
+  the matrix. This framing carries into the paper: the census is a consequence of
+  the theorem, and the theorem is what explains it.
+- **G3 — the impossibility is the headline result, and the general condition is
+  the transferable one.** With `ask` priced at `(c_F, c_T)`, the ceiling can be
+  positive iff `c_F/ν + c_T/α < 1` — the price of a question measured against a
+  needless escalation when no human is needed, plus its price against a false
+  assertion when one is, must sum to under 1. v1 sits at `16/15`. This turns a
+  fact about our matrix into a testable condition on any cost structure, and the
+  paper frames it that way rather than as a fact about these 30 numbers.
+- **G4 — v2 has two spines, not one.** (1) Calibration: the honest, held-out,
+  measurably-better-agent half, unchanged from the plan and still the concrete
+  improvement. (2) The impossibility theorem plus the general condition: the
+  structural-discovery half. Neither is subordinate to the other and the paper
+  carries both.
+- **G5 — VoI stays genuinely computed, but is demoted from a shipped `ask`
+  feature to the analysis that produced the theorem.** The answer model and the
+  VoI machinery get built only to the depth needed to demonstrate the ceiling
+  holds empirically case by case: entropy, information gain, the counterfactual
+  belief update, and VoI evaluated on real cases under a simple, documented
+  answer model. No production `ask` feature, and nothing is tuned to make `ask`
+  fire. The point of computing VoI is to show it stays capped exactly where the
+  theorem says, not to manufacture a positive case.
+- **G6 — the cost matrix is not touched.** Re-pricing `ask` would reopen a locked
+  v1 decision and read as goalpost-moving. The break-even scaling
+  `λ = 15/16` (`ask` at `(1.875, 3.750)`, a reduction of exactly `1/16` = 6.25%)
+  is computed on a local copy inside `voi_ceiling.py` and reported as a declared
+  sensitivity. `voi_ceiling.py` contains no assignment into `COST`.
+- **G7 — binding wording rule, in force through Gates 5–7 and the paper.** The
+  claim is always *"asking is never rational **on the unconstrained action
+  menu**."* Never the unqualified "asking never helps." Under `no_direct_answer`
+  the ceiling reaches `+1.000` and the positive region is `b_h < 1/5` on the
+  all-hot ray, bound by `escalate_notify`; that region is stated explicitly, as
+  is the reason it is empty here — all 8 `a05-restricted` cases have
+  `b_h ≥ 0.40`, because the archetype that forbids answering is the one where a
+  human is likely needed. The theoretical claim and the empirical one are made
+  separately; collapsing them would overclaim.
+- **G8 — three open questions resolved, one held.** The internal posterior widens
+  to a six-vector for the VoI computation while `Belief` and its 337 tests stay
+  untouched (OQ1). The VoI honesty check is named a self-consistency check of the
+  implementation wherever it appears, with the absence of external validation as
+  a new Limitations entry (OQ3). Abstention (OQ2) is held to Gate 4, where the
+  wiring is built and the cost of each option is visible rather than predicted.
+  Full analysis for each is in `decisions/v2-definitions.md` §7.
+
+### Provenance index, Gate 1
+
+`G`*n* is the *n*th bullet above, in order. Same status vocabulary as the cache-audit
+index. Supporting measurements are in `results/voi-ceiling.json` and the `## v2`
+section of `build-log.md`.
+
+| # | Resolution | Provenance | Status |
+| --- | --- | --- | --- |
+| G1 | The scope premise was wrong: there is no undervalued payoff to price, because VoI is capped below the price of asking. Supersedes the second Scope bullet | (AI-proposed) | **changed** |
+| G2 | v1's 0 asks in 100 cases was a necessity of the matrix, not evidence about the horizon; `V_act == V` on 100/100 | (AI-proposed) | **changed** |
+| G3 | The impossibility is the headline result; the general condition `c_F/ν + c_T/α < 1` is the transferable one and the paper frames it that way | (Kaps-decided) | **confirmed** |
+| G4 | v2 has two spines — calibration, and the impossibility theorem plus general condition — and the paper carries both | (Kaps-decided) | **changed** |
+| G5 | VoI stays genuinely computed but is demoted to the analysis behind the theorem; no production `ask` feature, nothing tuned to make `ask` fire | (Kaps-decided) | **changed** |
+| G6 | The cost matrix is not touched; the `λ = 15/16` re-pricing is a declared sensitivity on a local copy only | (Kaps-decided) | **confirmed** |
+| G7 | Binding wording rule: always "on the unconstrained action menu", with the constrained-menu region and its emptiness stated explicitly | (Kaps-decided) | **noted** |
+| G8 | OQ1 → six-vector posterior, `Belief` untouched; OQ3 → self-consistency check with the gap in Limitations; OQ2 → held to Gate 4 | (Kaps-decided) | **confirmed** |
+
+One Gate 1 finding has no bullet above because it changed no plan: `t* = ν/(α+ν)
+= 3/13`, the belief at which the ceiling is maximised, is the
+`answer`-versus-`escalate_notify` crossover already documented in v1 rather than a
+new constant. (AI-proposed), **noted**.

@@ -275,3 +275,104 @@ into one block destroys the score ordering that VoI needs in Gate 4.
 These probe numbers were computed ad hoc during the audit and are **not** a
 committed artifact. Gate 2 must reproduce them from a committed script before any
 of them enters the paper.
+
+### Gate 1 — definitions, and an impossibility theorem (2026-08-24)
+
+Gate 1 was scoped to write definitions. It also produced a theorem, which changed
+v2's scope premise (see G1–G8 in `decisions/v2-design-decisions.md`). Offline
+throughout; no LLM call was made.
+
+**1. Definitions written.** `decisions/v2-definitions.md`: entropy of readiness
+and of `needs_human` (additive by the independence in locked design 0a, so
+`H(b) ∈ [0, 2.585]` bits exactly), expected information gain, value of
+information, and cross-entropy/KL as the recalibration loss with its decomposition
+into an irreducible conditional-label-entropy term plus a KL miscalibration term.
+The decomposition matters for Gate 2: it gives the fit a floor, so "how much of
+the remaining loss is even reducible" becomes answerable rather than rhetorical.
+
+**2. A definition error made and caught, recorded so Gate 4 does not repeat it.**
+VoI was first written as `V(b) − V_q(b) − EC(ask | b)` with `V` minimising over
+*all* feasible actions. Since `ask` is in that menu, `V(b) ≤ EC(ask | b)`
+identically, so the expression is non-positive for any matrix, any belief, any
+question — a tautology, not a finding. It was caught by a symptom rather than by
+inspection: a λ-sensitivity probe returned exactly `+0.0000` across a whole range
+and a bisection returned a nonsense root. The fix is `V_act(b) = min` over the
+feasible **non-ask** actions, used both as the baseline and inside the lookahead.
+
+**3. The ceiling, and the impossibility.** Because every cost is non-negative,
+`V_q(b) ≥ 0`, so `VoI(q | b) ≤ V_act(b) − EC(ask | b)` with no reference to any
+answer model — it grants a free perfect oracle. `experiments/voi_ceiling.py`
+evaluates it and writes `results/voi-ceiling.json`:
+
+```bash
+python3 experiments/voi_ceiling.py --json results/voi-ceiling.json
+```
+
+| quantity | value | source |
+| --- | --- | --- |
+| cases with a positive ceiling (constraints applied) | **0 / 100** | `per_case.n_positive_ceiling` |
+| least negative per-case ceiling | −0.400, attained by 11 cases | `per_case.max_ceiling`, `.n_at_max_ceiling` |
+| most negative per-case ceiling | −3.500 | `per_case.min_ceiling` |
+| anchor case `a02-deep-018` | −0.500 (`V_act` 2.100 via `escalate_notify`, `EC(ask)` 2.600) | `per_case.anchor_case` |
+| max over **every** belief, closed form | **−2/13 = −0.153846**, at all-hot, `b_h = 3/13` | `global_ceiling.ceiling_exact` |
+| `max_b V_act(b)` | `α·ν/(α+ν)` = 30/13 = 2.3077 | `global_ceiling.max_v_act_exact` |
+| `min_b EC(ask \| b)` | 2 | `global_ceiling.ec_ask_range` |
+
+The bound is attained, not merely a bound: at `b_h = 3/13` on the all-hot vertex,
+`hold = 84/13` and `escalate_pause = 66/13` both exceed the cap `30/13`. So the
+cause is a price mismatch, not myopia — the payoff ceiling and the price floor do
+not occur at the same belief.
+
+Three independent cross-checks, all in the same artifact: the witness belief
+re-evaluated through `src/costs.py`'s own `expected_cost` rather than the script's
+arithmetic (agrees to `1e−9`); a deliberately dumb 60-per-axis grid search
+(`−0.166667`, below the closed form, short by `0.0128` because `3/13` is not on a
+`1/60` grid — and never *exceeding* it, which is the direction that would signal a
+bug); and a bisection for λ (agrees to `1e−9`). Readiness-flatness and the two
+monotonicity side conditions `−ν < c_T − c_F < α` are asserted rather than
+assumed, so a future matrix edit fails loudly instead of returning a quietly wrong
+optimum.
+
+**4. v1's action census was a necessity, not an observation.** `V_act == V` on
+100/100, so `ask` is never even the myopic argmin. v1 reported 0 asks in 100 cases
+and read it as evidence about the one-step horizon; it was evidence about the
+matrix. Same fact, read off the arithmetic instead of off the census.
+
+**5. The claim is conditional, and the wording is now binding (G7).** On the menu
+`no_direct_answer` leaves, the ceiling *does* go positive: up to **+1.000** at the
+all-hot vertex with `b_h = 0`, and positive for `b_h < 1/5` along the all-hot ray,
+bound by `escalate_notify`. Asking beats a needless escalation when a lead is hot,
+a human probably is not needed, and answering is forbidden. But **none of the 8
+cases carrying that constraint lands in the region**: all 8 are `a05-restricted`
+and every one has `b_h ≥ 0.40`, because the archetype that forbids answering is
+the one where a human is likely needed. The two conditions are anti-correlated by
+construction. So 0/100 holds for a verified reason rather than by accident, and
+the theoretical and empirical claims are stated separately everywhere.
+
+This was nearly missed. The first probes ignored `row["constraints"]` entirely,
+which understates `V_act` on exactly the cases where asking is most plausible. The
+committed script applies each case's constraints via `feasible_actions`.
+
+**6. The transferable result.** With `ask` priced at `(c_F, c_T)`, the ceiling can
+be positive iff
+
+    α·c_F + ν·c_T < α·ν        ⟺        c_F/ν + c_T/α < 1
+
+v1 sits at `2/3 + 4/10 = 16/15 ≈ 1.0667`, so uniformly scaling the `ask` row turns
+the ceiling positive at exactly `λ = 1/(16/15) = 15/16` — `ask` at
+`(15/8, 15/4) = (1.875, 3.750)`, a reduction of exactly `1/16` = **6.25%**. A
+first grid estimate put this at ~6.3%; the exact value is 6.25%. Reported as a
+declared sensitivity computed on a local copy of the matrix; `voi_ceiling.py`
+contains no assignment into `COST` (G6).
+
+**7. Verification.** 337 tests pass. `robustness.py` still reports `legacy path
+reproduces results/run.json exactly: True`, so nothing in Gate 1 disturbed the v1
+baseline. `results/voi-ceiling.json` is byte-identical across repeated runs.
+
+**A note on what changed against the plan.** Unlike Gate 0, none of these numbers
+are ad-hoc probes: the artifact was written before the definitions were finalised,
+specifically so the five figures in the draft trace to a committed file the way
+every other number in the project does. Three corrections came out of that
+discipline — 11 cases at the least-negative value rather than 8, 6.25% rather than
+~6.3%, and the conditional-impossibility finding in item 5, which no ad-hoc probe
+had surfaced.
