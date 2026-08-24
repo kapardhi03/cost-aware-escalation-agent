@@ -16,6 +16,8 @@ when-to-escalate/data/belief_cache_DRY.json
 
 # Dry-run output is never reportable and must not be committed.
 when-to-escalate/results/run_DRY.*
+when-to-escalate/results/logprob-elicitation_DRY.*
+when-to-escalate/data/logprob_cache_DRY.json
 
 .venv
 
@@ -34,5 +36,7 @@ when-to-escalate/results/run_DRY.*
 # macOS Finder metadata. Never source, and easy to sweep in with `git add -A`.
 .DS_Store
 
+# Root-level scratch figures only. The mid-pattern separator anchors this to the
+# repository root, so it does NOT reach when-to-escalate/paper/figures/ — do not
+# "fix" it to **/figures/*, which would re-ignore the figure the paper needs.
 figures/*
-when-to-escalate/paper/figures/reliability-needs-human.pdf
