@@ -58,7 +58,8 @@ Planning notes for v2. Each entry tagged by who proposed it and its status.
 - Audit the cache before anything else: confirm whether raw pre-quantization
   scores exist, and whether emoji or code-switched inputs score worse. Both
   findings gate the work downstream.
-  ## Tracking one case across v2
+
+## Tracking one case across v2
 
 Case `a02-deep-018` is a good anchor to carry through both gates.
 
@@ -76,7 +77,8 @@ Case `a02-deep-018` is a good anchor to carry through both gates.
 - Produce a parallel decision record for this same case in v2: needs_human before
   (0.30) and after recalibration, plus the VoI number. One case tracked across
   both versions is a stronger story than introducing a fresh one.
-  ## Resolutions after the cache audit
+
+## Resolutions after the cache audit
 
 The audit corrected several premises. Recording what changed and what was decided.
 
@@ -113,3 +115,28 @@ The audit corrected several premises. Recording what changed and what was decide
   minimizes cost by merging blocks. Flag it if the two goals conflict.
 - cases.json stays as is: it is synthetic, contains no real people, product, or
   client data, and was already part of v1. Synthetic domain data is standard.
+
+### Provenance index
+
+The bullets above carry the reasoning; this table carries only the tags the record
+requires. `R`*n* is the *n*th bullet of "Resolutions after the cache audit", in
+order. Status is `confirmed` (a planning assumption held), `changed` (a planning
+assumption was wrong and is corrected here), or `noted` (a new fact, no plan
+change). Supporting measurements are in the `## v2` section of `build-log.md`.
+
+| # | Resolution | Provenance | Status |
+| --- | --- | --- | --- |
+| R1 | Coarse values are the model's own granularity, not a harness rounding step; the grid is 0.1, not 0.2 | (AI-proposed) | **changed** |
+| R2 | The model never emits 0.5 or 0.6 | (AI-proposed) | **noted** |
+| R3 | Elicit continuous scores via token logprobs; 0.1 grid kept as no-network fallback; new cache file | (Kaps-decided) | **confirmed** |
+| R4 | Emoji normalizer dropped; the UI reaction feature is separate and stays | (Kaps-decided) | **changed** |
+| R5 | Recalibration is not a new result; the increment is a held-out fit with a genuine monotone map | (Kaps-decided) | **changed** |
+| R6 | Headline baseline is legacy 1.720; safe tie-break 1.650 noted; both agree on 16 misses | (Kaps-decided) | **noted** |
+| R7 | Prefer a calibration map that preserves score ordering over one that minimises cost by merging blocks | (Kaps-decided) | **noted** |
+| R8 | `data/cases.json` stays as-is | (Kaps-decided) | **confirmed** |
+
+Two findings in `build-log.md` have no bullet above because they changed no plan:
+the absence of any discarded raw layer (nothing in the v1 code path ever rounded),
+and the fact that v1's own records — Q6 in `build-log.md`, correction C4 in
+`results/wrong-decisions.md` — had already noted the one-decimal granularity.
+Both are (AI-proposed), **noted**.
