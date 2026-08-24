@@ -229,3 +229,39 @@ One Gate 1 finding has no bullet above because it changed no plan: `t* = ν/(α+
 = 3/13`, the belief at which the ceiling is maximised, is the
 `answer`-versus-`escalate_notify` crossover already documented in v1 rather than a
 new constant. (AI-proposed), **noted**.
+
+---
+
+## Records integrity — two parked items closed, resolved as leave
+
+Two items had been parked for Gate 8 because they sat where the standing
+no-cohort-language rule collides with the standing no-retroactive-edits rule.
+They are closed here so they do not resurface: **history integrity wins over
+word-scrubbing**, and in both cases the words identify nothing. The
+no-cohort-language rule governs what this project *authors* from here on, not
+what its history already recorded.
+
+- **G9 — `build-log.md` rows 1, 45 and 47 keep their wording.** They are dated
+  entries in an append-only log. Editing them would falsify the record of what
+  was known when, which is the one thing that log exists to preserve. Row 47 in
+  particular is the entry that recorded the moved-path 404 as a known cost at the
+  time, and is load-bearing evidence for the correction now carried in
+  `social/x-thread.md`.
+- **G10 — the 11 v1 commit messages containing `week1` / `deliverable` are not
+  rewritten.** Purging them means rewriting all of v1's history, on a published
+  repository, to change words that name no person, client or product. Not worth
+  it, and the rewrite would itself be the larger integrity cost.
+- **G11 — `v1.0.0` is tagged retroactively at Gate 8.** No tags exist in the
+  repository; `v1.0.0` was never created even though v1 is complete and
+  published. It gets tagged at the v1 head commit as part of the Gate 8
+  reproducibility pass, before `v2.0.0`.
+
+What remains genuinely open at Gate 8 is therefore one technical item: the
+`.gitignore` line 32 versus line 38 conflict, which may prevent the paper's
+figure from being committed.
+
+| # | Resolution | Provenance | Status |
+| --- | --- | --- | --- |
+| G9 | `build-log.md` rows 1/45/47 keep their cohort wording; an append-only log is not edited to match a later naming rule | (Kaps-decided) | **confirmed** |
+| G10 | The 11 v1 commit messages are not rewritten; history integrity beats word-scrubbing and the words identify nothing | (Kaps-decided) | **confirmed** |
+| G11 | `v1.0.0` is tagged retroactively at Gate 8, before `v2.0.0` | (Kaps-decided) | **noted** |
