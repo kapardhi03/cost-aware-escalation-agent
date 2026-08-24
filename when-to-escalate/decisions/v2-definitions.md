@@ -1,10 +1,8 @@
 # v2 Definitions — entropy, information gain, value of information, calibration loss
 
-Gate 1. Definitions only; no code written against these yet. Everything is stated
-in the cost notation this project already uses, so each symbol maps onto something
-that exists in `src/costs.py` or `src/belief.py`.
-
-Draft for review. Nothing here is a result.
+Every symbol is stated in the cost notation v1 already uses, so each one maps onto
+something that exists in `src/costs.py` or `src/belief.py`. Where a number is
+computed rather than defined, it traces to `results/voi-ceiling.json`.
 
 ---
 
