@@ -1,17 +1,17 @@
-# PLAN — Week 1
+# PLAN — v1
 
-> **Personal working file. Not a graded deliverable.** Nobody reviews this file.
-> It exists so I know what to do each morning. The graded work lives in
+> **Personal working file, not a project artifact.** Nobody reviews this file.
+> It exists so I know what to do each morning. The reviewed work lives in
 > `research-file.md`, `discussion-record.md`, `review-record.md`,
 > `decisions/probability-decision-record.md`, `paper/`, `src/`, `experiments/`,
 > `results/`, and `social/`.
 
-**Why the public work sits at the front of the week:** Reddit and X depend on
+**Why the public work sits at the front of the schedule:** Reddit and X depend on
 strangers replying on their own schedule. A thread posted on Day 6 will not have
 two replies by Day 7. So discussion starts on Day 1 and runs every single day,
 and the writing, building, and reviewing stack up behind it.
 
-## Running week targets
+## Running targets
 
 - [ ] Reddit: 10+ contributions across 5+ communities
 - [ ] Reddit: 5 threads that reach 2+ replies from real people
