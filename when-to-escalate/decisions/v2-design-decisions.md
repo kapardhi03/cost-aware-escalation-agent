@@ -500,5 +500,44 @@ the merge in bits and bits are not what Gate 4 reads. Source:
 | Q10 | `isotonic` chosen within R7's 0.02-bit margin (0.0747 clear of Platt); `maps_excluded` empty; the merge's cost is `order_preserved_on_test: false` | (AI-proposed) | **confirmed** |
 | Q11 | The 11/100 temperature-0 drift is recorded as unreproducible beliefs with an undetermined cause (v1 stored the alias, not the resolved snapshot), noted as L10; the before/after is taken within the fresh beliefs so it isolates the map | (Kaps-decided) | **changed** |
 | Q12 | Gate 2's claim is the held-out calibration metrics; the decision metrics are a trade-off — misses 7→2, cost 1.40→1.50, escalations 21→41 of 50 | (Kaps-decided) | **changed** |
-| Q13 | The unchanged published→re-baselined aggregate is a coincidence, not stability; cross-snapshot aggregates now carry a per-case table | (AI-proposed) | **noted** |
+| Q13 | The unchanged published→re-baselined aggregate is a coincidence, not stability; cross-date aggregates now carry a per-case table | (AI-proposed) | **noted** |
 | — | `order_preserved_on_test: false` carried to Gate 4 as an open flag; nothing changed in Gate 2 | (Kaps-decided) | **noted** |
+
+## Branch and merge policy — changed at the Gate 2 close
+
+The original v2 rule was: all new work goes on `v2`, nothing is committed to
+`main`, and `main` sees v2 only once at the end. **That is superseded.** Each gate
+now merges to `main` as it closes, after a review pass, and `v2.0.0` is still
+tagged only at the very end once the paper compiles and the run reproduces from
+cache.
+
+- **M1 — gates merge to `main` one at a time as they finish.** Discussion first,
+  then the merge. The original rule was aimed at keeping half-finished work off a
+  published repository; merging *reviewed, closed* gates is a different act from
+  doing the work on `main`, which is still not done. The reason this is safe to
+  start now was verified rather than assumed: v1's published run still reproduces
+  from cache byte-for-byte against `results/run.json` (mean 1.72, 16 missed
+  escalations), so nothing already published moves when v2 lands.
+- **M2 — the first merge carries Gates 0, 1 and 2 together, not Gate 2 alone.**
+  Gates 0 and 1 closed before this policy existed and were never merged, so they
+  ride along. Splitting them into three retroactive merges would manufacture
+  history that did not happen. Gate 3 onward is one merge per gate.
+- **M3 — `main`'s two Aug-24 commits (`391f075`, `7573686`) are superseded in
+  content, not reverted.** Both edited `decisions/v2-design-decisions.md` directly
+  on `main`, which is what the original rule existed to prevent, and they are the
+  reason this merge conflicts add/add rather than fast-forwarding. v2's copy is
+  taken wholesale: it contains every non-blank line of `main`'s except two headings
+  that `main` had indented two spaces — so markdown rendered them as body text
+  rather than headings — which v2 had already fixed. Nothing is lost. The commits
+  stay in history per the same reasoning as G9/G12.
+- **M4 — the 8.8 MB logprob cache goes to `main`.** 99.3% of it is the top-20
+  logprob payload, which is what lets a future elicitor be scored with zero new
+  calls, and cache-only reproduction is load-bearing for this project. Well inside
+  GitHub's limits. Same decision as committing it to `v2`, one step further out.
+
+| # | Resolution | Provenance | Status |
+| --- | --- | --- | --- |
+| M1 | Gates merge to `main` one at a time as they close; supersedes "nothing is committed to `main`"; `v2.0.0` still tagged only at the end | (Kaps-decided) | **changed** |
+| M2 | The first merge carries Gates 0–2 together; one merge per gate from Gate 3 on | (AI-proposed) | **confirmed** |
+| M3 | `main`'s two Aug-24 design-record commits are superseded in content, not reverted; v2's copy is taken wholesale | (Kaps-decided) | **confirmed** |
+| M4 | The 8.8 MB logprob cache lands on `main`; cache-only reproduction is worth the bytes | (Kaps-decided) | **confirmed** |
