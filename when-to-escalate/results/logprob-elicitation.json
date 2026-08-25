@@ -1,0 +1,4924 @@
+{
+  "analysis": {
+    "calibration": {
+      "evaluated_on": "test",
+      "fitted_on": "dev",
+      "map": {
+        "knots": [
+          [
+            2.8453347280241004e-08,
+            0.2608695652173913
+          ],
+          [
+            0.22854647295970762,
+            0.3333333333333333
+          ],
+          [
+            0.2593180856083898,
+            0.38461538461538464
+          ],
+          [
+            0.6642154666083476,
+            0.5
+          ],
+          [
+            0.749757241844589,
+            0.5
+          ],
+          [
+            0.79640101573984,
+            1.0
+          ],
+          [
+            0.8077308032474363,
+            1.0
+          ],
+          [
+            0.8124277306884308,
+            1.0
+          ],
+          [
+            0.8812080102358627,
+            1.0
+          ],
+          [
+            0.8889866208635734,
+            1.0
+          ],
+          [
+            0.8991448080221514,
+            1.0
+          ],
+          [
+            0.8996344396231138,
+            1.0
+          ]
+        ],
+        "name": "isotonic",
+        "strictly_monotone": false
+      },
+      "order_preserved_on_test": false,
+      "test_calibrated": {
+        "base_rate": 0.42,
+        "base_rate_entropy_bits": 0.9814538950336535,
+        "brier": 0.19617736922836168,
+        "cross_entropy_bits": 0.8136480723586935,
+        "ece": 0.06959819304994638,
+        "n": 50,
+        "n_distinct_scores": 33
+      },
+      "test_calibrated_decomposition": {
+        "binned_sum_bits": 0.8308730160709924,
+        "cross_entropy_bits": 0.8136480723586935,
+        "irreducible_bits": 0.7320605921760214,
+        "miscalibration_bits": 0.09881242389497102,
+        "n_bins": 10,
+        "residual_bits": -0.01722494371229888
+      },
+      "test_raw": {
+        "base_rate": 0.42,
+        "base_rate_entropy_bits": 0.9814538950336535,
+        "brier": 0.20632531852260594,
+        "cross_entropy_bits": 0.8545785736317595,
+        "ece": 0.15262857327602686,
+        "n": 50,
+        "n_distinct_scores": 43
+      },
+      "test_raw_decomposition": {
+        "binned_sum_bits": 0.8536749106139429,
+        "cross_entropy_bits": 0.8545785736317595,
+        "irreducible_bits": 0.6893427481873763,
+        "miscalibration_bits": 0.16433216242656654,
+        "n_bins": 10,
+        "residual_bits": 0.000903663017816636
+      },
+      "test_reliability_calibrated": [
+        {
+          "empirical_rate": null,
+          "hi": 0.1,
+          "lo": 0.0,
+          "mean_score": null,
+          "n": 0
+        },
+        {
+          "empirical_rate": null,
+          "hi": 0.2,
+          "lo": 0.1,
+          "mean_score": null,
+          "n": 0
+        },
+        {
+          "empirical_rate": 0.0,
+          "hi": 0.3,
+          "lo": 0.2,
+          "mean_score": 0.2921,
+          "n": 4
+        },
+        {
+          "empirical_rate": 0.3448,
+          "hi": 0.4,
+          "lo": 0.3,
+          "mean_score": 0.3414,
+          "n": 29
+        },
+        {
+          "empirical_rate": 0.5714,
+          "hi": 0.5,
+          "lo": 0.4,
+          "mean_score": 0.439,
+          "n": 7
+        },
+        {
+          "empirical_rate": 0.3333,
+          "hi": 0.6,
+          "lo": 0.5,
+          "mean_score": 0.5029,
+          "n": 3
+        },
+        {
+          "empirical_rate": null,
+          "hi": 0.7,
+          "lo": 0.6,
+          "mean_score": null,
+          "n": 0
+        },
+        {
+          "empirical_rate": 0.0,
+          "hi": 0.8,
+          "lo": 0.7,
+          "mean_score": 0.7765,
+          "n": 1
+        },
+        {
+          "empirical_rate": null,
+          "hi": 0.9,
+          "lo": 0.8,
+          "mean_score": null,
+          "n": 0
+        },
+        {
+          "empirical_rate": 1.0,
+          "hi": 1.0,
+          "lo": 0.9,
+          "mean_score": 1.0,
+          "n": 6
+        }
+      ],
+      "test_reliability_raw": [
+        {
+          "empirical_rate": 0.0,
+          "hi": 0.1,
+          "lo": 0.0,
+          "mean_score": 0.0639,
+          "n": 1
+        },
+        {
+          "empirical_rate": 0.1429,
+          "hi": 0.2,
+          "lo": 0.1,
+          "mean_score": 0.1678,
+          "n": 14
+        },
+        {
+          "empirical_rate": 0.4375,
+          "hi": 0.3,
+          "lo": 0.2,
+          "mean_score": 0.2319,
+          "n": 16
+        },
+        {
+          "empirical_rate": 0.3333,
+          "hi": 0.4,
+          "lo": 0.3,
+          "mean_score": 0.3235,
+          "n": 3
+        },
+        {
+          "empirical_rate": 0.6,
+          "hi": 0.5,
+          "lo": 0.4,
+          "mean_score": 0.4441,
+          "n": 5
+        },
+        {
+          "empirical_rate": 1.0,
+          "hi": 0.6,
+          "lo": 0.5,
+          "mean_score": 0.5747,
+          "n": 1
+        },
+        {
+          "empirical_rate": 0.0,
+          "hi": 0.7,
+          "lo": 0.6,
+          "mean_score": 0.6996,
+          "n": 1
+        },
+        {
+          "empirical_rate": 0.3333,
+          "hi": 0.8,
+          "lo": 0.7,
+          "mean_score": 0.7528,
+          "n": 3
+        },
+        {
+          "empirical_rate": 1.0,
+          "hi": 0.9,
+          "lo": 0.8,
+          "mean_score": 0.8772,
+          "n": 6
+        },
+        {
+          "empirical_rate": null,
+          "hi": 1.0,
+          "lo": 0.9,
+          "mean_score": null,
+          "n": 0
+        }
+      ]
+    },
+    "elicitor_choice": {
+      "chosen": "digit_expectation",
+      "disqualified": [],
+      "ranking": [
+        "digit_expectation",
+        "yes_no_probability"
+      ],
+      "reason": "lower dev cross-entropy by 0.8071 bits, outside the 0.01 margin",
+      "rule": "collapse disqualifies; then lowest dev cross-entropy in bits; ties within 0.01 bits go to lower ECE",
+      "tie_break_used": false
+    },
+    "map_candidates_dev": {
+      "identity": {
+        "brier": 0.22937232317582484,
+        "cross_entropy_bits": 0.9933505191753516,
+        "ece": 0.16160950775179894,
+        "order_preserving": true,
+        "params": {
+          "name": "identity",
+          "strictly_monotone": true
+        }
+      },
+      "isotonic": {
+        "brier": 0.20263826559709164,
+        "cross_entropy_bits": 0.8356317835692966,
+        "ece": 0.08590929388681906,
+        "order_preserving": false,
+        "params": {
+          "knots": [
+            [
+              2.8453347280241004e-08,
+              0.2608695652173913
+            ],
+            [
+              0.22854647295970762,
+              0.3333333333333333
+            ],
+            [
+              0.2593180856083898,
+              0.38461538461538464
+            ],
+            [
+              0.6642154666083476,
+              0.5
+            ],
+            [
+              0.749757241844589,
+              0.5
+            ],
+            [
+              0.79640101573984,
+              1.0
+            ],
+            [
+              0.8077308032474363,
+              1.0
+            ],
+            [
+              0.8124277306884308,
+              1.0
+            ],
+            [
+              0.8812080102358627,
+              1.0
+            ],
+            [
+              0.8889866208635734,
+              1.0
+            ],
+            [
+              0.8991448080221514,
+              1.0
+            ],
+            [
+              0.8996344396231138,
+              1.0
+            ]
+          ],
+          "name": "isotonic",
+          "strictly_monotone": false
+        }
+      },
+      "platt": {
+        "brier": 0.21779815269026312,
+        "cross_entropy_bits": 0.9103100694538847,
+        "ece": 0.10857050280318156,
+        "order_preserving": true,
+        "params": {
+          "a": 0.4737078140887084,
+          "b": -0.0009742022326174849,
+          "name": "platt",
+          "strictly_monotone": true
+        }
+      }
+    },
+    "map_choice": {
+      "chosen": "isotonic",
+      "override_applied": false,
+      "ranking": [
+        "isotonic",
+        "platt",
+        "identity"
+      ],
+      "reason": "isotonic beats the best order-preserving map (platt) by 0.0747 bits, more than the 0.02 margin, so the merge is worth it",
+      "rule": "lowest dev cross-entropy in bits, except that an order-preserving map is kept unless a merging map beats it by more than 0.02 bits (resolution R7)"
+    },
+    "maps_excluded": {},
+    "per_elicitor": {
+      "digit_expectation": {
+        "collapse": {
+          "collapsed": false,
+          "median_top1_prob": 0.7730567567527742,
+          "min_distinct_required": 9,
+          "n_distinct_scores": 85,
+          "top1_median_threshold": 0.99
+        },
+        "cross_entropy_bits": 0.9933505191753516,
+        "dev": {
+          "base_rate": 0.42,
+          "base_rate_entropy_bits": 0.9814538950336535,
+          "brier": 0.22937232317582484,
+          "cross_entropy_bits": 0.9933505191753516,
+          "ece": 0.16160950775179894,
+          "n": 50,
+          "n_distinct_scores": 48
+        },
+        "ece": 0.16160950775179894,
+        "n": 100,
+        "test": {
+          "base_rate": 0.42,
+          "base_rate_entropy_bits": 0.9814538950336535,
+          "brier": 0.20632531852260594,
+          "cross_entropy_bits": 0.8545785736317595,
+          "ece": 0.15262857327602686,
+          "n": 50,
+          "n_distinct_scores": 43
+        }
+      },
+      "yes_no_probability": {
+        "collapse": {
+          "collapsed": false,
+          "median_top1_prob": 0.9999998748117674,
+          "min_distinct_required": 9,
+          "n_distinct_scores": 19,
+          "top1_median_threshold": 0.99
+        },
+        "cross_entropy_bits": 1.8004342113607643,
+        "dev": {
+          "base_rate": 0.42,
+          "base_rate_entropy_bits": 0.9814538950336535,
+          "brier": 0.32243247053370183,
+          "cross_entropy_bits": 1.8004342113607643,
+          "ece": 0.3351974655810753,
+          "n": 50,
+          "n_distinct_scores": 8
+        },
+        "ece": 0.3351974655810753,
+        "n": 100,
+        "test": {
+          "base_rate": 0.42,
+          "base_rate_entropy_bits": 0.9814538950336535,
+          "brier": 0.3541890362785608,
+          "cross_entropy_bits": 1.9506749024376753,
+          "ece": 0.3660732302201778,
+          "n": 50,
+          "n_distinct_scores": 14
+        }
+      }
+    },
+    "recalibrated_scores": {
+      "a01-blast-007": {
+        "calibrated": 0.3260837246843833,
+        "raw": 0.20568163548494234,
+        "split": "dev"
+      },
+      "a01-blast-008": {
+        "calibrated": 0.325179581822987,
+        "raw": 0.202830022304031,
+        "split": "dev"
+      },
+      "a01-blast-009": {
+        "calibrated": 0.3236799808416372,
+        "raw": 0.19810036938400374,
+        "split": "test"
+      },
+      "a01-blast-010": {
+        "calibrated": 0.32468883750705435,
+        "raw": 0.2012822437177911,
+        "split": "test"
+      },
+      "a01-first-001": {
+        "calibrated": 0.3419322639149424,
+        "raw": 0.23370623070018617,
+        "split": "test"
+      },
+      "a01-first-002": {
+        "calibrated": 0.39672301322020037,
+        "raw": 0.3018050939142103,
+        "split": "dev"
+      },
+      "a01-first-003": {
+        "calibrated": 0.32443345993311645,
+        "raw": 0.2004767979336747,
+        "split": "test"
+      },
+      "a01-first-004": {
+        "calibrated": 0.3249321301901321,
+        "raw": 0.2020495744699383,
+        "split": "test"
+      },
+      "a01-first-005": {
+        "calibrated": 0.3306576261647953,
+        "raw": 0.22010745059295594,
+        "split": "dev"
+      },
+      "a01-first-006": {
+        "calibrated": 0.3315547463398799,
+        "raw": 0.22293691463604087,
+        "split": "dev"
+      },
+      "a02-deep-015": {
+        "calibrated": 0.32458133573929243,
+        "raw": 0.20094318949194911,
+        "split": "test"
+      },
+      "a02-deep-016": {
+        "calibrated": 0.5,
+        "raw": 0.749757241844589,
+        "split": "dev"
+      },
+      "a02-deep-017": {
+        "calibrated": 0.37235932609981576,
+        "raw": 0.2519638812461968,
+        "split": "test"
+      },
+      "a02-deep-018": {
+        "calibrated": 0.3912868823789028,
+        "raw": 0.28272910936395157,
+        "split": "dev"
+      },
+      "a02-early-011": {
+        "calibrated": 0.29359428832159046,
+        "raw": 0.10321187221164135,
+        "split": "dev"
+      },
+      "a02-early-012": {
+        "calibrated": 0.2948914271170602,
+        "raw": 0.10730297135599634,
+        "split": "dev"
+      },
+      "a02-early-013": {
+        "calibrated": 0.32281154954453917,
+        "raw": 0.1953613883675565,
+        "split": "test"
+      },
+      "a02-early-014": {
+        "calibrated": 0.32259430674600975,
+        "raw": 0.194676217412617,
+        "split": "test"
+      },
+      "a03-first-019": {
+        "calibrated": 0.33306427984622905,
+        "raw": 0.22769789415324349,
+        "split": "test"
+      },
+      "a03-first-020": {
+        "calibrated": 0.3279933386927366,
+        "raw": 0.21170444527438642,
+        "split": "dev"
+      },
+      "a03-first-021": {
+        "calibrated": 0.3255690688459744,
+        "raw": 0.20405844136916593,
+        "split": "test"
+      },
+      "a03-first-022": {
+        "calibrated": 0.32504331216568283,
+        "raw": 0.20240023585377154,
+        "split": "dev"
+      },
+      "a03-followup-023": {
+        "calibrated": 0.3056339998417404,
+        "raw": 0.14118441121085443,
+        "split": "test"
+      },
+      "a03-followup-024": {
+        "calibrated": 0.3333333333333333,
+        "raw": 0.22854647295970762,
+        "split": "dev"
+      },
+      "a03-followup-025": {
+        "calibrated": 0.3168834909270894,
+        "raw": 0.17666464163371706,
+        "split": "dev"
+      },
+      "a03-followup-026": {
+        "calibrated": 0.3849480400341575,
+        "raw": 0.26048541027630673,
+        "split": "test"
+      },
+      "a04-answerable-027": {
+        "calibrated": 0.326968238957756,
+        "raw": 0.208471341258606,
+        "split": "dev"
+      },
+      "a04-answerable-028": {
+        "calibrated": 0.321308989983781,
+        "raw": 0.19062240426282606,
+        "split": "test"
+      },
+      "a04-answerable-029": {
+        "calibrated": 0.3028840435298387,
+        "raw": 0.13251121143151964,
+        "split": "test"
+      },
+      "a04-answerable-030": {
+        "calibrated": 0.3195983331035069,
+        "raw": 0.1852270935037796,
+        "split": "test"
+      },
+      "a04-answerable-031": {
+        "calibrated": 0.32349172224196077,
+        "raw": 0.19750661288027135,
+        "split": "test"
+      },
+      "a04-answerable-032": {
+        "calibrated": 0.30287574079432616,
+        "raw": 0.13248502509412086,
+        "split": "dev"
+      },
+      "a04-answerable-033": {
+        "calibrated": 0.3189717929279016,
+        "raw": 0.18325102279702488,
+        "split": "dev"
+      },
+      "a04-answerable-034": {
+        "calibrated": 0.322852182346781,
+        "raw": 0.19548954182581768,
+        "split": "dev"
+      },
+      "a04-booking-035": {
+        "calibrated": 0.32743468543251986,
+        "raw": 0.20994248588897121,
+        "split": "test"
+      },
+      "a04-booking-036": {
+        "calibrated": 0.30090115782099874,
+        "raw": 0.12625730702659332,
+        "split": "dev"
+      },
+      "a04-booking-037": {
+        "calibrated": 0.3975158466204308,
+        "raw": 0.30458723403100635,
+        "split": "dev"
+      },
+      "a04-booking-038": {
+        "calibrated": 0.32430710026005155,
+        "raw": 0.20007826698836473,
+        "split": "test"
+      },
+      "a04-booking-039": {
+        "calibrated": 0.38461538461538464,
+        "raw": 0.2593180856083898,
+        "split": "dev"
+      },
+      "a04-booking-040": {
+        "calibrated": 0.450227309582687,
+        "raw": 0.48955758931581905,
+        "split": "test"
+      },
+      "a04-booking-041": {
+        "calibrated": 0.39333524353164456,
+        "raw": 0.28991703527004054,
+        "split": "test"
+      },
+      "a04-booking-042": {
+        "calibrated": 0.2956319696693032,
+        "raw": 0.10963859882502355,
+        "split": "dev"
+      },
+      "a05-public-051": {
+        "calibrated": 0.5,
+        "raw": 0.7257742481747819,
+        "split": "dev"
+      },
+      "a05-public-052": {
+        "calibrated": 0.5,
+        "raw": 0.699562244803361,
+        "split": "test"
+      },
+      "a05-public-053": {
+        "calibrated": 0.39809291789415474,
+        "raw": 0.3066122409749761,
+        "split": "dev"
+      },
+      "a05-public-054": {
+        "calibrated": 0.5,
+        "raw": 0.7323801553353054,
+        "split": "test"
+      },
+      "a05-restricted-043": {
+        "calibrated": 0.42589787426556813,
+        "raw": 0.404182909092872,
+        "split": "test"
+      },
+      "a05-restricted-044": {
+        "calibrated": 1.0,
+        "raw": 0.8667085739148218,
+        "split": "test"
+      },
+      "a05-restricted-045": {
+        "calibrated": 1.0,
+        "raw": 0.8812080102358627,
+        "split": "dev"
+      },
+      "a05-restricted-046": {
+        "calibrated": 1.0,
+        "raw": 0.8729163526100333,
+        "split": "test"
+      },
+      "a05-restricted-047": {
+        "calibrated": 1.0,
+        "raw": 0.79640101573984,
+        "split": "dev"
+      },
+      "a05-restricted-048": {
+        "calibrated": 1.0,
+        "raw": 0.8889866208635734,
+        "split": "dev"
+      },
+      "a05-restricted-049": {
+        "calibrated": 1.0,
+        "raw": 0.8995403301251725,
+        "split": "test"
+      },
+      "a05-restricted-050": {
+        "calibrated": 1.0,
+        "raw": 0.8077308032474363,
+        "split": "dev"
+      },
+      "a06-frustrated-055": {
+        "calibrated": 0.5085720265360397,
+        "raw": 0.7505569051797313,
+        "split": "test"
+      },
+      "a06-frustrated-056": {
+        "calibrated": 0.5,
+        "raw": 0.6642154666083476,
+        "split": "dev"
+      },
+      "a06-frustrated-057": {
+        "calibrated": 1.0,
+        "raw": 0.8991448080221514,
+        "split": "dev"
+      },
+      "a06-frustrated-058": {
+        "calibrated": 1.0,
+        "raw": 0.8996344396231138,
+        "split": "dev"
+      },
+      "a06-frustrated-059": {
+        "calibrated": 1.0,
+        "raw": 0.8772736803348105,
+        "split": "test"
+      },
+      "a06-frustrated-060": {
+        "calibrated": 1.0,
+        "raw": 0.8987138099944365,
+        "split": "test"
+      },
+      "a06-mild-061": {
+        "calibrated": 0.32297625309221917,
+        "raw": 0.19588085362859037,
+        "split": "test"
+      },
+      "a06-mild-062": {
+        "calibrated": 0.35017195554387964,
+        "raw": 0.23865042838361597,
+        "split": "dev"
+      },
+      "a07-internals-067": {
+        "calibrated": 0.39632341574792274,
+        "raw": 0.30040286217438866,
+        "split": "dev"
+      },
+      "a07-internals-068": {
+        "calibrated": 0.47450104094483825,
+        "raw": 0.5747367981979598,
+        "split": "test"
+      },
+      "a07-internals-069": {
+        "calibrated": 1.0,
+        "raw": 0.8124277306884308,
+        "split": "dev"
+      },
+      "a07-internals-070": {
+        "calibrated": 0.3991329573552502,
+        "raw": 0.31026185450907195,
+        "split": "test"
+      },
+      "a07-price-063": {
+        "calibrated": 0.32348693421711505,
+        "raw": 0.19749151173271656,
+        "split": "dev"
+      },
+      "a07-price-064": {
+        "calibrated": 0.41177639284705786,
+        "raw": 0.35462906846052056,
+        "split": "test"
+      },
+      "a07-price-065": {
+        "calibrated": 0.4125111276080123,
+        "raw": 0.3572073340243346,
+        "split": "dev"
+      },
+      "a07-price-066": {
+        "calibrated": 0.43525904182137903,
+        "raw": 0.43703228172210196,
+        "split": "test"
+      },
+      "a08-reaction-075": {
+        "calibrated": 0.2811282174307651,
+        "raw": 0.06389462094058074,
+        "split": "test"
+      },
+      "a08-reaction-076": {
+        "calibrated": 0.29663454536336076,
+        "raw": 0.1128006633461333,
+        "split": "test"
+      },
+      "a08-reaction-077": {
+        "calibrated": 0.2761528242771447,
+        "raw": 0.048202524809699714,
+        "split": "dev"
+      },
+      "a08-reaction-078": {
+        "calibrated": 0.29017517943381077,
+        "raw": 0.09242820473202788,
+        "split": "dev"
+      },
+      "a08-voice-071": {
+        "calibrated": 0.3863762769676401,
+        "raw": 0.26549725168936594,
+        "split": "test"
+      },
+      "a08-voice-072": {
+        "calibrated": 0.39336454027173584,
+        "raw": 0.2900198407722755,
+        "split": "test"
+      },
+      "a08-voice-073": {
+        "calibrated": 0.349468610135226,
+        "raw": 0.23822838847038624,
+        "split": "dev"
+      },
+      "a08-voice-074": {
+        "calibrated": 0.4662088491970668,
+        "raw": 0.5456385799456345,
+        "split": "dev"
+      },
+      "a09-oversharer-079": {
+        "calibrated": 0.8551751956729781,
+        "raw": 0.7828906648849329,
+        "split": "dev"
+      },
+      "a09-oversharer-080": {
+        "calibrated": 0.3990794295979271,
+        "raw": 0.310074019686564,
+        "split": "dev"
+      },
+      "a09-oversharer-081": {
+        "calibrated": 0.4986872674572656,
+        "raw": 0.6596089428812907,
+        "split": "dev"
+      },
+      "a09-oversharer-082": {
+        "calibrated": 0.4496167635061295,
+        "raw": 0.48741511558521056,
+        "split": "test"
+      },
+      "a09-oversharer-083": {
+        "calibrated": 0.3977944377424997,
+        "raw": 0.30556484110036747,
+        "split": "test"
+      },
+      "a09-oversharer-084": {
+        "calibrated": 0.7765121746692991,
+        "raw": 0.7755523845537069,
+        "split": "test"
+      },
+      "a10-early-085": {
+        "calibrated": 0.29769824215791757,
+        "raw": 0.11615550020805039,
+        "split": "test"
+      },
+      "a10-early-086": {
+        "calibrated": 0.2927939672958998,
+        "raw": 0.10068770696822446,
+        "split": "test"
+      },
+      "a10-early-087": {
+        "calibrated": 0.4658787615287872,
+        "raw": 0.5444802657982823,
+        "split": "dev"
+      },
+      "a10-early-088": {
+        "calibrated": 0.3896519727799235,
+        "raw": 0.2769920307023653,
+        "split": "dev"
+      },
+      "a10-early-089": {
+        "calibrated": 0.3220162644409027,
+        "raw": 0.19285310612484763,
+        "split": "test"
+      },
+      "a10-early-090": {
+        "calibrated": 0.29291287187417153,
+        "raw": 0.10106272498489806,
+        "split": "dev"
+      },
+      "a10-persistent-091": {
+        "calibrated": 0.42540289192521646,
+        "raw": 0.40244596129804194,
+        "split": "test"
+      },
+      "a10-persistent-092": {
+        "calibrated": 1.0,
+        "raw": 0.8480922690628793,
+        "split": "test"
+      },
+      "a10-persistent-093": {
+        "calibrated": 0.3226270972131801,
+        "raw": 0.19477963660927672,
+        "split": "dev"
+      },
+      "a10-persistent-094": {
+        "calibrated": 0.38850422032694926,
+        "raw": 0.27296444036290396,
+        "split": "dev"
+      },
+      "a11-first-095": {
+        "calibrated": 0.31723621024544923,
+        "raw": 0.17777709753017085,
+        "split": "dev"
+      },
+      "a11-first-096": {
+        "calibrated": 0.3254420578982518,
+        "raw": 0.20365785634205358,
+        "split": "test"
+      },
+      "a11-repeated-097": {
+        "calibrated": 0.2608695652173913,
+        "raw": 2.8453347280241004e-08,
+        "split": "dev"
+      },
+      "a11-repeated-098": {
+        "calibrated": 0.3872530417677117,
+        "raw": 0.2685739163739827,
+        "split": "test"
+      },
+      "a11-repeated-099": {
+        "calibrated": 0.2928505387279828,
+        "raw": 0.10086612992357662,
+        "split": "dev"
+      },
+      "a11-repeated-100": {
+        "calibrated": 0.32280367935893095,
+        "raw": 0.19533656626700707,
+        "split": "test"
+      }
+    }
+  },
+  "cache_hits": 200,
+  "cache_path": "when-to-escalate/data/logprob_cache.json",
+  "calls": 0,
+  "generated_at": "2026-08-24T14:26:39.024397+00:00",
+  "mode": "rescore",
+  "model_summary": "gpt-4o-mini-2024-07-18=200",
+  "n_cases": 100,
+  "preregistration": {
+    "clip": [
+      0.02,
+      0.98
+    ],
+    "collapse_min_distinct": 9,
+    "collapse_top1_median": 0.99,
+    "elicitor_tie_break": "ece",
+    "elicitor_tie_margin_bits": 0.01,
+    "map_candidates": [
+      "identity",
+      "platt",
+      "isotonic"
+    ],
+    "map_monotone_margin_bits": 0.02,
+    "n_bins": 10,
+    "primary_metric": "cross_entropy_bits",
+    "primary_test_metrics": [
+      "cross_entropy_bits",
+      "ece",
+      "brier"
+    ],
+    "score_rounding_dp": 3,
+    "secondary_caveat": "The test split carries only 8 of v1's 16 escalation misses, so a change of one or two misses is not evidence. Mean cost and miss count are reported alongside the calibration metrics and are not the claim.",
+    "secondary_test_metrics": [
+      "mean_cost",
+      "escalation_misses"
+    ],
+    "selection_split": "dev"
+  },
+  "prompt_hashes": {
+    "digit_expectation": "6bb21f453f9cc522",
+    "yes_no_probability": "7ce4984e16aa3962"
+  },
+  "reportable": true,
+  "reproduction_check": {
+    "available": true,
+    "compared": 100,
+    "drift_detail": [
+      {
+        "case_id": "a02-deep-016",
+        "reelicited": 0.7,
+        "v1": 0.8
+      },
+      {
+        "case_id": "a02-deep-017",
+        "reelicited": 0.2,
+        "v1": 0.3
+      },
+      {
+        "case_id": "a03-followup-024",
+        "reelicited": 0.2,
+        "v1": 0.3
+      },
+      {
+        "case_id": "a04-booking-035",
+        "reelicited": 0.2,
+        "v1": 0.1
+      },
+      {
+        "case_id": "a04-booking-040",
+        "reelicited": 0.3,
+        "v1": 0.9
+      },
+      {
+        "case_id": "a07-internals-068",
+        "reelicited": 0.7,
+        "v1": 0.4
+      },
+      {
+        "case_id": "a10-early-087",
+        "reelicited": 0.6,
+        "v1": 0.4
+      },
+      {
+        "case_id": "a10-persistent-091",
+        "reelicited": 0.4,
+        "v1": 0.2
+      },
+      {
+        "case_id": "a10-persistent-094",
+        "reelicited": 0.3,
+        "v1": 0.2
+      },
+      {
+        "case_id": "a11-first-095",
+        "reelicited": 0.2,
+        "v1": 0.0
+      },
+      {
+        "case_id": "a11-repeated-100",
+        "reelicited": 0.2,
+        "v1": 0.1
+      }
+    ],
+    "drifted": 11,
+    "match_rate": 0.89,
+    "matched": 89,
+    "note": "Elicitor A sends v1's system prompt at temperature 0, so the written value should equal v1's cached belief. Any drift is reported as measured; nothing is adjusted to hide it.",
+    "unparseable": 0,
+    "unparseable_detail": []
+  },
+  "rows": [
+    {
+      "archetype": 1,
+      "case_id": "a01-first-001",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.5877986707952829,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.23370623070018617,
+      "split": "test",
+      "variant": "1a-first"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-first-001",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999985996898,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999412601245,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 7.582559993131187e-10,
+      "split": "test",
+      "variant": "1a-first"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-first-002",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0000000000000002,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 18,
+        "path": "decimal",
+        "top1_prob": 0.7907749489540905,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.3018050939142103,
+      "split": "dev",
+      "variant": "1a-first"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-first-002",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999993669111,
+        "n_alternatives": 20,
+        "top1_prob": 0.999999962893001,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.3440409460910716e-08,
+      "split": "dev",
+      "variant": "1a-first"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-first-003",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9779862527736137,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.2004767979336747,
+      "split": "test",
+      "variant": "1a-first"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-first-003",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999986835821,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999623545027,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 6.691585848193618e-10,
+      "split": "test",
+      "variant": "1a-first"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-first-004",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.6150758687140341,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.2020495744699383,
+      "split": "test",
+      "variant": "1a-first"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-first-004",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999991975799,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999657443311,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 2.6465735503726306e-09,
+      "split": "test",
+      "variant": "1a-first"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-first-005",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.8915839027069759,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.22010745059295594,
+      "split": "dev",
+      "variant": "1a-first"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-first-005",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999998880166,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999651152639,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 4.0586519894357014e-10,
+      "split": "dev",
+      "variant": "1a-first"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-first-006",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.6233758096569667,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.22293691463604087,
+      "split": "dev",
+      "variant": "1a-first"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-first-006",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999990988131,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999650153616,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 4.363462104221847e-09,
+      "split": "dev",
+      "variant": "1a-first"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-blast-007",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0000000000000002,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9578509146405288,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.20568163548494234,
+      "split": "dev",
+      "variant": "1b-blast"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-blast-007",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999994778435,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999509406485,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 2.5109990338671262e-08,
+      "split": "dev",
+      "variant": "1b-blast"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-blast-008",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9409727660417635,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.202830022304031,
+      "split": "dev",
+      "variant": "1b-blast"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-blast-008",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999991839033,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999506494763,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 2.5109990338740766e-08,
+      "split": "dev",
+      "variant": "1b-blast"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-blast-009",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9647469420758332,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.19810036938400374,
+      "split": "test",
+      "variant": "1b-blast"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-blast-009",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999990855338,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999143183357,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 6.825604119270765e-08,
+      "split": "test",
+      "variant": "1b-blast"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-blast-010",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.6018898240544667,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.2012822437177911,
+      "split": "test",
+      "variant": "1b-blast"
+    },
+    {
+      "archetype": 1,
+      "case_id": "a01-blast-010",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999998997195,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999057275725,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 7.734422683236874e-08,
+      "split": "test",
+      "variant": "1b-blast"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-early-011",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9823266593434644,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.10321187221164135,
+      "split": "dev",
+      "variant": "2a-early"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-early-011",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999989510866,
+        "n_alternatives": 20,
+        "top1_prob": 0.999999963831244,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.6052279988102548e-09,
+      "split": "dev",
+      "variant": "2a-early"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-early-012",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9619028310426014,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.10730297135599634,
+      "split": "dev",
+      "variant": "2a-early"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-early-012",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995194429,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999768113544,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 8.15202052935336e-09,
+      "split": "dev",
+      "variant": "2a-early"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-early-013",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9309185940620631,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.1953613883675565,
+      "split": "test",
+      "variant": "2a-early"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-early-013",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999993780225,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999998436408016,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.4449803008384743e-07,
+      "split": "test",
+      "variant": "2a-early"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-early-014",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9475523964453071,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.194676217412617,
+      "split": "test",
+      "variant": "2a-early"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-early-014",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999999006288,
+        "n_alternatives": 20,
+        "top1_prob": 0.999999978745238,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 6.348799987410324e-09,
+      "split": "test",
+      "variant": "2a-early"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-deep-015",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9568483544407923,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.20094318949194911,
+      "split": "test",
+      "variant": "2b-deep"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-deep-015",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995883286,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999995972986532,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 3.9278636622573323e-07,
+      "split": "test",
+      "variant": "2b-deep"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-deep-016",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "7",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 18,
+        "path": "decimal",
+        "top1_prob": 0.5110190583699367,
+        "top1_token": "7",
+        "value_as_written": "0.7"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.749757241844589,
+      "split": "dev",
+      "variant": "2b-deep"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-deep-016",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999996634487,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999037915872627,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.999903897597518,
+      "split": "dev",
+      "variant": "2b-deep"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-deep-017",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.49637535384482795,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.2519638812461968,
+      "split": "test",
+      "variant": "2b-deep"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-deep-017",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995860934,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999989210803192,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.0677030651825887e-06,
+      "split": "test",
+      "variant": "2b-deep"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-deep-018",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.7377117856405102,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.28272910936395157,
+      "split": "dev",
+      "variant": "2b-deep"
+    },
+    {
+      "archetype": 2,
+      "case_id": "a02-deep-018",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999999600535,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999724499491455,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 2.7535692195384012e-05,
+      "split": "dev",
+      "variant": "2b-deep"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-first-019",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.8445997708042722,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.22769789415324349,
+      "split": "test",
+      "variant": "3a-first"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-first-019",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999985937038,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999644540715,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 4.84736854078287e-11,
+      "split": "test",
+      "variant": "3a-first"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-first-020",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9153199736446876,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.21170444527438642,
+      "split": "dev",
+      "variant": "3a-first"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-first-020",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999983283402,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999596652515,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 3.3315444133586096e-11,
+      "split": "dev",
+      "variant": "3a-first"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-first-021",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9103011781241956,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.20405844136916593,
+      "split": "test",
+      "variant": "3a-first"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-first-021",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999985571492,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999498032069,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.317651362768845e-10,
+      "split": "test",
+      "variant": "3a-first"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-first-022",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9546211819841088,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.20240023585377154,
+      "split": "dev",
+      "variant": "3a-first"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-first-022",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999983110422,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999593680325,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 3.7751343972639967e-11,
+      "split": "dev",
+      "variant": "3a-first"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-followup-023",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.511174330720421,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.14118441121085443,
+      "split": "test",
+      "variant": "3b-followup"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-followup-023",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999989418993,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999631708099,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 8.592166311822949e-10,
+      "split": "test",
+      "variant": "3b-followup"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-followup-024",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.3929189543352075,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.22854647295970762,
+      "split": "dev",
+      "variant": "3b-followup"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-followup-024",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995368344,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999086985893,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 6.825604077832199e-08,
+      "split": "dev",
+      "variant": "3b-followup"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-followup-025",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.7827575816469269,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.17666464163371706,
+      "split": "dev",
+      "variant": "3b-followup"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-followup-025",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999988990849,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999653049755,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 3.581747809957549e-10,
+      "split": "dev",
+      "variant": "3b-followup"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-followup-026",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.5292002189665876,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.26048541027630673,
+      "split": "test",
+      "variant": "3b-followup"
+    },
+    {
+      "archetype": 3,
+      "case_id": "a03-followup-026",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999925714612,
+        "n_alternatives": 20,
+        "top1_prob": 0.6224592478234603,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.6224593678414072,
+      "split": "test",
+      "variant": "3b-followup"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-027",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.41626643647939415,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.208471341258606,
+      "split": "dev",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-027",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999984858422,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999562459086,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.4930946131289442e-10,
+      "split": "dev",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-028",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9033123011226319,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.19062240426282606,
+      "split": "test",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-028",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999990448212,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999654058284,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 2.7894679990340274e-10,
+      "split": "test",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-029",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 0.9999999999999999,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.8342443535978762,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.13251121143151964,
+      "split": "test",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-029",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999999149817,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999635750865,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 6.3487998901868266e-09,
+      "split": "test",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-030",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.8512301208691818,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.1852270935037796,
+      "split": "test",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-030",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999999251225,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999618649363,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.1861119707900569e-08,
+      "split": "test",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-031",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0000000000000002,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9674820440752914,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.19750661288027135,
+      "split": "test",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-031",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999989780048,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999651545054,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.103255995027574e-09,
+      "split": "test",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-032",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.8369775822191085,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.13248502509412086,
+      "split": "dev",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-032",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999992316231,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999625408068,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.0467401410687141e-08,
+      "split": "dev",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-033",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.8043923744281976,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.18325102279702488,
+      "split": "dev",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-033",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995560632,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999977254908099,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 2.26032524314644e-06,
+      "split": "dev",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-034",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9507062157476963,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.19548954182581768,
+      "split": "dev",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-answerable-034",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999993029396,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999693033501,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 6.691585890547946e-10,
+      "split": "dev",
+      "variant": "4a-answerable"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-035",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.4131685079192826,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.20994248588897121,
+      "split": "test",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-035",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999992864257,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999530261041,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 2.8453346773572964e-08,
+      "split": "test",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-036",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.7585468782746214,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.12625730702659332,
+      "split": "dev",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-036",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999991098716,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999591410832,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 2.2159488887678022e-08,
+      "split": "dev",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-037",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.7754199623799244,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.30458723403100635,
+      "split": "dev",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-037",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999996410652,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999986192841571,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.3709566421670702e-06,
+      "split": "dev",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-038",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9785199553947498,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.20007826698836473,
+      "split": "test",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-038",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999993764852,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999729991821,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 3.850741821195429e-09,
+      "split": "test",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-039",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.6479516460362063,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.2593180856083898,
+      "split": "dev",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-039",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999999507857,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999995945598983,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 3.9278636518159535e-07,
+      "split": "dev",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-040",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.35122802173397233,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.48955758931581905,
+      "split": "test",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-040",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999955476649,
+        "n_alternatives": 20,
+        "top1_prob": 0.7310584339218928,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.7310586191345374,
+      "split": "test",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-041",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.7718756715231566,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.28991703527004054,
+      "split": "test",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-041",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995268131,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999998394081862,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.4449802945074279e-07,
+      "split": "test",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-042",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9283399061285479,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.10963859882502355,
+      "split": "dev",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 4,
+      "case_id": "a04-booking-042",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995829442,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999998050102502,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.855391582004169e-07,
+      "split": "dev",
+      "variant": "4b-booking"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-043",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "4",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.7383317902306787,
+        "top1_token": "4",
+        "value_as_written": "0.4"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.404182909092872,
+      "split": "test",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-043",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999999645734,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999869801504142,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.3007125619798893e-05,
+      "split": "test",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-044",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "9",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.7149180288892736,
+        "top1_token": "9",
+        "value_as_written": "0.9"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8667085739148218,
+      "split": "test",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-044",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999949948247,
+        "n_alternatives": 20,
+        "top1_prob": 0.9399132814368529,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.06008667038483544,
+      "split": "test",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-045",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "9",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.8156985823695979,
+        "top1_token": "9",
+        "value_as_written": "0.9"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8812080102358627,
+      "split": "dev",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-045",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999936497215,
+        "n_alternatives": 20,
+        "top1_prob": 0.6224592223990306,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.6224593775392258,
+      "split": "dev",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-046",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "9",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.7479458005028908,
+        "top1_token": "9",
+        "value_as_written": "0.9"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8729163526100333,
+      "split": "test",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-046",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999981636495,
+        "n_alternatives": 20,
+        "top1_prob": 0.9859362085365361,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9859363729756746,
+      "split": "test",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-047",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "8",
+        "mass_on_numeric": 1.0000000000000002,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.7126186230952155,
+        "top1_token": "8",
+        "value_as_written": "0.8"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.79640101573984,
+      "split": "dev",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-047",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999998227964,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999985802387796,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9999986290434116,
+      "split": "dev",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-048",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "9",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 18,
+        "path": "decimal",
+        "top1_prob": 0.8853880649779017,
+        "top1_token": "9",
+        "value_as_written": "0.9"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8889866208635734,
+      "split": "dev",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-048",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999997736029,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999474856759,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9999999966017323,
+      "split": "dev",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-049",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "9",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9936231255301086,
+        "top1_token": "9",
+        "value_as_written": "0.9"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8995403301251725,
+      "split": "test",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-049",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999997792501,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999604096814,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9999999997210531,
+      "split": "test",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-050",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "8",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 18,
+        "path": "decimal",
+        "top1_prob": 0.740524854536141,
+        "top1_token": "8",
+        "value_as_written": "0.8"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8077308032474363,
+      "split": "dev",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-restricted-050",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999998747371,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999353018963,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9999999895325968,
+      "split": "dev",
+      "variant": "5a-restricted"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-public-051",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "7",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.62383107225048,
+        "top1_token": "7",
+        "value_as_written": "0.7"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.7257742481747819,
+      "split": "dev",
+      "variant": "5b-public"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-public-051",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999992885448,
+        "n_alternatives": 20,
+        "top1_prob": 0.9770225375073414,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9770226313082879,
+      "split": "dev",
+      "variant": "5b-public"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-public-052",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "7",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.5124712435865092,
+        "top1_token": "7",
+        "value_as_written": "0.7"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.699562244803361,
+      "split": "test",
+      "variant": "5b-public"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-public-052",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995710908,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999251407008521,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 7.484620460239352e-05,
+      "split": "test",
+      "variant": "5b-public"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-public-053",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.7347501009930034,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.3066122409749761,
+      "split": "dev",
+      "variant": "5b-public"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-public-053",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995531472,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999982284160233,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.7603431153289884e-06,
+      "split": "dev",
+      "variant": "5b-public"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-public-054",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "7",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.5714333433524099,
+        "top1_token": "7",
+        "value_as_written": "0.7"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.7323801553353054,
+      "split": "test",
+      "variant": "5b-public"
+    },
+    {
+      "archetype": 5,
+      "case_id": "a05-public-054",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999966946421,
+        "n_alternatives": 20,
+        "top1_prob": 0.970687729500989,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.029312233573706718,
+      "split": "test",
+      "variant": "5b-public"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-frustrated-055",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "7",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 18,
+        "path": "decimal",
+        "top1_prob": 0.48009758060954705,
+        "top1_token": "7",
+        "value_as_written": "0.7"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.7505569051797313,
+      "split": "test",
+      "variant": "6a-frustrated"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-frustrated-055",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999983758676,
+        "n_alternatives": 20,
+        "top1_prob": 0.9706876110992567,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9706877725497892,
+      "split": "test",
+      "variant": "6a-frustrated"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-frustrated-056",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "7",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.7266200540843348,
+        "top1_token": "7",
+        "value_as_written": "0.7"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.6642154666083476,
+      "split": "dev",
+      "variant": "6a-frustrated"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-frustrated-056",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999992383749,
+        "n_alternatives": 20,
+        "top1_prob": 0.9984988004932601,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.0015011822592963123,
+      "split": "dev",
+      "variant": "6a-frustrated"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-frustrated-057",
+      "detail": {
+        "decisive_index": 35,
+        "decisive_token": "9",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9929233027470231,
+        "top1_token": "9",
+        "value_as_written": "0.9"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8991448080221514,
+      "split": "dev",
+      "variant": "6a-frustrated"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-frustrated-057",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999998216642,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999995800613098,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.999999694097931,
+      "split": "dev",
+      "variant": "6a-frustrated"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-frustrated-058",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "9",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9942217786070395,
+        "top1_token": "9",
+        "value_as_written": "0.9"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8996344396231138,
+      "split": "dev",
+      "variant": "6a-frustrated"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-frustrated-058",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999998604305,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999525514818,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9999999961492583,
+      "split": "dev",
+      "variant": "6a-frustrated"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-frustrated-059",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "9",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 18,
+        "path": "decimal",
+        "top1_prob": 0.7742378419823919,
+        "top1_token": "9",
+        "value_as_written": "0.9"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8772736803348105,
+      "split": "test",
+      "variant": "6a-frustrated"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-frustrated-059",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999997799907,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999188280663,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9999999677581289,
+      "split": "test",
+      "variant": "6a-frustrated"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-frustrated-060",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "9",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 18,
+        "path": "decimal",
+        "top1_prob": 0.9864234722685329,
+        "top1_token": "9",
+        "value_as_written": "0.9"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8987138099944365,
+      "split": "test",
+      "variant": "6a-frustrated"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-frustrated-060",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999998546407,
+        "n_alternatives": 20,
+        "top1_prob": 0.999999941421659,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9999999966017323,
+      "split": "test",
+      "variant": "6a-frustrated"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-mild-061",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9514684107371358,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.19588085362859037,
+      "split": "test",
+      "variant": "6b-mild"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-mild-061",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999990503086,
+        "n_alternatives": 20,
+        "top1_prob": 0.999999942256937,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 3.653482006227472e-08,
+      "split": "test",
+      "variant": "6b-mild"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-mild-062",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.802579309470901,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.23865042838361597,
+      "split": "dev",
+      "variant": "6b-mild"
+    },
+    {
+      "archetype": 6,
+      "case_id": "a06-mild-062",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999999713193,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999898612398799,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.0129988440476433e-05,
+      "split": "dev",
+      "variant": "6b-mild"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-price-063",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9314033776080869,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.19749151173271656,
+      "split": "dev",
+      "variant": "7a-price-only"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-price-063",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999988348103,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999684161315,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 9.736200016847214e-10,
+      "split": "dev",
+      "variant": "7a-price-only"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-price-064",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.48033194604660495,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.35462906846052056,
+      "split": "test",
+      "variant": "7a-price-only"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-price-064",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999998024455,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999545004453009,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9999546021427569,
+      "split": "test",
+      "variant": "7a-price-only"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-price-065",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.460916466390933,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.3572073340243346,
+      "split": "dev",
+      "variant": "7a-price-only"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-price-065",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999993647664,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999174113071,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 6.825604138476235e-08,
+      "split": "dev",
+      "variant": "7a-price-only"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-price-066",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "4",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.8043339060988345,
+        "top1_token": "4",
+        "value_as_written": "0.4"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.43703228172210196,
+      "split": "test",
+      "variant": "7a-price-only"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-price-066",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995874772,
+        "n_alternatives": 20,
+        "top1_prob": 0.999986981764337,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.3007125419017275e-05,
+      "split": "test",
+      "variant": "7a-price-only"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-internals-067",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.6013699126099257,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.30040286217438866,
+      "split": "dev",
+      "variant": "7b-internals"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-internals-067",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999996445637,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999995961606196,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 3.9278636575664067e-07,
+      "split": "dev",
+      "variant": "7b-internals"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-internals-068",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "7",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.454675872685042,
+        "top1_token": "7",
+        "value_as_written": "0.7"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.5747367981979598,
+      "split": "test",
+      "variant": "7b-internals"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-internals-068",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999937648465,
+        "n_alternatives": 20,
+        "top1_prob": 0.9046504525213275,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.0953494963664122,
+      "split": "test",
+      "variant": "7b-internals"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-internals-069",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "8",
+        "mass_on_numeric": 1.0000000000000002,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.6468060181478112,
+        "top1_token": "8",
+        "value_as_written": "0.8"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8124277306884308,
+      "split": "dev",
+      "variant": "7b-internals"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-internals-069",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999998382655,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999962027860052,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9999962733607015,
+      "split": "dev",
+      "variant": "7b-internals"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-internals-070",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.6364918974632447,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.31026185450907195,
+      "split": "test",
+      "variant": "7b-internals"
+    },
+    {
+      "archetype": 7,
+      "case_id": "a07-internals-070",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995554453,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999995972396261,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 3.927863662154643e-07,
+      "split": "test",
+      "variant": "7b-internals"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-voice-071",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.7019456714295894,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.26549725168936594,
+      "split": "test",
+      "variant": "8a-voice"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-voice-071",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999419430028,
+        "n_alternatives": 20,
+        "top1_prob": 0.9046503068748145,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9046505465844188,
+      "split": "test",
+      "variant": "8a-voice"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-voice-072",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.5930874830764052,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.2900198407722755,
+      "split": "test",
+      "variant": "8a-voice"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-voice-072",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999959649969,
+        "n_alternatives": 20,
+        "top1_prob": 0.9968271937430628,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9968273168636931,
+      "split": "test",
+      "variant": "8a-voice"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-voice-073",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.8041814623720133,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.23822838847038624,
+      "split": "dev",
+      "variant": "8a-voice"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-voice-073",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999230161349,
+        "n_alternatives": 20,
+        "top1_prob": 0.5621763802017349,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.5621765463502426,
+      "split": "dev",
+      "variant": "8a-voice"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-voice-074",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "4",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.3916085064657962,
+        "top1_token": "4",
+        "value_as_written": "0.4"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.5456385799456345,
+      "split": "dev",
+      "variant": "8a-voice"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-voice-074",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999937037495,
+        "n_alternatives": 20,
+        "top1_prob": 0.993307020685254,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9933071484434497,
+      "split": "dev",
+      "variant": "8a-voice"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-reaction-075",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "0",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.44070837418998093,
+        "top1_token": "0",
+        "value_as_written": "0.0"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.06389462094058074,
+      "split": "test",
+      "variant": "8b-reaction"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-reaction-075",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999999134592,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999770367353,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.416608755339178e-09,
+      "split": "test",
+      "variant": "8b-reaction"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-reaction-076",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.44185224592202954,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.1128006633461333,
+      "split": "test",
+      "variant": "8b-reaction"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-reaction-076",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999996761666,
+        "n_alternatives": 20,
+        "top1_prob": 0.9980732008443456,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9980732657658616,
+      "split": "test",
+      "variant": "8b-reaction"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-reaction-077",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "0",
+        "mass_on_numeric": 1.0000000000000002,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.5373125093301568,
+        "top1_token": "0",
+        "value_as_written": "0.0"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.048202524809699714,
+      "split": "dev",
+      "variant": "8b-reaction"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-reaction-077",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999992022839,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999581030081,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 2.8453346920421997e-08,
+      "split": "dev",
+      "variant": "8b-reaction"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-reaction-078",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.5223234128786833,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.09242820473202788,
+      "split": "dev",
+      "variant": "8b-reaction"
+    },
+    {
+      "archetype": 8,
+      "case_id": "a08-reaction-078",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999987177559,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999573643321,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.522997911490082e-08,
+      "split": "dev",
+      "variant": "8b-reaction"
+    },
+    {
+      "archetype": 9,
+      "case_id": "a09-oversharer-079",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "9",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.5291283315919044,
+        "top1_token": "9",
+        "value_as_written": "0.9"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.7828906648849329,
+      "split": "dev",
+      "variant": "9-oversharer"
+    },
+    {
+      "archetype": 9,
+      "case_id": "a09-oversharer-079",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999994724889,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999685982844,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 5.602796264555385e-09,
+      "split": "dev",
+      "variant": "9-oversharer"
+    },
+    {
+      "archetype": 9,
+      "case_id": "a09-oversharer-080",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.7539530810338777,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.310074019686564,
+      "split": "dev",
+      "variant": "9-oversharer"
+    },
+    {
+      "archetype": 9,
+      "case_id": "a09-oversharer-080",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995671399,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999206710801,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 6.825604159344836e-08,
+      "split": "dev",
+      "variant": "9-oversharer"
+    },
+    {
+      "archetype": 9,
+      "case_id": "a09-oversharer-081",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "7",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.7801460193417201,
+        "top1_token": "7",
+        "value_as_written": "0.7"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.6596089428812907,
+      "split": "dev",
+      "variant": "9-oversharer"
+    },
+    {
+      "archetype": 9,
+      "case_id": "a09-oversharer-081",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999984556676,
+        "n_alternatives": 20,
+        "top1_prob": 0.8519527082716415,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8519528105510709,
+      "split": "dev",
+      "variant": "9-oversharer"
+    },
+    {
+      "archetype": 9,
+      "case_id": "a09-oversharer-082",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "4",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.46144497511546595,
+        "top1_token": "4",
+        "value_as_written": "0.4"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.48741511558521056,
+      "split": "test",
+      "variant": "9-oversharer"
+    },
+    {
+      "archetype": 9,
+      "case_id": "a09-oversharer-082",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999990055436,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999998177510523,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.4449802639665154e-07,
+      "split": "test",
+      "variant": "9-oversharer"
+    },
+    {
+      "archetype": 9,
+      "case_id": "a09-oversharer-083",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.8841012420910943,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.30556484110036747,
+      "split": "test",
+      "variant": "9-oversharer"
+    },
+    {
+      "archetype": 9,
+      "case_id": "a09-oversharer-083",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999991407795,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999613186844,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 8.592166294200366e-10,
+      "split": "test",
+      "variant": "9-oversharer"
+    },
+    {
+      "archetype": 9,
+      "case_id": "a09-oversharer-084",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "8",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.5964561684608884,
+        "top1_token": "8",
+        "value_as_written": "0.8"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.7755523845537069,
+      "split": "test",
+      "variant": "9-oversharer"
+    },
+    {
+      "archetype": 9,
+      "case_id": "a09-oversharer-084",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999999846292,
+        "n_alternatives": 20,
+        "top1_prob": 0.999999724045868,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9999997617630245,
+      "split": "test",
+      "variant": "9-oversharer"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-early-085",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 18,
+        "path": "decimal",
+        "top1_prob": 0.8480449211390845,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.11615550020805039,
+      "split": "test",
+      "variant": "10a-early"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-early-085",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999998806214,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999714090554,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 4.3634621333972344e-09,
+      "split": "test",
+      "variant": "10a-early"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-early-086",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9910120667965439,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.10068770696822446,
+      "split": "test",
+      "variant": "10a-early"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-early-086",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999994998938,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999991568936192,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 8.315279811668015e-07,
+      "split": "test",
+      "variant": "10a-early"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-early-087",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "6",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.5021318780832843,
+        "top1_token": "6",
+        "value_as_written": "0.6"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.5444802657982823,
+      "split": "dev",
+      "variant": "10a-early"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-early-087",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999999388612,
+        "n_alternatives": 20,
+        "top1_prob": 0.999997080945387,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 2.902312408324655e-06,
+      "split": "dev",
+      "variant": "10a-early"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-early-088",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0000000000000002,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.7140203499331784,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.2769920307023653,
+      "split": "dev",
+      "variant": "10a-early"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-early-088",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999995082736,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999994843993701,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 5.043471997990089e-07,
+      "split": "dev",
+      "variant": "10a-early"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-early-089",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9161778692141901,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.19285310612484763,
+      "split": "test",
+      "variant": "10a-early"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-early-089",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999993875344,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999998028936905,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.8553915784396827e-07,
+      "split": "test",
+      "variant": "10a-early"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-early-090",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9932862367389017,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.10106272498489806,
+      "split": "dev",
+      "variant": "10a-early"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-early-090",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999993598334,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999692600273,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.1861119794326412e-08,
+      "split": "dev",
+      "variant": "10a-early"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-persistent-091",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "4",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.8312746926778748,
+        "top1_token": "4",
+        "value_as_written": "0.4"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.40244596129804194,
+      "split": "test",
+      "variant": "10b-persistent"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-persistent-091",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999994873308,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999038801355551,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 9.610240995241931e-05,
+      "split": "test",
+      "variant": "10b-persistent"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-persistent-092",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "9",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.5888827770037127,
+        "top1_token": "9",
+        "value_as_written": "0.9"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.8480922690628793,
+      "split": "test",
+      "variant": "10b-persistent"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-persistent-092",
+      "detail": {
+        "emitted_token": "Yes",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.999999998342215,
+        "n_alternatives": 20,
+        "top1_prob": 0.9947796476045623,
+        "top1_token": "Yes"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.9947798740023396,
+      "split": "test",
+      "variant": "10b-persistent"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-persistent-093",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9415931500367428,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.19477963660927672,
+      "split": "dev",
+      "variant": "10b-persistent"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-persistent-093",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999990698927,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999665321324,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 3.3982677089230473e-09,
+      "split": "dev",
+      "variant": "10b-persistent"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-persistent-094",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.6620208533708203,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.27296444036290396,
+      "split": "dev",
+      "variant": "10b-persistent"
+    },
+    {
+      "archetype": 10,
+      "case_id": "a10-persistent-094",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999992836235,
+        "n_alternatives": 20,
+        "top1_prob": 0.9995694219831858,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.00043055716530745244,
+      "split": "dev",
+      "variant": "10b-persistent"
+    },
+    {
+      "archetype": 11,
+      "case_id": "a11-first-095",
+      "detail": {
+        "decisive_index": 35,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.761370116791304,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.17777709753017085,
+      "split": "dev",
+      "variant": "11a-first"
+    },
+    {
+      "archetype": 11,
+      "case_id": "a11-first-095",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999992380704,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999655346724,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 9.73619998486653e-10,
+      "split": "dev",
+      "variant": "11a-first"
+    },
+    {
+      "archetype": 11,
+      "case_id": "a11-first-096",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9529758068855052,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.20365785634205358,
+      "split": "test",
+      "variant": "11a-first"
+    },
+    {
+      "archetype": 11,
+      "case_id": "a11-first-096",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999990929554,
+        "n_alternatives": 20,
+        "top1_prob": 0.9997965559333399,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": false,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.00020342708370283872,
+      "split": "test",
+      "variant": "11a-first"
+    },
+    {
+      "archetype": 11,
+      "case_id": "a11-repeated-097",
+      "detail": {
+        "decisive_index": 29,
+        "decisive_token": "0",
+        "mass_on_numeric": 0.9999999999925415,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 2,
+        "path": "integer",
+        "top1_prob": 0.9999999715391942,
+        "top1_token": "0",
+        "value_as_written": "0"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 2.8453347280241004e-08,
+      "split": "dev",
+      "variant": "11b-repeated"
+    },
+    {
+      "archetype": 11,
+      "case_id": "a11-repeated-097",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999990517452,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999999601277052,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 7.582560132768021e-10,
+      "split": "dev",
+      "variant": "11b-repeated"
+    },
+    {
+      "archetype": 11,
+      "case_id": "a11-repeated-098",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "3",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.6053571609204343,
+        "top1_token": "3",
+        "value_as_written": "0.3"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.2685739163739827,
+      "split": "test",
+      "variant": "11b-repeated"
+    },
+    {
+      "archetype": 11,
+      "case_id": "a11-repeated-098",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999971467516,
+        "n_alternatives": 20,
+        "top1_prob": 0.9914224645372367,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.008577488001507002,
+      "split": "test",
+      "variant": "11b-repeated"
+    },
+    {
+      "archetype": 11,
+      "case_id": "a11-repeated-099",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "1",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 19,
+        "path": "decimal",
+        "top1_prob": 0.9877606192141264,
+        "top1_token": "1",
+        "value_as_written": "0.1"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.10086612992357662,
+      "split": "dev",
+      "variant": "11b-repeated"
+    },
+    {
+      "archetype": 11,
+      "case_id": "a11-repeated-099",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999994482989,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999545847705201,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 4.539786077352158e-05,
+      "split": "dev",
+      "variant": "11b-repeated"
+    },
+    {
+      "archetype": 11,
+      "case_id": "a11-repeated-100",
+      "detail": {
+        "decisive_index": 37,
+        "decisive_token": "2",
+        "mass_on_numeric": 1.0,
+        "n_alternatives": 20,
+        "n_numeric_candidates": 20,
+        "path": "decimal",
+        "top1_prob": 0.9520301616196262,
+        "top1_token": "2",
+        "value_as_written": "0.2"
+      },
+      "elicitor": "digit_expectation",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 0.19533656626700707,
+      "split": "test",
+      "variant": "11b-repeated"
+    },
+    {
+      "archetype": 11,
+      "case_id": "a11-repeated-100",
+      "detail": {
+        "emitted_token": "No",
+        "leading_whitespace_tokens": 0,
+        "mass_on_yes_no": 0.9999999993168677,
+        "n_alternatives": 20,
+        "top1_prob": 0.9999998438959624,
+        "top1_token": "No"
+      },
+      "elicitor": "yes_no_probability",
+      "label_needs_human": true,
+      "model": "gpt-4o-mini-2024-07-18",
+      "score": 1.4449803012955443e-07,
+      "split": "test",
+      "variant": "11b-repeated"
+    }
+  ],
+  "stub_rows": 0
+}

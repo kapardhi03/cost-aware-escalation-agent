@@ -22,7 +22,7 @@ policy over the belief, not full belief-state planning.
 
 ## Repository layout
 
-Graded deliverables:
+Primary artifacts:
 
 - `research-file.md` — technical terms, search queries, verified communities and
   accounts, five read sources, open questions, the AI prompts used verbatim, and
@@ -55,7 +55,7 @@ Graded deliverables:
 - `social/` — the LinkedIn post and the X thread, both as published. Each file
   opens with the live URL to the posted version.
 
-Working files, not graded:
+Supporting working files:
 
 - `build-log.md` — every design decision with its verdict and reason, the open
   questions, the limitations carried into the paper (L1–L9), and the findings

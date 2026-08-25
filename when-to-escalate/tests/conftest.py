@@ -28,12 +28,15 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 import belief as belief_mod          # noqa: E402
+import calibrate as calibrate_mod    # noqa: E402
 import config as config_mod          # noqa: E402
+import elicit as elicit_mod          # noqa: E402
 import providers as providers_pkg    # noqa: E402
 
 PROJECT_VARS = (
     "BELIEF_PROVIDER", "BELIEF_ALLOW_RULE_FALLBACK", "BELIEF_CACHE_PATH",
     "BELIEF_CACHE_ONLY",
+    "LOGPROB_CACHE_PATH", "LOGPROB_CACHE_ONLY",
     "OPENAI_API_KEY", "OPENAI_MODEL", "GOOGLE_API_KEY", "GEMINI_API_KEY",
     "GOOGLE_MODEL",
 )
@@ -45,8 +48,18 @@ def belief():
 
 
 @pytest.fixture
+def calibrate():
+    return calibrate_mod
+
+
+@pytest.fixture
 def config():
     return config_mod
+
+
+@pytest.fixture
+def elicit():
+    return elicit_mod
 
 
 @pytest.fixture
@@ -100,6 +113,10 @@ class RecordingSDK:
         self.keys: list[str] = []
         self.models: list[str] = []
         self.messages: list[str] = []
+        # Everything past model/messages. Needed to assert that a request asked
+        # for logprobs at all — the belief path never sets them, the elicitation
+        # path is meaningless without them.
+        self.kwargs: list[dict] = []
 
     @property
     def call_count(self) -> int:
@@ -116,6 +133,7 @@ def fake_openai(monkeypatch):
             def create(self, model=None, messages=None, **kwargs):
                 rec.models.append(model)
                 rec.messages.append(messages[-1]["content"] if messages else "")
+                rec.kwargs.append(kwargs)
                 if error is not None:
                     raise error
                 text = raw_text if raw_text is not None else json.dumps(payload)
@@ -145,6 +163,7 @@ def fake_google(monkeypatch):
             def generate_content(self, model=None, contents=None, **kwargs):
                 rec.models.append(model)
                 rec.messages.append(contents or "")
+                rec.kwargs.append(kwargs)
                 if error is not None:
                     raise error
                 text = raw_text if raw_text is not None else json.dumps(payload)

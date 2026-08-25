@@ -42,8 +42,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-DELIVERABLE = HERE.parent
-sys.path.insert(0, str(DELIVERABLE / "src"))
+PROJECT_ROOT = HERE.parent
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 import belief as belief_mod          # noqa: E402
 import config as config_mod          # noqa: E402
@@ -51,8 +51,8 @@ import costs as costs_mod            # noqa: E402
 
 logger = logging.getLogger("run_policies")
 
-CASES_PATH = DELIVERABLE / "data" / "cases.json"
-RESULTS_DIR = DELIVERABLE / "results"
+CASES_PATH = PROJECT_ROOT / "data" / "cases.json"
+RESULTS_DIR = PROJECT_ROOT / "results"
 
 #: Policies under test. Each is (name, decision matrix). Scoring always uses the
 #: real matrix regardless of which one the policy decided with.
@@ -294,7 +294,7 @@ def main() -> int:
         # LLM and would silently report keyword numbers as model numbers. Caught
         # the first time this script was exercised: the offline run had already
         # filled data/belief_cache.json with 100 rule-derived entries.
-        os.environ["BELIEF_CACHE_PATH"] = str(DELIVERABLE / "data" / "belief_cache_DRY.json")
+        os.environ["BELIEF_CACHE_PATH"] = str(PROJECT_ROOT / "data" / "belief_cache_DRY.json")
 
     try:
         settings = config_mod.load_settings(reload=True)

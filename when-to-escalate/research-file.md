@@ -143,7 +143,7 @@ sales lead routing human vs automation cost
 - Title: Predict Responsibly: Improving Fairness and Accuracy by Learning to Defer (Madras, Pitassi, Zemel)
 - Link: https://arxiv.org/pdf/1711.06664
 - Why it matters here: Frames rejection as a special case of deferral, and shows a fair model composed with a fair human can still yield an unfair system , relevant to my ethics/limitations, not my method.
-- What I took from it: The system-level fairness point: even if each part is fair, escalation delays can fall unevenly (e.g. on non-standard or code-switched messages). I treat this as a limitations/ethics concern for a production deployment, not as a fairness objective I optimise in the Week 1 policy.
+- What I took from it: The system-level fairness point: even if each part is fair, escalation delays can fall unevenly (e.g. on non-standard or code-switched messages). I treat this as a limitations/ethics concern for a production deployment, not as a fairness objective I optimise in the v1 policy.
 
 ### Source 3
 
@@ -180,7 +180,7 @@ sales lead routing human vs automation cost
 | # | Question | How I will know it is answered |
 | --- | --- | --- |
 | 1 | Is the belief's probability calibrated enough to threshold on? The belief comes from an LLM, and if it's overconfident the expected-cost math is wrong and automated actions look artificially cheap. | Reliability diagram + ECE computed on my labeled/synthetic cases. Closed when I can say whether the numbers are trustworthy, and if not, that I recalibrated and re-checked. |
-| 2 | Should "ask a qualifying question" be priced by myopic VOI/EVSI, or hand-tuned as a special case? A strict one-step policy structurally undervalues it because its payoff is a better belief next turn, not immediate. | Closed as a decision, not a proof: I state which path I took for Week 1 and why. If I defer VOI to future work, that counts as answered as long as I say so plainly. |
+| 2 | Should "ask a qualifying question" be priced by myopic VOI/EVSI, or hand-tuned as a special case? A strict one-step policy structurally undervalues it because its payoff is a better belief next turn, not immediate. | Closed as a decision, not a proof: I state which path I took for v1 and why. If I defer VOI to future work, that counts as answered as long as I say so plainly. |
 | 3 | Which error actually costs the most, and by roughly what ratio — missed escalation vs false escalation vs needless question? | Closed when the cost ranking is backed by practitioner input (r/sales) or a stated assumption + sensitivity analysis, not just my intuition. |
 | 4 | Does asking a qualifying question backfire in practice (friction, drop-off, looking robotic)? | Closed by real answers from people who run inbound sales (r/sales), recorded in the discussion record with any design change. |
 | 5 | Is a two-part hidden state (readiness distribution + separate needs-human probability) the right factorization, or does collapsing/adding a dimension change policy cost? | Closed when I've tested whether the factorization changes the policy's cost on my cases; if it doesn't, I prefer the simpler state and say so. |

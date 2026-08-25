@@ -100,8 +100,12 @@ def find_repo_root(start: Optional[Path] = None) -> Path:
     return fallback
 
 
-def deliverable_root() -> Path:
-    """The when-to-escalate/ directory — src/'s parent."""
+def project_root() -> Path:
+    """The when-to-escalate/ directory — src/'s parent.
+
+    Distinct from find_repo_root(), which returns the enclosing git repository.
+    This is the project directory itself, one level down from it.
+    """
     return Path(__file__).resolve().parents[1]
 
 
@@ -111,7 +115,7 @@ def deliverable_root() -> Path:
 
 def _env_candidates() -> list[Path]:
     """Where a .env may live, nearest-scope last so it wins."""
-    return [find_repo_root() / ".env", deliverable_root() / ".env"]
+    return [find_repo_root() / ".env", project_root() / ".env"]
 
 
 def load_env(override: bool = False) -> list[Path]:
