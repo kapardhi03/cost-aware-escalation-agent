@@ -541,3 +541,95 @@ cache.
 | M2 | The first merge carries Gates 0–2 together; one merge per gate from Gate 3 on | (AI-proposed) | **confirmed** |
 | M3 | `main`'s two Aug-24 design-record commits are superseded in content, not reverted; v2's copy is taken wholesale | (Kaps-decided) | **confirmed** |
 | M4 | The 8.8 MB logprob cache lands on `main`; cache-only reproduction is worth the bytes | (Kaps-decided) | **confirmed** |
+
+---
+
+## Resolutions after Gate 3
+
+Gate 3 built the question set, the answer model, the six-vector adapter and the
+sweep. Every number here traces to `results/answer-model.json`, written by
+`experiments/answer_model.py`; the choices it was held to are in
+`decisions/v2-gate3-preregistration.md`, committed with the tables and before the
+computation existed.
+
+- **S1 — OQ3's "load-bearing defence" line is wrong, and the correction is
+  recorded here rather than by editing OQ3.** OQ3's Gate 1 resolution called the
+  likelihood sweep the load-bearing defence of the impossibility result. That was
+  written before the answer-model-free ceiling was proved, and it is wrong as
+  stated. `VoI(q | b) ≤ V_act(b) − EC(ask | b)` follows from `V_q(b) ≥ 0` alone,
+  so the bound grants a free perfect oracle and has already assumed the most
+  favourable answer model there is. A sweep over likelihoods cannot defend a bound
+  like that — and, the half that matters more, cannot undermine it either. **The
+  impossibility needs no defence from Gate 3, and Gate 3 supplies none.** What the
+  sweep measures is the stability of the information-gain magnitudes: the
+  mechanism, not the claim. OQ3's other half stands unchanged — the VoI honesty
+  check is a self-consistency check of the implementation wherever it appears, and
+  the absence of external validation stays a Limitations entry. OQ3 itself is left
+  as written, per the no-retroactive-edits rule whose build-log form is G9/G12.
+
+- **S2 — the sweep fired its pre-registered fragile branch, and the IG-ordering
+  illustration is withdrawn.** Baseline order by mean information gain over the
+  100 beliefs: `q_timeline` 0.1290 > `q_authority` 0.1278 > `q_specifics` 0.1040
+  bits. Across the 88 variants — 22 free parameters × 4 deltas — the ordering
+  flips 27 times, **11 of them at `±0.05`**. That is the second clause of §5
+  verbatim, so the illustration is withdrawn rather than repaired by choosing
+  better entries; the grid is not changed and the sweep is not re-run on a
+  different one.
+
+  Withdrawn: any claim that the information-gain ordering of the three real
+  questions means something, and any use of these magnitudes as a stable
+  illustration. That narrows what G5 promised. VoI computed case by case under a
+  simple documented answer model is still delivered; the *ordering* of questions
+  by information gain is not a result this repo carries.
+
+  Not withdrawn, because the sweep does not bear on them: the eight invariants,
+  which are properties of the implementation against the Gate 1 §2 definitions and
+  hold for any table (0 violations across all 400 question-case pairs); the OQ1
+  adapter (S3); `IG(q_null | b) = 0` on all 100 beliefs, the equality case
+  asserted rather than argued; and the impossibility result, which is
+  answer-model-free. (Kaps-decided: the withdrawal is a result and not a failure —
+  the branch fired as designed and stopped an ordering claim the sweep showed was
+  an artifact of the entries chosen.)
+
+- **S3 — OQ1 is discharged, and on a coupled posterior that actually arose rather
+  than a constructed one.** All 100 priors round-trip `Belief → six-vector →
+  Belief` to within `1.11e-16`. `q_specifics` is verified non-separable in exact
+  arithmetic and produces a coupled posterior on 96 of the 100 cases; the first,
+  `a01-first-001` on answer `concrete` at `P = 0.4488`, makes `narrow()` raise
+  instead of projecting onto the marginals. `Belief` is unmodified — its fields
+  are still `readiness` and `needs_human`, and the cache format and policy
+  signature are untouched, which is what OQ1(b) required. The exact decomposition
+  `IG = IG_r + IG_h + I(R ; Hh | U)` holds to under `1e-12` on all 400 pairs, and
+  its third term is an independent cross-check on `separates()`: that is a rank-1
+  test on the integer table, this is an entropy computed from the posteriors, so
+  their agreement is evidence rather than restatement.
+
+- **S4 — a rule written in units it was never checked against is a recurring
+  failure mode in this project, not a one-off.** Two instances now, in consecutive
+  gates:
+
+  | gate | the rule | units it was written in | the scale it had to resolve |
+  | --- | --- | --- | --- |
+  | Gate 2 §5 | the collapse diagnostic: fewer than *N* distinct values | a raw count | the `n` it is counted over — pooling dev and test more than doubled Yes/No's count, past the threshold |
+  | Gate 3 §5 | the sweep grid: `±0.05` and `±0.10` on a table entry | absolute probability | the 0.0250-bit spread of the mean IGs the sweep had to order, and the size of the entry it lands on — an absolute 0.10 is 14% of a 0.70 entry and 100% of a 0.10 entry |
+
+  The class: **a numeric rule stated in absolute units, governing a quantity whose
+  scale the rule never consulted.** Both times the rule fired exactly as written
+  and the pre-registration held; both times the blind spot became visible only
+  after the data arrived. Neither is retuned, now or then — a threshold edited
+  after seeing the data it governs is worth nothing, which Q9 already settled.
+
+  **The check to run before locking any threshold or grid from Gate 4 on:** compute
+  the scale of the quantity the rule has to resolve, then either state the rule as
+  a fraction of that scale or state explicitly that it is absolute and why. Two
+  instances in consecutive gates is a pattern, so it is recorded as a class to
+  watch rather than as a second isolated caveat. (The pattern was noticed by
+  Claude while diagnosing the flips; recording it as a standing watch item instead
+  of another one-off is Kaps-decided.)
+
+| # | Resolution | Provenance | Status |
+| --- | --- | --- | --- |
+| S1 | OQ3's "load-bearing defence" line is wrong — the impossibility is answer-model-free and needs no defence from Gate 3. Corrected here and in pre-registration §1; OQ3 left as written. OQ3's self-consistency half stands | (AI-proposed) | **changed** |
+| S2 | The sweep fired the pre-registered fragile branch — 11 flips of 44 at `±0.05` — so the IG-ordering illustration is withdrawn; the grid is not changed and the sweep is not re-run. Narrows G5 | (Kaps-decided) | **changed** |
+| S3 | OQ1 discharged: 100/100 priors round-trip to `1.11e-16`, `narrow()` raises on the real coupled posterior at `a01-first-001`/`q_specifics`/`concrete`, `Belief` unmodified | (AI-proposed) | **confirmed** |
+| S4 | A rule written in units it was never checked against is a recurring failure mode — Gate 2's count threshold, Gate 3's absolute sweep grid. Recorded as a class to watch, with a pre-lock check for Gate 4 on; neither rule retuned | (Kaps-decided) | **noted** |

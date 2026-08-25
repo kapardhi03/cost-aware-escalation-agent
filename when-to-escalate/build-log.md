@@ -715,3 +715,165 @@ coverage.
 consumes this output and is the one deferred item. Nothing downstream of Gate 2 has
 been re-run against the calibrated beliefs, and the `order_preserved_on_test: false`
 flag is carried, not addressed.
+
+### Gate 3 — the question set, the answer model, and a withdrawn illustration (2026-08-25)
+
+Gate 3 owed three things: a question set drawn from what the cases actually leave
+ambiguous, an answer model with every assumption written down, and the six-vector
+adapter OQ1 asked for. It makes **zero API calls** — the answer model is a
+committed table and the beliefs come from `results/run.json`. Every number below is
+from `results/answer-model.json`.
+
+**1. The tables were locked before the computation existed, and the git history is
+the proof.** `decisions/v2-gate3-preregistration.md` and `src/questions.py` landed
+in one commit (`83217d8`): 2 files, 621 insertions, with
+`experiments/answer_model.py` verified absent from the tree. Same mechanism Gate 2
+used — the rules are module constants, committed before the run — so "the entries
+were fixed before any information gain was seen" is checkable rather than asserted.
+§7 names the violation in advance: `answer_model.py` existing in any commit that
+does not already contain the filled tables.
+
+Two things were corrected during the drafting, both before the lock. The
+pre-registration first described the tables as "54 entries", which overstates how
+tunable the model is: the axis-only questions repeat rows across the other axis and
+every row is constrained to sum to 1, so the **free parameters are 22**, and 22 is
+what the §5 sweep perturbs. And a first draft of the `q_timeline` table would have
+made the pre-registration's own separability claim false; the exact `separates()`
+check caught it while the tables were still being written. The 54 entries are
+**(AI-proposed, Kaps-reviewed)** — drafted by Claude, reviewed by Kaps — and are
+never described as practitioner-set anywhere, which is asserted by a test rather
+than left to review.
+
+**2. Information gain per question**, mean and range over the 100 beliefs, in bits
+against a maximum possible `H(b)` of 2.585:
+
+| question | targets | separable | mean IG | min | max | max at | cases with IG < 0.01 |
+| --- | --- | --- | ---: | ---: | ---: | --- | ---: |
+| `q_timeline` | readiness | True | 0.1290 | 0.0000 | 0.1540 | `a07-price-066` | 1 |
+| `q_authority` | needs_human | True | 0.1278 | −0.0000 | 0.1999 | `a09-oversharer-082` | 4 |
+| `q_specifics` | both | False | 0.1040 | 0.0000 | 0.1319 | `a10-early-086` | 1 |
+| `q_null` | none | True | 0.0000 | −0.0000 | 0.0000 | — | 100 |
+
+`q_null` is the control: its answer cannot depend on the state, so the equality case
+of Gate 1 §2 forces `IG = 0`, and having it in `Q` makes that an executed assertion
+instead of a sentence. The `−0.0000` entries are float rounding on cases whose true
+value is exactly 0 — the most negative IG anywhere in the 400 question-case pairs is
+`−4.44e-16`. Reported rather than clamped, so a real sign error could not hide
+inside a tolerance.
+
+**3. The coupling term is an independent check on separability.** `IG = IG_r + IG_h
++ I(R ; Hh | U)` holds exactly, and the residual is under `1e-12` on all 400 pairs.
+The third term is the coupling an answer induces between the two axes, and it is
+what makes the six-vector necessary. `q_specifics` is the only question with any:
+mean 0.004283 bits, max 0.008493, and a coupled posterior on **96 of 100** cases.
+The other three sit at zero up to float noise. That agreement is evidence rather
+than restatement, because `separates()` is a rank-1 test on the integer table while
+the coupling term is an entropy computed from the posteriors — two different
+computations reaching the same verdict.
+
+**4. The adapter, both directions — OQ1 discharged.** All 100 priors round-trip
+`Belief → six-vector → Belief` to within `1.11e-16`. A coupled posterior arose in
+the run rather than having to be constructed: `a01-first-001`, `q_specifics`, answer
+`concrete` at `P(u) = 0.4488`, max deviation from the product of its own marginals
+`6.80e-04`. `narrow()` raised on it instead of projecting. `Belief` is unmodified —
+fields still `readiness` and `needs_human`, cache format and policy signature
+untouched — which is what OQ1(b) required.
+
+**5. The sweep fired its pre-registered fragile branch, so the illustration is
+withdrawn.** 22 free parameters × 4 deltas = 88 variants, the unit being a distinct
+table row, one non-`no_answer` entry at a time with the row renormalised. Baseline
+order by mean IG: `q_timeline` 0.1290 > `q_authority` 0.1278 > `q_specifics` 0.1040.
+
+- Order flips: **27 of 88**, **11 of them at `±0.05`**
+- Largest shift in any one mean IG: 0.0786 bits
+- Entries clipped to `[0.01, 0.99]`: 1; smallest entry after renormalisation 0.0100
+- Fewest cases holding the baseline per-case order: 14 of 100
+- Distinct orderings seen across the 88 variants: **5 of the 6 possible** — the
+  baseline in 61, `q_authority > q_timeline > q_specifics` in 14, and three others
+  in 6, 4 and 3
+
+§5 pre-registered this reading: "If the ordering flips under a `±0.05` perturbation,
+the answer model is too fragile to illustrate anything, and that is the finding —
+reported as such, with the illustration withdrawn rather than repaired by choosing
+better entries." Eleven flips at `±0.05`, so that is the verdict, recorded verbatim
+in both artifacts. The grid is not changed and the sweep is not re-run on a
+different one.
+
+What this withdraws is the IG-ordering claim and the use of these magnitudes as a
+stable illustration. What it leaves alone, because the sweep does not bear on them:
+the eight invariants, the OQ1 adapter, and the impossibility result, which is
+answer-model-free — `VoI(q | b) ≤ V_act(b) − EC(ask | b)` follows from
+`V_q(b) ≥ 0` alone, grants a free perfect oracle, and so cannot be defended or
+undermined by any sweep over likelihoods. That last point also corrects OQ3's
+"load-bearing defence" line, recorded as S1 in the design record.
+
+**6. Why it is fragile — and a first reading of it that was wrong.** Post-hoc
+diagnosis, marked in the JSON as `post_hoc: true, changes_the_verdict: false`:
+
+| delta | variants | flips | max shift in one mean IG | flips won by > 0.002 bits | post-flip top margin |
+| ---: | ---: | ---: | ---: | ---: | --- |
+| ±0.05 | 44 | 11 | 0.0341 | 9 | 0.00025 to 0.0317 |
+| ±0.10 | 44 | 16 | 0.0786 | 14 | 0.00021 to 0.0774 |
+
+The three mean IGs span **0.0250 bits** while a single `±0.05` perturbation of one
+entry moves one of them by up to **0.0341 bits**. The ordering test was asked to
+resolve a signal smaller than its own step size.
+
+The first two readings of this, both mine, called the flips a near-tie artifact —
+fourth-decimal noise crossing gaps of 0.0001 to 0.0016 bits. That was wrong, and
+the mistake was reading the *gap crossed* as the margin. The margin that matters is
+the one after the flip, and 9 of the 11 flips at `±0.05` leave the new winner ahead
+by more than 0.002 bits, one of them by 0.0317. They are decisive re-orderings, and
+the sharper answer is the one recorded.
+
+The grid was written in absolute probability units and never checked against the
+spread of the quantity it had to order. An absolute 0.10 is 14% of a 0.70 entry and
+100% of a 0.10 entry, so the same grid is a mild perturbation in one place and a
+total one in another. **This is the second time in v2 that a rule was written in
+units it was never checked against** — the first was Gate 2's collapse diagnostic,
+a threshold on a raw count of distinct values that loosened monotonically as `n`
+grew. Recorded as a class to watch rather than a second one-off, with the pre-lock
+check for Gate 4 onward, as S4 in the design record.
+
+**7. The free check the data hands over, and it passes.** Four cases sit at
+`b_h = 0.0` exactly, so `H_h = 0` and no answer can reduce it; one of them also has
+a degenerate readiness belief, so `H(b) = 0` on both axes and invariant 5 forces
+`IG = 0` for every question:
+
+| case | b_h | H_r | H_h | H joint | max IG over Q |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `a08-reaction-075` | 0.00 | 1.1568 | 0.0000 | 1.1568 | 0.142598 |
+| `a08-reaction-077` | 0.00 | 1.1568 | 0.0000 | 1.1568 | 0.142598 |
+| `a11-first-095` | 0.00 | 0.4690 | 0.0000 | 0.4690 | 0.031862 |
+| `a11-repeated-097` | 0.00 | 0.0000 | 0.0000 | 0.0000 | 0.000000 |
+
+`H_h = 0` on all four, `IG_h = 0` on all four for every question, and `IG = 0` for
+every question on `a11-repeated-097`. It would have failed loudly on a sign or
+normalisation error in the entropy code, which is why it was stated in the
+pre-registration in advance rather than found afterwards.
+
+**8. Verification.** All eight invariants hold with **0 violations across all 400
+question-case pairs**. The suite is **510 tests passing in 0.42s**, up from 474 —
+Gate 3 added library code, so unlike Gate 2b it added tests. Both artifacts are
+byte-identical across consecutive runs and carry no `generated_at` key, so
+determinism is exact rather than modulo a timestamp. `answer_model.py` contains no
+API-capable import, asserted structurally by a test rather than by inspection.
+
+The 36 new tests passed on the first run, which is weak evidence that they test
+anything, so four mutations were introduced to check: changing a sweep delta,
+making `narrow()` project onto the marginals instead of raising, changing a
+free-parameter count in the document, and using `H_r + H_h` for the posterior
+entropy instead of the joint. All four were caught, by the prose-matches-constants
+test, three adapter tests, the prose test again, and the decomposition test. The
+tree was restored afterwards. Two AI-narration artifacts and one nonsense
+expression were also removed from `answer_model.py` during review, and four
+rendering defects were found by reading the generated report rather than trusting
+it — `.capitalize()` lowercasing "IG" to "ig" mid-string among them.
+
+**What Gate 3 has not done.** The answer model is **not validated**: nothing in the
+data can confirm these numbers, because the cases are single messages with no
+answers to fit to. A1 — the answer depends on the hidden state and not on which
+case is being asked about — is false in detail and accepted for the reason given in
+the pre-registration. No claim about `ask` follows from any number in this gate.
+The reliability diagram (Q5) is still the one item carried from Gate 2, and
+`order_preserved_on_test: false` is still carried, not addressed.
