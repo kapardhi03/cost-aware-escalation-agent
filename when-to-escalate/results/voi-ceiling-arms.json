@@ -1,0 +1,4013 @@
+{
+  "schema_version": 1,
+  "arms": [
+    "published",
+    "rebaselined",
+    "raw",
+    "calibrated"
+  ],
+  "arm_sources": {
+    "published": "results/run.json",
+    "rebaselined": "data/logprob_cache.json written digit + fresh readiness",
+    "raw": "results/logprob-elicitation.json raw + fresh readiness",
+    "calibrated": "results/logprob-elicitation.json calibrated + fresh readiness"
+  },
+  "n_cases_per_arm": 100,
+  "claim_split": "test",
+  "grid_steps_per_axis": 60,
+  "one_variable_at_a_time": "rebaselined, raw and calibrated share one fresh readiness vector and differ only in needs_human, so each contrast isolates the belief component that changed. published differs from rebaselined in readiness too, being the committed Gate 1 run.",
+  "belief_independent": {
+    "sections": [
+      "cost_matrix_constants",
+      "global_ceiling",
+      "witness_crosscheck",
+      "grid_crosscheck",
+      "feasibility",
+      "lambda_crosscheck",
+      "constrained_regime.max_ceiling"
+    ],
+    "reference_arm": "published",
+    "identical_across_all_arms": true,
+    "compared_by": "exact equality of json.dumps(section, sort_keys=True)",
+    "why_no_arm_can_move_these": "`V_act(b) <= min(alpha*b_h, nu*(1-b_h))` for every belief, and `EC(ask|b)` is flat in readiness, so `max_b [V_act(b) - EC(ask|b)]` is a function of the cost matrix alone. On the unconstrained menu the claim that the impossibility survives recalibration is therefore ANALYTIC: any belief is still a belief and the maximum is already negative. It is not an empirical finding and is not presented as one.",
+    "what_remains_empirical": "Whether any real case reaches the positive-VoI region the constrained menu opens up is the only part of section 2 an arm can change.",
+    "unconstrained_max_ceiling_exact": "-2/13",
+    "unconstrained_max_ceiling_float": -0.15384615384615385,
+    "ask_can_ever_be_rational_unconstrained": false,
+    "t_star_exact": "3/13",
+    "constrained_max_ceiling": 1.0,
+    "constrained_positive_region": {
+      "ray": "hot",
+      "per_action_crossing": {
+        "hold": "never",
+        "escalate_notify": "1/5",
+        "escalate_pause": "2/3"
+      },
+      "binding_action": "escalate_notify",
+      "b_h_upper_bound_exact": "1/5",
+      "b_h_upper_bound_float": 0.2
+    },
+    "general_condition": "ask_F/nu + ask_T/alpha < 1",
+    "general_condition_ratio_exact": "16/15",
+    "general_condition_satisfied": false,
+    "break_even_lambda_exact": "15/16",
+    "shared": {
+      "cost_matrix_constants": {
+        "alpha": "10",
+        "answer_when_fine": "0",
+        "nu": "3",
+        "notify_when_needed": "0",
+        "ask_F": "2",
+        "ask_T": "4"
+      },
+      "global_ceiling": {
+        "alpha_false_assertion": "10",
+        "nu_needless_escalation": "3",
+        "ask_F": "2",
+        "ask_T": "4",
+        "t_star_exact": "3/13",
+        "t_star_float": 0.23076923076923078,
+        "max_v_act_exact": "30/13",
+        "max_v_act_float": 2.3076923076923075,
+        "ec_ask_at_t_star_exact": "32/13",
+        "ec_ask_range": [
+          "2",
+          "4"
+        ],
+        "ceiling_exact": "-2/13",
+        "ceiling_float": -0.15384615384615385,
+        "ask_can_ever_be_rational": false,
+        "monotonicity_left_branch_rises": true,
+        "monotonicity_right_branch_falls": true,
+        "closed_form_valid": true,
+        "witness_belief": {
+          "readiness": {
+            "hot": 1,
+            "warm": 0,
+            "cold": 0
+          },
+          "b_h": "3/13",
+          "hold_cost": "84/13",
+          "pause_cost": "66/13",
+          "v_act": "30/13",
+          "ec_ask": "32/13"
+        },
+        "bound_is_attained": true
+      },
+      "witness_crosscheck": {
+        "ran": true,
+        "belief": {
+          "readiness": {
+            "hot": 1.0,
+            "warm": 0.0,
+            "cold": 0.0
+          },
+          "needs_human": 0.23076923076923078
+        },
+        "expected_cost_per_action": {
+          "answer": 2.307692307692308,
+          "ask": 2.4615384615384617,
+          "hold": 6.461538461538462,
+          "escalate_notify": 2.3076923076923075,
+          "escalate_pause": 5.076923076923077
+        },
+        "v_act_via_src_costs": 2.3076923076923075,
+        "ec_ask_via_src_costs": 2.4615384615384617,
+        "ceiling_via_src_costs": -0.1538461538461542,
+        "closed_form_ceiling": -0.15384615384615385,
+        "agree_to_1e_9": true
+      },
+      "grid_crosscheck": {
+        "grid_steps_per_axis": 60,
+        "grid_max": -0.16666666666666652,
+        "grid_argmax": {
+          "readiness": {
+            "hot": 0.2667,
+            "warm": 0.7,
+            "cold": 0.0333
+          },
+          "b_h": 0.2333
+        },
+        "closed_form_max": -0.15384615384615385,
+        "grid_exceeds_closed_form": false,
+        "gap_to_closed_form": 0.012820512820512664
+      },
+      "feasibility": {
+        "condition": "alpha*ask_F + nu*ask_T < alpha*nu",
+        "readable_condition": "ask_F/nu + ask_T/alpha < 1",
+        "lhs_exact": "32",
+        "rhs_exact": "30",
+        "satisfied": false,
+        "ratio_exact": "16/15",
+        "ratio_float": 1.0666666666666667,
+        "break_even_lambda_exact": "15/16",
+        "break_even_lambda_float": 0.9375,
+        "repriced_ask_row": [
+          "15/8",
+          "15/4"
+        ],
+        "repriced_ask_row_float": [
+          1.875,
+          3.75
+        ],
+        "required_reduction_exact": "1/16",
+        "required_reduction_pct": 6.25
+      },
+      "lambda_crosscheck": {
+        "bisected_lambda": 0.9374999999999998,
+        "closed_form_lambda": 0.9375,
+        "agree_to_1e_9": true,
+        "ceiling_at_lambda_1": -0.1538461538461542
+      }
+    }
+  },
+  "belief_dependent_sections": [
+    "per_case",
+    "invariants",
+    "constrained_regime.min_b_h_among_those_cases",
+    "constrained_regime.any_such_case_inside_the_region"
+  ],
+  "per_arm": {
+    "published": {
+      "source": "results/run.json",
+      "b_h": {
+        "min": 0.0,
+        "max": 0.9,
+        "n_distinct": 8
+      },
+      "ceiling": {
+        "test_claim_split": {
+          "n": 50,
+          "n_positive_ceiling": 0,
+          "max_ceiling": -0.3999999999999999,
+          "min_ceiling": -3.5000000000000004,
+          "cases_at_max_ceiling": [
+            "a01-first-003",
+            "a02-deep-015",
+            "a02-early-013",
+            "a04-answerable-028",
+            "a04-answerable-030",
+            "a04-answerable-031",
+            "a04-booking-038"
+          ]
+        },
+        "dev_in_sample": {
+          "n": 50,
+          "n_positive_ceiling": 0,
+          "max_ceiling": -0.3999999999999999,
+          "min_ceiling": -3.5000000000000004,
+          "cases_at_max_ceiling": [
+            "a04-answerable-027",
+            "a04-answerable-033",
+            "a04-answerable-034",
+            "a07-price-063"
+          ]
+        },
+        "all_100": {
+          "n": 100,
+          "n_positive_ceiling": 0,
+          "max_ceiling": -0.3999999999999999,
+          "min_ceiling": -3.5000000000000004,
+          "cases_at_max_ceiling": [
+            "a01-first-003",
+            "a02-deep-015",
+            "a02-early-013",
+            "a04-answerable-027",
+            "a04-answerable-028",
+            "a04-answerable-030",
+            "a04-answerable-031",
+            "a04-answerable-033",
+            "a04-answerable-034",
+            "a04-booking-038",
+            "a07-price-063"
+          ]
+        }
+      },
+      "v_act_argmin_census": {
+        "answer": 30,
+        "escalate_notify": 43,
+        "hold": 27
+      },
+      "constrained_cases": {
+        "n": 8,
+        "min_b_h": 0.4,
+        "region_bound_b_h_below": 0.2,
+        "any_inside_the_region": false,
+        "max_ceiling_among_them": -0.9999999999999998
+      },
+      "invariants": {
+        "ec_ask_affine_in_b_h": "100/100",
+        "v_act_at_least_v": "100/100",
+        "ask_never_myopic_argmin": "100/100",
+        "cases_where_ask_would_be_chosen": []
+      },
+      "anchor_case": {
+        "case_id": "a02-deep-018",
+        "ceiling": -0.5,
+        "v_act": 2.0999999999999996,
+        "ec_ask": 2.5999999999999996,
+        "b_h": 0.3,
+        "v_act_argmin": "escalate_notify"
+      },
+      "per_case": [
+        {
+          "case_id": "a01-first-001",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.5199999999999998,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-002",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-003",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-004",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.5199999999999998,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-005",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-006",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.5199999999999998,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-007",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-008",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-009",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-010",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -1.0199999999999998,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-011",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-012",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-013",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-014",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-015",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-016",
+          "split": "dev",
+          "b_h": 0.8,
+          "ceiling": -3.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-017",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-018",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-019",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-020",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-021",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-022",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-023",
+          "split": "test",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-024",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.9299999999999997,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-025",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-026",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.9299999999999997,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-027",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-028",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-029",
+          "split": "test",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-030",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-031",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-032",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-033",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.40000000000000036,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-034",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-035",
+          "split": "test",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-036",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-037",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-038",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-039",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-040",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-041",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-042",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-restricted-043",
+          "split": "test",
+          "b_h": 0.4,
+          "ceiling": -0.9999999999999998,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-044",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-045",
+          "split": "dev",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-046",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-047",
+          "split": "dev",
+          "b_h": 0.8,
+          "ceiling": -3.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-048",
+          "split": "dev",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-049",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-050",
+          "split": "dev",
+          "b_h": 0.8,
+          "ceiling": -3.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-public-051",
+          "split": "dev",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-public-052",
+          "split": "test",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-public-053",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-public-054",
+          "split": "test",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-055",
+          "split": "test",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-056",
+          "split": "dev",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-057",
+          "split": "dev",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-058",
+          "split": "dev",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-059",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-060",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-mild-061",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-mild-062",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-063",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.40000000000000036,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-064",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-065",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-066",
+          "split": "test",
+          "b_h": 0.4,
+          "ceiling": -1.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-067",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-068",
+          "split": "test",
+          "b_h": 0.4,
+          "ceiling": -0.9999999999999998,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-069",
+          "split": "dev",
+          "b_h": 0.8,
+          "ceiling": -3.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-070",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-071",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-072",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-073",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-074",
+          "split": "dev",
+          "b_h": 0.4,
+          "ceiling": -0.9999999999999998,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-075",
+          "split": "test",
+          "b_h": 0.0,
+          "ceiling": -2.0,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-076",
+          "split": "test",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-077",
+          "split": "dev",
+          "b_h": 0.0,
+          "ceiling": -2.0,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-078",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-079",
+          "split": "dev",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-080",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-081",
+          "split": "dev",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-082",
+          "split": "test",
+          "b_h": 0.4,
+          "ceiling": -0.9999999999999998,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-083",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-084",
+          "split": "test",
+          "b_h": 0.8,
+          "ceiling": -3.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-085",
+          "split": "test",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-086",
+          "split": "test",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-087",
+          "split": "dev",
+          "b_h": 0.4,
+          "ceiling": -1.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-088",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-089",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-090",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-091",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-092",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-093",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-094",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-first-095",
+          "split": "dev",
+          "b_h": 0.0,
+          "ceiling": -2.0,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-first-096",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-097",
+          "split": "dev",
+          "b_h": 0.0,
+          "ceiling": -2.0,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-098",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.9299999999999997,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-099",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-100",
+          "split": "test",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        }
+      ]
+    },
+    "rebaselined": {
+      "source": "data/logprob_cache.json written digit + fresh readiness",
+      "b_h": {
+        "min": 0.0,
+        "max": 0.9,
+        "n_distinct": 9
+      },
+      "ceiling": {
+        "test_claim_split": {
+          "n": 50,
+          "n_positive_ceiling": 0,
+          "max_ceiling": -0.3999999999999999,
+          "min_ceiling": -3.500000000000001,
+          "cases_at_max_ceiling": [
+            "a01-first-003",
+            "a02-deep-015",
+            "a02-deep-017",
+            "a02-early-013",
+            "a04-answerable-028",
+            "a04-answerable-030",
+            "a04-answerable-031",
+            "a04-booking-035",
+            "a04-booking-038"
+          ]
+        },
+        "dev_in_sample": {
+          "n": 50,
+          "n_positive_ceiling": 0,
+          "max_ceiling": -0.3999999999999999,
+          "min_ceiling": -3.500000000000001,
+          "cases_at_max_ceiling": [
+            "a04-answerable-027",
+            "a04-answerable-033",
+            "a04-answerable-034",
+            "a07-price-063"
+          ]
+        },
+        "all_100": {
+          "n": 100,
+          "n_positive_ceiling": 0,
+          "max_ceiling": -0.3999999999999999,
+          "min_ceiling": -3.500000000000001,
+          "cases_at_max_ceiling": [
+            "a01-first-003",
+            "a02-deep-015",
+            "a02-deep-017",
+            "a02-early-013",
+            "a04-answerable-027",
+            "a04-answerable-028",
+            "a04-answerable-030",
+            "a04-answerable-031",
+            "a04-answerable-033",
+            "a04-answerable-034",
+            "a04-booking-035",
+            "a04-booking-038",
+            "a07-price-063"
+          ]
+        }
+      },
+      "v_act_argmin_census": {
+        "answer": 29,
+        "escalate_notify": 44,
+        "hold": 27
+      },
+      "constrained_cases": {
+        "n": 8,
+        "min_b_h": 0.4,
+        "region_bound_b_h_below": 0.2,
+        "any_inside_the_region": false,
+        "max_ceiling_among_them": -1.0
+      },
+      "invariants": {
+        "ec_ask_affine_in_b_h": "100/100",
+        "v_act_at_least_v": "100/100",
+        "ask_never_myopic_argmin": "100/100",
+        "cases_where_ask_would_be_chosen": []
+      },
+      "anchor_case": {
+        "case_id": "a02-deep-018",
+        "ceiling": -0.5,
+        "v_act": 2.0999999999999996,
+        "ec_ask": 2.5999999999999996,
+        "b_h": 0.3,
+        "v_act_argmin": "escalate_notify"
+      },
+      "per_case": [
+        {
+          "case_id": "a01-first-001",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.5199999999999998,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-002",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-003",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-004",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.5199999999999998,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-005",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-006",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.5199999999999998,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-007",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-008",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-009",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-010",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -1.0199999999999998,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-011",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-012",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-013",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-014",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-015",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-016",
+          "split": "dev",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-017",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.40000000000000036,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-018",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-019",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-020",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-021",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-022",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-023",
+          "split": "test",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-024",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -1.0199999999999998,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-025",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-026",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.9299999999999997,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-027",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-028",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-029",
+          "split": "test",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-030",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-031",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-032",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-033",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.40000000000000036,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-034",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-035",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-036",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000004,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-037",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-038",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.3999999999999999,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-039",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-040",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-041",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-042",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-restricted-043",
+          "split": "test",
+          "b_h": 0.4,
+          "ceiling": -1.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-044",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.500000000000001,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-045",
+          "split": "dev",
+          "b_h": 0.9,
+          "ceiling": -3.500000000000001,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-046",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.500000000000001,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-047",
+          "split": "dev",
+          "b_h": 0.8,
+          "ceiling": -3.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-048",
+          "split": "dev",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-049",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-050",
+          "split": "dev",
+          "b_h": 0.8,
+          "ceiling": -3.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-public-051",
+          "split": "dev",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-public-052",
+          "split": "test",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-public-053",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-public-054",
+          "split": "test",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-055",
+          "split": "test",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-056",
+          "split": "dev",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-057",
+          "split": "dev",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-058",
+          "split": "dev",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-059",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-060",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.5000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-mild-061",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-mild-062",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-063",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.40000000000000036,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-064",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-065",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-066",
+          "split": "test",
+          "b_h": 0.4,
+          "ceiling": -1.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-067",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-068",
+          "split": "test",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-069",
+          "split": "dev",
+          "b_h": 0.8,
+          "ceiling": -3.0000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-070",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-071",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-072",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-073",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-074",
+          "split": "dev",
+          "b_h": 0.4,
+          "ceiling": -1.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-075",
+          "split": "test",
+          "b_h": 0.0,
+          "ceiling": -2.0,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-076",
+          "split": "test",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-077",
+          "split": "dev",
+          "b_h": 0.0,
+          "ceiling": -2.0,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-078",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-079",
+          "split": "dev",
+          "b_h": 0.9,
+          "ceiling": -3.500000000000001,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-080",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-081",
+          "split": "dev",
+          "b_h": 0.7,
+          "ceiling": -2.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-082",
+          "split": "test",
+          "b_h": 0.4,
+          "ceiling": -0.9999999999999998,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-083",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-084",
+          "split": "test",
+          "b_h": 0.8,
+          "ceiling": -3.0000000000000004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-085",
+          "split": "test",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000004,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-086",
+          "split": "test",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-087",
+          "split": "dev",
+          "b_h": 0.6,
+          "ceiling": -2.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-088",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-089",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-090",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-091",
+          "split": "test",
+          "b_h": 0.4,
+          "ceiling": -1.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-092",
+          "split": "test",
+          "b_h": 0.9,
+          "ceiling": -3.500000000000001,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-093",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-094",
+          "split": "dev",
+          "b_h": 0.3,
+          "ceiling": -0.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-first-095",
+          "split": "dev",
+          "b_h": 0.2,
+          "ceiling": -1.7000000000000002,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-first-096",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.6199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-097",
+          "split": "dev",
+          "b_h": 0.0,
+          "ceiling": -2.0,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-098",
+          "split": "test",
+          "b_h": 0.3,
+          "ceiling": -0.9299999999999997,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-099",
+          "split": "dev",
+          "b_h": 0.1,
+          "ceiling": -1.2000000000000002,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-100",
+          "split": "test",
+          "b_h": 0.2,
+          "ceiling": -0.9199999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        }
+      ]
+    },
+    "raw": {
+      "source": "results/logprob-elicitation.json raw + fresh readiness",
+      "b_h": {
+        "min": 2.8453347280241004e-08,
+        "max": 0.8996344396231138,
+        "n_distinct": 100
+      },
+      "ceiling": {
+        "test_claim_split": {
+          "n": 50,
+          "n_positive_ceiling": 0,
+          "max_ceiling": -0.2598194062309842,
+          "min_ceiling": -3.4977016506258627,
+          "cases_at_max_ceiling": [
+            "a02-deep-017"
+          ]
+        },
+        "dev_in_sample": {
+          "n": 50,
+          "n_positive_ceiling": 0,
+          "max_ceiling": -0.29659042804194913,
+          "min_ceiling": -3.498172198115569,
+          "cases_at_max_ceiling": [
+            "a04-booking-039"
+          ]
+        },
+        "all_100": {
+          "n": 100,
+          "n_positive_ceiling": 0,
+          "max_ceiling": -0.2598194062309842,
+          "min_ceiling": -3.498172198115569,
+          "cases_at_max_ceiling": [
+            "a02-deep-017"
+          ]
+        }
+      },
+      "v_act_argmin_census": {
+        "answer": 25,
+        "escalate_notify": 45,
+        "hold": 30
+      },
+      "constrained_cases": {
+        "n": 8,
+        "min_b_h": 0.404182909092872,
+        "region_bound_b_h_below": 0.2,
+        "any_inside_the_region": false,
+        "max_ceiling_among_them": -1.02091454546436
+      },
+      "invariants": {
+        "ec_ask_affine_in_b_h": "100/100",
+        "v_act_at_least_v": "100/100",
+        "ask_never_myopic_argmin": "100/100",
+        "cases_where_ask_would_be_chosen": []
+      },
+      "anchor_case": {
+        "case_id": "a02-deep-018",
+        "ceiling": -0.4136455468197582,
+        "v_act": 2.151812671908145,
+        "ec_ask": 2.5654582187279034,
+        "b_h": 0.28272910936395157,
+        "v_act_argmin": "escalate_notify"
+      },
+      "per_case": [
+        {
+          "case_id": "a01-first-001",
+          "split": "test",
+          "b_h": 0.23370623070018617,
+          "ceiling": -0.4896643923698325,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-002",
+          "split": "dev",
+          "b_h": 0.3018050939142103,
+          "ceiling": -0.5090254695710512,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-003",
+          "split": "test",
+          "b_h": 0.2004767979336747,
+          "ceiling": -0.396185616530603,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-004",
+          "split": "test",
+          "b_h": 0.2020495744699383,
+          "ceiling": -0.5181553829770555,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-005",
+          "split": "dev",
+          "b_h": 0.22010745059295594,
+          "ceiling": -0.6019032944663394,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-006",
+          "split": "dev",
+          "b_h": 0.22293691463604087,
+          "ceiling": -0.4993567768275631,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-007",
+          "split": "dev",
+          "b_h": 0.20568163548494234,
+          "ceiling": -0.9148865280635516,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-008",
+          "split": "dev",
+          "b_h": 0.202830022304031,
+          "ceiling": -0.917452979926372,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-009",
+          "split": "test",
+          "b_h": 0.19810036938400374,
+          "ceiling": -0.9217096675543968,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-010",
+          "split": "test",
+          "b_h": 0.2012822437177911,
+          "ceiling": -1.0188459806539878,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-011",
+          "split": "dev",
+          "b_h": 0.10321187221164135,
+          "ceiling": -1.1743050223068694,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-012",
+          "split": "dev",
+          "b_h": 0.10730297135599634,
+          "ceiling": -1.1415762291520293,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-013",
+          "split": "test",
+          "b_h": 0.1953613883675565,
+          "ceiling": -0.43710889305954836,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-014",
+          "split": "test",
+          "b_h": 0.194676217412617,
+          "ceiling": -0.6247914043286449,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-015",
+          "split": "test",
+          "b_h": 0.20094318949194911,
+          "ceiling": -0.3924544840644071,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-016",
+          "split": "dev",
+          "b_h": 0.749757241844589,
+          "ceiling": -2.748786209222945,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-017",
+          "split": "test",
+          "b_h": 0.2519638812461968,
+          "ceiling": -0.2598194062309842,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-018",
+          "split": "dev",
+          "b_h": 0.28272910936395157,
+          "ceiling": -0.4136455468197582,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-019",
+          "split": "test",
+          "b_h": 0.22769789415324349,
+          "ceiling": -0.5950718952620808,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-020",
+          "split": "dev",
+          "b_h": 0.21170444527438642,
+          "ceiling": -0.609465999253052,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-021",
+          "split": "test",
+          "b_h": 0.20405844136916593,
+          "ceiling": -0.9163474027677507,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-022",
+          "split": "dev",
+          "b_h": 0.20240023585377154,
+          "ceiling": -0.6178397877316057,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-023",
+          "split": "test",
+          "b_h": 0.14118441121085443,
+          "ceiling": -1.072934029910231,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-024",
+          "split": "dev",
+          "b_h": 0.22854647295970762,
+          "ceiling": -0.994308174336263,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-025",
+          "split": "dev",
+          "b_h": 0.17666464163371706,
+          "ceiling": -0.9410018225296546,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-026",
+          "split": "test",
+          "b_h": 0.26048541027630673,
+          "ceiling": -0.9655631307513237,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-027",
+          "split": "dev",
+          "b_h": 0.208471341258606,
+          "ceiling": -0.332229269931152,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-028",
+          "split": "test",
+          "b_h": 0.19062240426282606,
+          "ceiling": -0.4750207658973913,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-029",
+          "split": "test",
+          "b_h": 0.13251121143151964,
+          "ceiling": -0.9399103085478429,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-030",
+          "split": "test",
+          "b_h": 0.1852270935037796,
+          "ceiling": -0.5181832519697633,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-031",
+          "split": "test",
+          "b_h": 0.19750661288027135,
+          "ceiling": -0.41994709695782895,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-032",
+          "split": "dev",
+          "b_h": 0.13248502509412086,
+          "ceiling": -0.9401197992470331,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-033",
+          "split": "dev",
+          "b_h": 0.18325102279702488,
+          "ceiling": -0.533991817623801,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-034",
+          "split": "dev",
+          "b_h": 0.19548954182581768,
+          "ceiling": -0.43608366539345833,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-035",
+          "split": "test",
+          "b_h": 0.20994248588897121,
+          "ceiling": -0.3204601128882305,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-036",
+          "split": "dev",
+          "b_h": 0.12625730702659332,
+          "ceiling": -0.9899415437872539,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-037",
+          "split": "dev",
+          "b_h": 0.30458723403100635,
+          "ceiling": -0.5229361701550315,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-038",
+          "split": "test",
+          "b_h": 0.20007826698836473,
+          "ceiling": -0.3993738640930822,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-039",
+          "split": "dev",
+          "b_h": 0.2593180856083898,
+          "ceiling": -0.29659042804194913,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-040",
+          "split": "test",
+          "b_h": 0.48955758931581905,
+          "ceiling": -1.4477879465790957,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-041",
+          "split": "test",
+          "b_h": 0.28991703527004054,
+          "ceiling": -0.4495851763502028,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-042",
+          "split": "dev",
+          "b_h": 0.10963859882502355,
+          "ceiling": -1.1228912093998118,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-restricted-043",
+          "split": "test",
+          "b_h": 0.404182909092872,
+          "ceiling": -1.02091454546436,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-044",
+          "split": "test",
+          "b_h": 0.8667085739148218,
+          "ceiling": -3.333542869574109,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-045",
+          "split": "dev",
+          "b_h": 0.8812080102358627,
+          "ceiling": -3.4060400511793136,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-046",
+          "split": "test",
+          "b_h": 0.8729163526100333,
+          "ceiling": -3.364581763050167,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-047",
+          "split": "dev",
+          "b_h": 0.79640101573984,
+          "ceiling": -2.9820050786992,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-048",
+          "split": "dev",
+          "b_h": 0.8889866208635734,
+          "ceiling": -3.4449331043178666,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-049",
+          "split": "test",
+          "b_h": 0.8995403301251725,
+          "ceiling": -3.4977016506258627,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-050",
+          "split": "dev",
+          "b_h": 0.8077308032474363,
+          "ceiling": -3.038654016237181,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-public-051",
+          "split": "dev",
+          "b_h": 0.7257742481747819,
+          "ceiling": -2.6288712408739094,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-public-052",
+          "split": "test",
+          "b_h": 0.699562244803361,
+          "ceiling": -2.497811224016805,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-public-053",
+          "split": "dev",
+          "b_h": 0.3066122409749761,
+          "ceiling": -0.5330612048748802,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-public-054",
+          "split": "test",
+          "b_h": 0.7323801553353054,
+          "ceiling": -2.6619007766765272,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-055",
+          "split": "test",
+          "b_h": 0.7505569051797313,
+          "ceiling": -2.7527845258986563,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-056",
+          "split": "dev",
+          "b_h": 0.6642154666083476,
+          "ceiling": -2.3210773330417385,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-057",
+          "split": "dev",
+          "b_h": 0.8991448080221514,
+          "ceiling": -3.495724040110757,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-058",
+          "split": "dev",
+          "b_h": 0.8996344396231138,
+          "ceiling": -3.498172198115569,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-059",
+          "split": "test",
+          "b_h": 0.8772736803348105,
+          "ceiling": -3.3863684016740523,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-060",
+          "split": "test",
+          "b_h": 0.8987138099944365,
+          "ceiling": -3.4935690499721828,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-mild-061",
+          "split": "test",
+          "b_h": 0.19588085362859037,
+          "ceiling": -0.9237072317342685,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-mild-062",
+          "split": "dev",
+          "b_h": 0.23865042838361597,
+          "ceiling": -0.5852146144547457,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-063",
+          "split": "dev",
+          "b_h": 0.19749151173271656,
+          "ceiling": -0.42006790613826794,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-064",
+          "split": "test",
+          "b_h": 0.35462906846052056,
+          "ceiling": -0.7731453423026027,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-065",
+          "split": "dev",
+          "b_h": 0.3572073340243346,
+          "ceiling": -0.7860366701216732,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-066",
+          "split": "test",
+          "b_h": 0.43703228172210196,
+          "ceiling": -1.1851614086105098,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-067",
+          "split": "dev",
+          "b_h": 0.30040286217438866,
+          "ceiling": -0.5020143108719428,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-068",
+          "split": "test",
+          "b_h": 0.5747367981979598,
+          "ceiling": -1.8736839909897989,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-069",
+          "split": "dev",
+          "b_h": 0.8124277306884308,
+          "ceiling": -3.0621386534421546,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-070",
+          "split": "test",
+          "b_h": 0.31026185450907195,
+          "ceiling": -0.5513092725453599,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-071",
+          "split": "test",
+          "b_h": 0.26549725168936594,
+          "ceiling": -0.5610524734795705,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-072",
+          "split": "test",
+          "b_h": 0.2900198407722755,
+          "ceiling": -0.5389821433049518,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-073",
+          "split": "dev",
+          "b_h": 0.23822838847038624,
+          "ceiling": -0.5855944503766521,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-074",
+          "split": "dev",
+          "b_h": 0.5456385799456345,
+          "ceiling": -1.7281928997281724,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-075",
+          "split": "test",
+          "b_h": 0.06389462094058074,
+          "ceiling": -1.4888430324753539,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-076",
+          "split": "test",
+          "b_h": 0.1128006633461333,
+          "ceiling": -1.0984794029884797,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-077",
+          "split": "dev",
+          "b_h": 0.048202524809699714,
+          "ceiling": -1.6143798015224025,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-078",
+          "split": "dev",
+          "b_h": 0.09242820473202788,
+          "ceiling": -1.2605743621437773,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-079",
+          "split": "dev",
+          "b_h": 0.7828906648849329,
+          "ceiling": -2.9144533244246644,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-080",
+          "split": "dev",
+          "b_h": 0.310074019686564,
+          "ceiling": -0.5503700984328201,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-081",
+          "split": "dev",
+          "b_h": 0.6596089428812907,
+          "ceiling": -2.2980447144064535,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-082",
+          "split": "test",
+          "b_h": 0.48741511558521056,
+          "ceiling": -1.4370755779260524,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-083",
+          "split": "test",
+          "b_h": 0.30556484110036747,
+          "ceiling": -0.5278242055018376,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-084",
+          "split": "test",
+          "b_h": 0.7755523845537069,
+          "ceiling": -2.877761922768535,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-085",
+          "split": "test",
+          "b_h": 0.11615550020805039,
+          "ceiling": -1.070755998335597,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-086",
+          "split": "test",
+          "b_h": 0.10068770696822446,
+          "ceiling": -1.194498344254204,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-087",
+          "split": "dev",
+          "b_h": 0.5444802657982823,
+          "ceiling": -1.7224013289914117,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-088",
+          "split": "dev",
+          "b_h": 0.2769920307023653,
+          "ceiling": -0.38496015351182633,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-089",
+          "split": "test",
+          "b_h": 0.19285310612484763,
+          "ceiling": -0.926432204487637,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-090",
+          "split": "dev",
+          "b_h": 0.10106272498489806,
+          "ceiling": -1.1914982001208156,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-091",
+          "split": "test",
+          "b_h": 0.40244596129804194,
+          "ceiling": -1.0122298064902095,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-092",
+          "split": "test",
+          "b_h": 0.8480922690628793,
+          "ceiling": -3.240461345314397,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-093",
+          "split": "dev",
+          "b_h": 0.19477963660927672,
+          "ceiling": -0.6246983270516508,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-094",
+          "split": "dev",
+          "b_h": 0.27296444036290396,
+          "ceiling": -0.3648222018145195,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-first-095",
+          "split": "dev",
+          "b_h": 0.17777709753017085,
+          "ceiling": -1.7222229024698292,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-first-096",
+          "split": "test",
+          "b_h": 0.20365785634205358,
+          "ceiling": -0.6167079292921516,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-097",
+          "split": "dev",
+          "b_h": 2.8453347280241004e-08,
+          "ceiling": -1.9999999715466525,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-098",
+          "split": "test",
+          "b_h": 0.2685739163739827,
+          "ceiling": -0.9582834752634153,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-099",
+          "split": "dev",
+          "b_h": 0.10086612992357662,
+          "ceiling": -1.1930709606113872,
+          "v_act_argmin": "answer",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-100",
+          "split": "test",
+          "b_h": 0.19533656626700707,
+          "ceiling": -0.9241970903596934,
+          "v_act_argmin": "hold",
+          "constraints": []
+        }
+      ]
+    },
+    "calibrated": {
+      "source": "results/logprob-elicitation.json calibrated + fresh readiness",
+      "b_h": {
+        "min": 0.2608695652173913,
+        "max": 1.0,
+        "n_distinct": 84
+      },
+      "ceiling": {
+        "test_claim_split": {
+          "n": 50,
+          "n_positive_ceiling": 0,
+          "max_ceiling": -0.4639698364794991,
+          "min_ceiling": -4.000000000000001,
+          "cases_at_max_ceiling": [
+            "a10-early-086"
+          ]
+        },
+        "dev_in_sample": {
+          "n": 50,
+          "n_positive_ceiling": 0,
+          "max_ceiling": -0.46425269363991406,
+          "min_ceiling": -4.000000000000001,
+          "cases_at_max_ceiling": [
+            "a11-repeated-099"
+          ]
+        },
+        "all_100": {
+          "n": 100,
+          "n_positive_ceiling": 0,
+          "max_ceiling": -0.4639698364794991,
+          "min_ceiling": -4.000000000000001,
+          "cases_at_max_ceiling": [
+            "a10-early-086"
+          ]
+        }
+      },
+      "v_act_argmin_census": {
+        "escalate_notify": 83,
+        "hold": 17
+      },
+      "constrained_cases": {
+        "n": 8,
+        "min_b_h": 0.42589787426556813,
+        "region_bound_b_h_below": 0.2,
+        "any_inside_the_region": false,
+        "max_ceiling_among_them": -1.1294893713278407
+      },
+      "invariants": {
+        "ec_ask_affine_in_b_h": "100/100",
+        "v_act_at_least_v": "100/100",
+        "ask_never_myopic_argmin": "100/100",
+        "cases_where_ask_would_be_chosen": []
+      },
+      "anchor_case": {
+        "case_id": "a02-deep-018",
+        "ceiling": -0.9564344118945143,
+        "v_act": 1.8261393528632914,
+        "ec_ask": 2.7825737647578057,
+        "b_h": 0.3912868823789028,
+        "v_act_argmin": "escalate_notify"
+      },
+      "per_case": [
+        {
+          "case_id": "a01-first-001",
+          "split": "test",
+          "b_h": 0.3419322639149424,
+          "ceiling": -0.7096613195747121,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-002",
+          "split": "dev",
+          "b_h": 0.39672301322020037,
+          "ceiling": -0.9836150661010015,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-003",
+          "split": "test",
+          "b_h": 0.32443345993311645,
+          "ceiling": -0.6221672996655827,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-004",
+          "split": "test",
+          "b_h": 0.3249321301901321,
+          "ceiling": -0.6246606509506605,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-005",
+          "split": "dev",
+          "b_h": 0.3306576261647953,
+          "ceiling": -0.6532881308239764,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-first-006",
+          "split": "dev",
+          "b_h": 0.3315547463398799,
+          "ceiling": -0.6577737316993995,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-007",
+          "split": "dev",
+          "b_h": 0.3260837246843833,
+          "ceiling": -0.8065246477840551,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-008",
+          "split": "dev",
+          "b_h": 0.325179581822987,
+          "ceiling": -0.8073383763593118,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-009",
+          "split": "test",
+          "b_h": 0.3236799808416372,
+          "ceiling": -0.8086880172425264,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a01-blast-010",
+          "split": "test",
+          "b_h": 0.32468883750705435,
+          "ceiling": -0.9077800462436512,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-011",
+          "split": "dev",
+          "b_h": 0.29359428832159046,
+          "ceiling": -0.46797144160795234,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-012",
+          "split": "dev",
+          "b_h": 0.2948914271170602,
+          "ceiling": -0.4744571355853009,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-013",
+          "split": "test",
+          "b_h": 0.32281154954453917,
+          "ceiling": -0.6140577477226956,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-early-014",
+          "split": "test",
+          "b_h": 0.32259430674600975,
+          "ceiling": -0.612971533730049,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-015",
+          "split": "test",
+          "b_h": 0.32458133573929243,
+          "ceiling": -0.6229066786964621,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-016",
+          "split": "dev",
+          "b_h": 0.5,
+          "ceiling": -1.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-017",
+          "split": "test",
+          "b_h": 0.37235932609981576,
+          "ceiling": -0.8617966304990792,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a02-deep-018",
+          "split": "dev",
+          "b_h": 0.3912868823789028,
+          "ceiling": -0.9564344118945143,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-019",
+          "split": "test",
+          "b_h": 0.33306427984622905,
+          "ceiling": -0.6653213992311455,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-020",
+          "split": "dev",
+          "b_h": 0.3279933386927366,
+          "ceiling": -0.6399666934636836,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-021",
+          "split": "test",
+          "b_h": 0.3255690688459744,
+          "ceiling": -0.8069878380386228,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-first-022",
+          "split": "dev",
+          "b_h": 0.32504331216568283,
+          "ceiling": -0.6252165608284144,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-023",
+          "split": "test",
+          "b_h": 0.3056339998417404,
+          "ceiling": -0.9249294001424335,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-024",
+          "split": "dev",
+          "b_h": 0.3333333333333333,
+          "ceiling": -0.8999999999999999,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-025",
+          "split": "dev",
+          "b_h": 0.3168834909270894,
+          "ceiling": -0.8148048581656193,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a03-followup-026",
+          "split": "test",
+          "b_h": 0.3849480400341575,
+          "ceiling": -0.9247402001707874,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-027",
+          "split": "dev",
+          "b_h": 0.326968238957756,
+          "ceiling": -0.63484119478878,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-028",
+          "split": "test",
+          "b_h": 0.321308989983781,
+          "ceiling": -0.6065449499189048,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-029",
+          "split": "test",
+          "b_h": 0.3028840435298387,
+          "ceiling": -0.5144202176491932,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-030",
+          "split": "test",
+          "b_h": 0.3195983331035069,
+          "ceiling": -0.5979916655175344,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-031",
+          "split": "test",
+          "b_h": 0.32349172224196077,
+          "ceiling": -0.6174586112098042,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-032",
+          "split": "dev",
+          "b_h": 0.30287574079432616,
+          "ceiling": -0.5143787039716305,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-033",
+          "split": "dev",
+          "b_h": 0.3189717929279016,
+          "ceiling": -0.5948589646395086,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-answerable-034",
+          "split": "dev",
+          "b_h": 0.322852182346781,
+          "ceiling": -0.6142609117339051,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-035",
+          "split": "test",
+          "b_h": 0.32743468543251986,
+          "ceiling": -0.6371734271625997,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-036",
+          "split": "dev",
+          "b_h": 0.30090115782099874,
+          "ceiling": -0.5045057891049938,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-037",
+          "split": "dev",
+          "b_h": 0.3975158466204308,
+          "ceiling": -0.9875792331021542,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-038",
+          "split": "test",
+          "b_h": 0.32430710026005155,
+          "ceiling": -0.6215355013002579,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-039",
+          "split": "dev",
+          "b_h": 0.38461538461538464,
+          "ceiling": -0.9230769230769229,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-040",
+          "split": "test",
+          "b_h": 0.450227309582687,
+          "ceiling": -1.2511365479134346,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-041",
+          "split": "test",
+          "b_h": 0.39333524353164456,
+          "ceiling": -0.9666762176582231,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a04-booking-042",
+          "split": "dev",
+          "b_h": 0.2956319696693032,
+          "ceiling": -0.47815984834651637,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-restricted-043",
+          "split": "test",
+          "b_h": 0.42589787426556813,
+          "ceiling": -1.1294893713278407,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-044",
+          "split": "test",
+          "b_h": 1.0,
+          "ceiling": -4.000000000000001,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-045",
+          "split": "dev",
+          "b_h": 1.0,
+          "ceiling": -4.000000000000001,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-046",
+          "split": "test",
+          "b_h": 1.0,
+          "ceiling": -4.000000000000001,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-047",
+          "split": "dev",
+          "b_h": 1.0,
+          "ceiling": -4.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-048",
+          "split": "dev",
+          "b_h": 1.0,
+          "ceiling": -4.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-049",
+          "split": "test",
+          "b_h": 1.0,
+          "ceiling": -4.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-restricted-050",
+          "split": "dev",
+          "b_h": 1.0,
+          "ceiling": -4.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": [
+            "no_direct_answer"
+          ]
+        },
+        {
+          "case_id": "a05-public-051",
+          "split": "dev",
+          "b_h": 0.5,
+          "ceiling": -1.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-public-052",
+          "split": "test",
+          "b_h": 0.5,
+          "ceiling": -1.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-public-053",
+          "split": "dev",
+          "b_h": 0.39809291789415474,
+          "ceiling": -0.9904645894707738,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a05-public-054",
+          "split": "test",
+          "b_h": 0.5,
+          "ceiling": -1.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-055",
+          "split": "test",
+          "b_h": 0.5085720265360397,
+          "ceiling": -1.5428601326801985,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-056",
+          "split": "dev",
+          "b_h": 0.5,
+          "ceiling": -1.5,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-057",
+          "split": "dev",
+          "b_h": 1.0,
+          "ceiling": -4.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-058",
+          "split": "dev",
+          "b_h": 1.0,
+          "ceiling": -4.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-059",
+          "split": "test",
+          "b_h": 1.0,
+          "ceiling": -4.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-frustrated-060",
+          "split": "test",
+          "b_h": 1.0,
+          "ceiling": -4.0,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-mild-061",
+          "split": "test",
+          "b_h": 0.32297625309221917,
+          "ceiling": -0.8093213722170025,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a06-mild-062",
+          "split": "dev",
+          "b_h": 0.35017195554387964,
+          "ceiling": -0.7508597777193979,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-063",
+          "split": "dev",
+          "b_h": 0.32348693421711505,
+          "ceiling": -0.6174346710855749,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-064",
+          "split": "test",
+          "b_h": 0.41177639284705786,
+          "ceiling": -1.0588819642352891,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-065",
+          "split": "dev",
+          "b_h": 0.4125111276080123,
+          "ceiling": -1.0625556380400611,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-price-066",
+          "split": "test",
+          "b_h": 0.43525904182137903,
+          "ceiling": -1.176295209106895,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-067",
+          "split": "dev",
+          "b_h": 0.39632341574792274,
+          "ceiling": -0.9816170787396137,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-068",
+          "split": "test",
+          "b_h": 0.47450104094483825,
+          "ceiling": -1.3725052047241912,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-069",
+          "split": "dev",
+          "b_h": 1.0,
+          "ceiling": -4.000000000000001,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a07-internals-070",
+          "split": "test",
+          "b_h": 0.3991329573552502,
+          "ceiling": -0.9956647867762509,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-071",
+          "split": "test",
+          "b_h": 0.3863762769676401,
+          "ceiling": -0.9318813848382004,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-072",
+          "split": "test",
+          "b_h": 0.39336454027173584,
+          "ceiling": -0.9668227013586792,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-073",
+          "split": "dev",
+          "b_h": 0.349468610135226,
+          "ceiling": -0.7473430506761298,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-voice-074",
+          "split": "dev",
+          "b_h": 0.4662088491970668,
+          "ceiling": -1.3310442459853338,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-075",
+          "split": "test",
+          "b_h": 0.2811282174307651,
+          "ceiling": -0.9469846043123111,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-076",
+          "split": "test",
+          "b_h": 0.29663454536336076,
+          "ceiling": -0.9330289091729753,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-077",
+          "split": "dev",
+          "b_h": 0.2761528242771447,
+          "ceiling": -0.9514624581505697,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a08-reaction-078",
+          "split": "dev",
+          "b_h": 0.29017517943381077,
+          "ceiling": -0.9388423385095703,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-079",
+          "split": "dev",
+          "b_h": 0.8551751956729781,
+          "ceiling": -3.2758759783648905,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-080",
+          "split": "dev",
+          "b_h": 0.3990794295979271,
+          "ceiling": -0.9953971479896353,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-081",
+          "split": "dev",
+          "b_h": 0.4986872674572656,
+          "ceiling": -1.4934363372863277,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-082",
+          "split": "test",
+          "b_h": 0.4496167635061295,
+          "ceiling": -1.2480838175306477,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-083",
+          "split": "test",
+          "b_h": 0.3977944377424997,
+          "ceiling": -0.9889721887124985,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a09-oversharer-084",
+          "split": "test",
+          "b_h": 0.7765121746692991,
+          "ceiling": -2.8825608733464962,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-085",
+          "split": "test",
+          "b_h": 0.29769824215791757,
+          "ceiling": -0.4884912107895878,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-086",
+          "split": "test",
+          "b_h": 0.2927939672958998,
+          "ceiling": -0.4639698364794991,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-087",
+          "split": "dev",
+          "b_h": 0.4658787615287872,
+          "ceiling": -1.3293938076439362,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-088",
+          "split": "dev",
+          "b_h": 0.3896519727799235,
+          "ceiling": -0.9482598638996176,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-089",
+          "split": "test",
+          "b_h": 0.3220162644409027,
+          "ceiling": -0.8101853620031878,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-early-090",
+          "split": "dev",
+          "b_h": 0.29291287187417153,
+          "ceiling": -0.4645643593708577,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-091",
+          "split": "test",
+          "b_h": 0.42540289192521646,
+          "ceiling": -1.127014459626082,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-092",
+          "split": "test",
+          "b_h": 1.0,
+          "ceiling": -4.000000000000001,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-093",
+          "split": "dev",
+          "b_h": 0.3226270972131801,
+          "ceiling": -0.6131354860659006,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a10-persistent-094",
+          "split": "dev",
+          "b_h": 0.38850422032694926,
+          "ceiling": -0.9425211016347466,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-first-095",
+          "split": "dev",
+          "b_h": 0.31723621024544923,
+          "ceiling": -1.5827637897545508,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-first-096",
+          "split": "test",
+          "b_h": 0.3254420578982518,
+          "ceiling": -0.6272102894912588,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-097",
+          "split": "dev",
+          "b_h": 0.2608695652173913,
+          "ceiling": -1.7391304347826084,
+          "v_act_argmin": "hold",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-098",
+          "split": "test",
+          "b_h": 0.3872530417677117,
+          "ceiling": -0.9362652088385583,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-099",
+          "split": "dev",
+          "b_h": 0.2928505387279828,
+          "ceiling": -0.46425269363991406,
+          "v_act_argmin": "escalate_notify",
+          "constraints": []
+        },
+        {
+          "case_id": "a11-repeated-100",
+          "split": "test",
+          "b_h": 0.32280367935893095,
+          "ceiling": -0.809476688576962,
+          "v_act_argmin": "hold",
+          "constraints": []
+        }
+      ]
+    }
+  },
+  "calibration_floor": {
+    "claim": "The committed isotonic map cannot emit a score below 6/23 = 0.260870, and both thresholds that would let `answer` or `ask` fire sit below that floor, so under this calibration neither can ever fire",
+    "map": {
+      "name": "isotonic",
+      "strictly_monotone": false,
+      "n_knots": 12,
+      "evaluation": "linear interpolation between knots, clamped flat outside them (src/calibrate.py IsotonicMap.predict)",
+      "why_flat_outside": "An isotonic fit carries no information about a region it never saw; extrapolating a slope there would be fabrication. Flatness is also what makes the floor a bound on the whole real line rather than only on the fitted interval."
+    },
+    "reachable_range": {
+      "low_exact": "6/23",
+      "low_float": 0.2608695652173913,
+      "high_exact": "1",
+      "high_float": 1.0,
+      "image_is_the_closed_interval": true,
+      "why": "Knot y-values are non-decreasing and prediction is continuous and piecewise linear between them with clamping outside, so the image of R is exactly [y_first, y_last]",
+      "attained_by": [
+        {
+          "case_id": "a11-repeated-097",
+          "split": "dev"
+        }
+      ],
+      "n_cases_at_the_floor": 1,
+      "note_on_attainment": "Attainment needs a raw score at or below the first knot's x. Interpolation lifts the other cases in the lowest block strictly above the floor, so few cases sit exactly on it even though 23 dev cases were pooled to produce it. The bound is on the range, not a claim about how many cases land on it."
+    },
+    "mechanism": {
+      "statement": "PAVA sets each pooled block's level to that block's positive rate, so the first knot's y is the lowest pooled block's positive rate",
+      "lowest_block": {
+        "n_dev_cases": 23,
+        "positives": 6,
+        "level_exact": "6/23"
+      },
+      "blocks": [
+        {
+          "index": 0,
+          "x_left_edge": 2.8453347280241004e-08,
+          "n_dev_cases": 23,
+          "positives": 6,
+          "level_exact": "6/23",
+          "level_float": 0.2608695652173913
+        },
+        {
+          "index": 1,
+          "x_left_edge": 0.22854647295970762,
+          "n_dev_cases": 3,
+          "positives": 1,
+          "level_exact": "1/3",
+          "level_float": 0.3333333333333333
+        },
+        {
+          "index": 2,
+          "x_left_edge": 0.2593180856083898,
+          "n_dev_cases": 13,
+          "positives": 5,
+          "level_exact": "5/13",
+          "level_float": 0.38461538461538464
+        },
+        {
+          "index": 3,
+          "x_left_edge": 0.6642154666083476,
+          "n_dev_cases": 2,
+          "positives": 1,
+          "level_exact": "1/2",
+          "level_float": 0.5
+        },
+        {
+          "index": 4,
+          "x_left_edge": 0.749757241844589,
+          "n_dev_cases": 2,
+          "positives": 1,
+          "level_exact": "1/2",
+          "level_float": 0.5
+        },
+        {
+          "index": 5,
+          "x_left_edge": 0.79640101573984,
+          "n_dev_cases": 1,
+          "positives": 1,
+          "level_exact": "1",
+          "level_float": 1.0
+        },
+        {
+          "index": 6,
+          "x_left_edge": 0.8077308032474363,
+          "n_dev_cases": 1,
+          "positives": 1,
+          "level_exact": "1",
+          "level_float": 1.0
+        },
+        {
+          "index": 7,
+          "x_left_edge": 0.8124277306884308,
+          "n_dev_cases": 1,
+          "positives": 1,
+          "level_exact": "1",
+          "level_float": 1.0
+        },
+        {
+          "index": 8,
+          "x_left_edge": 0.8812080102358627,
+          "n_dev_cases": 1,
+          "positives": 1,
+          "level_exact": "1",
+          "level_float": 1.0
+        },
+        {
+          "index": 9,
+          "x_left_edge": 0.8889866208635734,
+          "n_dev_cases": 1,
+          "positives": 1,
+          "level_exact": "1",
+          "level_float": 1.0
+        },
+        {
+          "index": 10,
+          "x_left_edge": 0.8991448080221514,
+          "n_dev_cases": 1,
+          "positives": 1,
+          "level_exact": "1",
+          "level_float": 1.0
+        },
+        {
+          "index": 11,
+          "x_left_edge": 0.8996344396231138,
+          "n_dev_cases": 1,
+          "positives": 1,
+          "level_exact": "1",
+          "level_float": 1.0
+        }
+      ],
+      "blocks_cover_dev_cases": 50,
+      "dev_positives": 21,
+      "dev_base_rate_exact": "21/50",
+      "every_level_equals_positives_over_n": true,
+      "recovered_without_refitting": true
+    },
+    "ordering": {
+      "positive_voi_region_bound": {
+        "exact": "1/5",
+        "float": 0.2,
+        "what_it_is": "b_h below which the constrained-menu ceiling is positive, on the argmax ray"
+      },
+      "t_star": {
+        "exact": "3/13",
+        "float": 0.23076923076923078,
+        "what_it_is": "nu/(alpha+nu), where answer stops beating escalate_notify"
+      },
+      "floor": {
+        "exact": "6/23",
+        "float": 0.2608695652173913,
+        "what_it_is": "the lowest score the committed map can emit"
+      },
+      "holds": true,
+      "as_written": "1/5 < 3/13 < 6/23",
+      "gaps": {
+        "floor_minus_t_star_exact": "9/299",
+        "floor_minus_t_star_float": 0.030100334448160536,
+        "floor_minus_region_bound_exact": "7/115",
+        "floor_minus_region_bound_float": 0.06086956521739131,
+        "t_star_minus_region_bound_exact": "2/65"
+      },
+      "note_on_margins": "All three numbers lie within 0.061 of each other, which is why they are carried as exact rationals: at 2dp the ordering is invisible."
+    },
+    "consequences": {
+      "answer_is_never_the_v_act_argmin_under_calibration": {
+        "calibrated_argmin_census": {
+          "escalate_notify": 83,
+          "hold": 17
+        },
+        "raw_argmin_census": {
+          "answer": 25,
+          "escalate_notify": 45,
+          "hold": 30
+        },
+        "n_calibrated_below_t_star": 0,
+        "n_raw_below_t_star": 48
+      },
+      "no_calibrated_belief_reaches_the_positive_voi_region": {
+        "region_necessary_condition": "b_h < 1/5",
+        "region_bound_is_necessary_not_sufficient": "1/5 is the bound on the ray the constrained maximum sits on, so it is the most favourable direction in the simplex. A belief with b_h below it is not thereby inside the region: it must also carry `no_direct_answer` and lie near that ray. The sufficient test is the per-case ceiling with constraints applied, reported per arm, and it is negative on all 400 case-arm pairs.",
+        "region_requires_b_h_below": 0.2,
+        "min_calibrated_b_h": 0.2608695652173913,
+        "n_calibrated_below_the_bound": 0,
+        "n_raw_below_the_bound": 31,
+        "n_raw_below_the_bound_that_also_carry_the_constraint": 0,
+        "n_calibrated_actually_inside": 0,
+        "n_raw_actually_inside": 0,
+        "structural_for_the_calibrated_arm": true,
+        "structural_for_the_other_arms": false,
+        "why_the_distinction_matters": "For the calibrated arm the bound is unreachable by construction: no input can produce a b_h below the floor, so the necessary condition fails for every belief the map can emit. For published, rebaselined and raw the bound IS reached by beliefs on unconstrained cases, and the region stays empty only because none of those cases carries `no_direct_answer`. That is a contingent fact about this dataset, not a structural one, and the two are not merged."
+      }
+    },
+    "transferable_form": "For an isotonic map fitted by PAVA, the reachable range is bounded below by the positive rate of the lowest pooled block. A fixed decision threshold beneath that rate cannot fire post-calibration, however many bits of discrimination the map buys. A calibration map has a reachable range; a fixed-threshold policy has thresholds; cross-entropy and Brier score never check that the thresholds sit inside the range.",
+    "what_this_does_not_claim": [
+      "not that calibration is harmful \u2014 the calibrated arm escalates more and misses fewer cases needing a human, which is the Gate 2 result and stands",
+      "not that the map is misfitted \u2014 6/23 is the correct positive rate for that block and the fit is doing what PAVA should do",
+      "not that the unconstrained-menu impossibility depends on this \u2014 that result is analytic and holds for every belief set including uncalibrated ones",
+      "not that 6/23 is a property of isotonic regression in general \u2014 it is the property of THIS fit on THIS dev split; what generalises is that a floor exists and equals the lowest block's positive rate"
+    ]
+  },
+  "regression_guards": {
+    "status": "regression guard, not an open test",
+    "why": "results/rebaseline.json already commits these counts, including the calibrated arm's zero `answer` decisions. Gate 4 reproduces them to show the arm loader rebuilds the same beliefs; it does not discover them. See decisions/v2-gate4-preregistration.md section 3.4.",
+    "split": "test",
+    "per_arm": {
+      "published": {
+        "n": 50,
+        "computed_here": {
+          "answer": 15,
+          "escalate_notify": 20,
+          "hold": 15
+        },
+        "committed": {
+          "answer": 15,
+          "escalate_notify": 20,
+          "hold": 15
+        },
+        "committed_at": "rebaseline.json:published.test.action_counts",
+        "reproduces": true,
+        "tie_break_changes_the_census": false,
+        "answer_count": 15
+      },
+      "rebaselined": {
+        "n": 50,
+        "computed_here": {
+          "answer": 15,
+          "escalate_notify": 20,
+          "hold": 15
+        },
+        "committed": {
+          "answer": 15,
+          "escalate_notify": 20,
+          "hold": 15
+        },
+        "committed_at": "rebaseline.json:arms.rebaselined_written.action_counts",
+        "reproduces": true,
+        "tie_break_changes_the_census": false,
+        "answer_count": 15
+      },
+      "raw": {
+        "n": 50,
+        "computed_here": {
+          "answer": 12,
+          "escalate_notify": 21,
+          "hold": 17
+        },
+        "committed": {
+          "answer": 12,
+          "escalate_notify": 21,
+          "hold": 17
+        },
+        "committed_at": "rebaseline.json:arms.fresh_raw.action_counts",
+        "reproduces": true,
+        "tie_break_changes_the_census": false,
+        "answer_count": 12
+      },
+      "calibrated": {
+        "n": 50,
+        "computed_here": {
+          "escalate_notify": 41,
+          "hold": 9
+        },
+        "committed": {
+          "escalate_notify": 41,
+          "hold": 9
+        },
+        "committed_at": "rebaseline.json:arms.fresh_calibrated.action_counts",
+        "reproduces": true,
+        "tie_break_changes_the_census": false,
+        "answer_count": 0
+      }
+    },
+    "calibrated_answer_count": 0,
+    "calibrated_chooses_answer_zero_times": true,
+    "all_four_arms_reproduce": true
+  }
+}

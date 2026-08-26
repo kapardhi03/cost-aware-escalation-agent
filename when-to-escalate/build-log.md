@@ -877,3 +877,394 @@ case is being asked about — is false in detail and accepted for the reason giv
 the pre-registration. No claim about `ask` follows from any number in this gate.
 The reliability diagram (Q5) is still the one item carried from Gate 2, and
 `order_preserved_on_test: false` is still carried, not addressed.
+
+### Gate 4 — four belief arms, a calibration floor, and abstention priced (2026-08-26)
+
+Gate 4 owed three things: the answer-model-free ceiling recomputed on the belief
+sets Gate 2 produced, the cost of abstention measured rather than argued, and the
+reliability-diagram data path Q5 has been carrying since Gate 2. It makes **zero API
+calls** — every belief comes from `results/run.json` or
+`results/logprob-elicitation.json`, and the cost matrix is read, never written.
+Every number below traces to `results/voi-ceiling-arms.json`,
+`results/abstention.json`, or `paper/figures/make_figures.py --check`.
+
+**1. The pre-registration was locked first, and the git history is the proof again.**
+`decisions/v2-gate4-preregistration.md` landed alone in `785adce`: 1 file, 404
+insertions, with `experiments/abstention.py` verified absent from that tree. The
+arms re-run followed in `d537ec2` and the abstention measurement in `874ecf2`. §9
+names twelve conditions that would make the document false, including "τ defined in
+absolute bits anywhere", "the analytic half of §4 written up as a finding", and "the
+abstention call made on anything other than the measured numbers". All twelve held.
+Two are checkable mechanically and were checked: nothing under `src/` and neither
+`results/run.json` nor `results/voi-ceiling.json` changed between the lock and the
+close, and no `COST[...] =` assignment exists anywhere in the repo.
+
+**2. Four belief arms, and the part of the result no arm can move.** The arms are
+`published` (the committed Gate 1 run), `rebaselined` (the cache's written digit
+with fresh readiness), `raw` and `calibrated`. The last three share one fresh
+readiness vector and differ only in `needs_human`, so each contrast isolates the
+component that changed.
+
+| arm | `b_h` range on test | positive ceilings | least negative | `V_act` argmin census |
+| --- | --- | ---: | ---: | --- |
+| `published` | 0.0000–0.9000 (8 distinct) | 0 / 50 | −0.4000 | `{answer: 30, escalate_notify: 43, hold: 27}` |
+| `rebaselined` | 0.0000–0.9000 (9 distinct) | 0 / 50 | −0.4000 | `{answer: 29, escalate_notify: 44, hold: 27}` |
+| `raw` | 0.0000–0.8996 (100 distinct) | 0 / 50 | −0.2598 | `{answer: 25, escalate_notify: 45, hold: 30}` |
+| `calibrated` | 0.2609–1.0000 (84 distinct) | 0 / 50 | −0.4640 | `{escalate_notify: 83, hold: 17}` |
+
+Nothing crosses zero, on either split, on any arm. That is not the interesting part.
+`V_act(b) ≤ min(α·b_h, ν·(1−b_h))` for every belief and `EC(ask | b)` is flat in
+readiness, so `max_b [V_act(b) − EC(ask | b)]` is a function of the cost matrix
+alone — `−2/13` = −0.153846 — and on the unconstrained action menu the claim that
+the impossibility survives recalibration is **analytic**. The artifact says so in
+§2, not only the paper. Checked rather than assumed: the seven belief-independent
+sections are identical across all four arms by exact equality of
+`json.dumps(section, sort_keys=True)`, and the script refuses to report a contrast
+if they ever differ. §4's regression guards reproduce counts
+`results/rebaseline.json` already commits, including the calibrated arm's zero
+`answer` decisions on test, and state that this shows the arm loader rebuilds the
+same beliefs rather than discovering them.
+
+**3. The calibration floor, which is the finding.** The committed isotonic map
+cannot emit a score below `6/23`, and both thresholds that would let `answer` or
+`ask` fire sit beneath it:
+
+| | exact | float | what it is |
+| --- | --- | ---: | --- |
+| positive-VoI region bound | `1/5` | 0.200000 | `b_h` below which the constrained-menu ceiling is positive, on the argmax ray |
+| t\* | `3/13` | 0.230769 | `ν/(α+ν)`, where `answer` stops beating `escalate_notify` |
+| the map's floor | `6/23` | 0.260870 | the lowest score the committed map can emit |
+
+`1/5 < 3/13 < 6/23`, all three within 0.061 of each other, which is why they are
+carried as exact rationals: at 2dp the ordering is invisible. PAVA sets each pooled
+block's level to that block's positive rate, and the lowest block pooled 23 dev
+cases carrying 6 positives. All 12 blocks were recovered from the committed knots
+and the committed dev scores without refitting, each level checked against its own
+`positives / n`; the blocks cover 50 dev cases with 21 positives. Prediction
+interpolates linearly between knots and clamps outside them, so the image of ℝ is
+exactly `[6/23, 1]` — the flatness outside the fitted interval is what makes the
+floor a bound on the whole real line rather than only on the fitted range. The floor
+is attained by 1 case (`a11-repeated-097`, dev); interpolation lifts the other 22 in
+that block strictly above it, so the bound is on the range and not a claim about how
+many cases land on it.
+
+Two consequences. `answer` is unreachable: 0 of 100 calibrated beliefs fall below
+t\*, against 48 raw ones. And the positive-VoI region is unreachable: 0 calibrated
+beliefs meet even the necessary condition `b_h < 1/5`, against 31 raw ones — of
+which 0 also carry `no_direct_answer`.
+
+Those two emptinesses are not the same kind and are not merged. For `calibrated` the
+region is unreachable **by construction**: no input can produce a `b_h` below the
+floor, so the necessary condition fails for every belief the map can emit. For
+`published`, `rebaselined` and `raw` the bound **is** reached, and the region stays
+empty only because none of the cases reaching it carries the constraint — a
+contingent fact about these 100 cases. `b_h < 1/5` is also necessary and not
+sufficient: `1/5` is the bound on the most favourable ray in the simplex, and the
+sufficient test is the per-case ceiling with constraints applied, negative on all
+400 case-arm pairs.
+
+What generalises is not `6/23`. It is that **an isotonic map fitted by PAVA has a
+reachable range bounded below by the positive rate of its lowest pooled block, so a
+fixed decision threshold beneath that rate cannot fire post-calibration however many
+bits of discrimination the map buys.** A calibration map has a reachable range and a
+fixed-threshold policy has thresholds; cross-entropy and Brier score never check
+that the thresholds sit inside the range. This does not say calibration is harmful —
+the calibrated arm escalates more and misses fewer cases needing a human, which is
+Gate 2's result and stands — nor that the map is misfitted; `6/23` is the correct
+positive rate for that block.
+
+**4. Abstention costs more than it saves, on every arm at every τ.** The matrix
+settles most of it before any belief is loaded. `escalate_pause` costs strictly more
+than `escalate_notify` in all six labelled states — +3/+2/+2 with `needs_human`
+false, +2/+1/+1 with it true — so any notify→pause rule raises realised cost on
+every case it touches; and `is_escalation` counts both actions, so no such rule can
+change the miss count. What remained to measure is how many cases each rule touches.
+
+| variant | published | raw | calibrated |
+| --- | --- | --- | --- |
+| baseline (test) | 86 cost, 8 misses | 70, 7 | 75, 2 |
+| (b) fallback rewrite | 20 cases, +32, miss Δ 0 | 21, +33, 0 | 41, +74, 0 |
+| (a) `H(b) ≥ τ` override | beats baseline at no τ | no τ | no τ |
+
+(a) loses at all 33 arm-τ pairs; the cost of a miss it does avoid runs from 7.5
+(published, q=0.7) to 72.0 (calibrated, q=0.3). Firing on all 50 test cases costs
+177 as pause against 87 as notify, identically on all three arms, because both
+figures depend only on labels. The resolution is (c): the diagnostic flag stays, the
+override is dropped. **This is the abstention analogue of the impossibility result —
+the existing minimum-cost policy already handles the "stop and hand off" case
+correctly, so an abstention override is machinery the cost structure provably does
+not need.** (Kaps-decided, on the measured numbers, at the close.)
+`results/abstention.md` §8 records the call as open at the time it was written and
+states that it recommends no variant; the decision is in the design record instead,
+which is the ordering the pre-registration exists to enforce.
+
+**5. τ was locked as deciles, and 12 decimal places of `H(b)` turned out to be
+load-bearing.** S4's pre-lock check ran and earned itself: published `H(b)` spans
+0.000000–2.456426 bits with 8 distinct values, so an absolute grid over the 0–2.585
+theoretical range would have put most of its points where almost no cases live.
+Deciles of the observed distribution on the arm being scored make the step
+commensurate by construction, and both the quantile and the absolute bit value are
+reported per arm with cross-arm incomparability in absolute bits declared.
+
+Underneath that, mathematically equal `H(b)` values differ by up to 8.88e-16, and
+two identical published deciles were firing on 49 cases and 44. `H(b)` is now
+quantised to 12 decimals before any comparison, collapsing exactly 5 spurious
+distinctions on published (24 → 19) and none on raw or calibrated. The guard is
+non-circular by construction: the noise bound is derived independently as
+`8 · math.ulp(max|H|)` = 3.55e-15, the 1e-12 tolerance is asserted to sit strictly
+between it and the smallest genuine gap per arm (9.99e-03 published, 3.92e-05 raw,
+4.97e-06 calibrated), and gaps are classified by the noise bound rather than by the
+tolerance. Negative controls sit at both ends: `H_DECIMALS = 2` is refused for
+crossing the signal, `H_DECIMALS = 17` for sitting below the noise. Without it the
+artifact would have shipped two wrong firing counts.
+
+**6. `--check` found a wrong bracket in the paper on its first run.** Q5's data path
+landed: `figure_data()` now returns three panels — v1's `needs_human` diagram, and
+the Gate 2 test-split raw and calibrated diagrams — and `check()` re-derives every
+plotted number from the per-case records, taking ECE, cross-entropy in bits, Brier
+and base rate to 1e-12 and asserting no test score falls below `6/23`. `_bin_index`
+and `_ece` are restated in the module rather than imported from `src.calibrate`,
+which is what wrote the committed tables; re-deriving a number with the function
+that produced it checks nothing.
+
+It failed immediately, on a real defect. The shaded band carries two claims with two
+different brackets. No case takes a **value** in `(0.2, 0.3)` — open at both ends,
+because 17 of the 100 cases sit at exactly 0.3. Every **threshold** in `(0.2, 0.3]`
+decides identically — half-open, because the rule is `answer iff b_h < t`, so a
+threshold at 0.3 leaves those 17 cases on the escalate side exactly as `3/13` does.
+The script, its render legend, and two lines of `paper/main.tex` all wrote the
+threshold bracket on the value claim. The script and legend are fixed, and the
+threshold claim is now verified as a partition identity —
+`partition(3/13) == partition(0.3)` is True, `== partition(0.2)` and
+`== partition(0.4)` are False — rather than inferred from the emptiness of the gap.
+`paper/main.tex:499` and `:728` are recorded for the paper gate rather than edited
+by a figure script; `:971` is a threshold claim and its bracket was already right.
+The pre-registration's own bracket on that region was also right; it is the
+manuscript that drifted.
+
+Rendering stays deferred. matplotlib is absent from the test environment, so
+shipping a render path now would ship something untested; panels 2 and 3 declare
+`renders: false` and name the paper gate. The test file's negative controls doctor
+the committed payloads and assert each check family fires — including on a
+deliberately stale panel-versus-records pair, because the shaded band is derived and
+within one payload the band and the check move together and cannot disagree.
+
+The suite is **654 passing** at the close, from 510 at the open.
+
+**What Gate 4 has not done.** No `ask` feature was built and nothing was tuned to
+make `ask` fire; the abstention override was measured and dropped. The unconstrained
+impossibility is not an empirical result of this gate and is not written up as one.
+The floor is a property of this fit on this dev split — what transfers is that a
+floor exists and equals the lowest block's positive rate. `order_preserved_on_test:
+false` is discharged rather than carried, and the flag turned out to overstate the
+risk: isotonic regression is weakly monotone, so it cannot invert two cases, only
+send them to the same value. On the test split there are **0 inversions and 16
+merged pairs** at full precision (31 at the pre-registered 3dp). The ceiling is also
+pointwise in the belief — `EC(ask | b) = 2 + 2·b_h` and `V_act` is a minimum over
+that same belief — so it reads levels and not ranks, and merging cannot move it in a
+direction the per-arm tables do not already show. The figure renders nothing yet,
+and two `.tex` brackets are knowingly still wrong pending the paper gate.
+
+### Review pass before Gate 5 — merge policy reversed, three paper debts (2026-08-26)
+
+No new measurement. A read over the four closed gates before the last four open,
+recorded as M5 and V1–V3 in `decisions/v2-design-decisions.md`.
+
+**The merge policy is reversed.** Everything stays on `v2` and there is one merge to
+`main` at the very end, with `v2.0.0` tagged at Gate 8 behind `v1.0.0`. This
+supersedes M1 and M2, which had gates merging one at a time as they closed. The
+reason is that keeping `main` current serves nobody on a single-person branch, and
+the backlog — 26 commits, `git rev-list --count v2..main` = 0 — is pushed, so not
+merging risks nothing. M3 and M4 describe what a merge carries and are unaffected.
+
+**v1's paper answers to two of its own three open questions.** `main.tex:1039` asked
+for a finer-grained belief and a held-out recalibration fit; Gate 2 did both.
+`main.tex:1050` asked whether `ask`, scored by one-step value of information, earns
+its place; Gates 3 and 4 answer no, and analytically rather than on these cases. The
+third, the turn boundary at `main.tex:1060`, is untouched by v2 and stays open.
+
+**Three defects in `main.tex` beyond U7's brackets.**
+
+`reliability-needs-human.pdf` has never been committed on any branch — `git log
+--all --diff-filter=A` finds no add — yet `main.tex:719` includes it and the tracked
+`main.pdf` embeds it, three Form XObjects with the filename in the PDF body. It was
+built from an untracked local file while the root `figures/*` rule still ignored it.
+The published artifact therefore carries a figure no clone can rebuild. Q4 cleared
+the `.gitignore` obstacle; the file itself is still missing and `render()` has never
+been executed, matplotlib being absent.
+
+`main.tex:683` says `ask` "can only win in a narrow middle band that the quantized
+beliefs never land in." There is no such band on the unconstrained menu — the
+maximum over every belief is `-2/13` — and quantization is not the cause either,
+since the raw arm's 100 distinct beliefs leave the region empty too. Heavier than a
+bracket, and it is where the theorem belongs.
+
+`main.tex:1045` attributes v1's floor to elicitation granularity "not the calibration
+method." Gate 4's floor, `6/23`, is set by the calibration method. Both are true of
+different objects; under one word they read as a contradiction.
+
+The `.gitignore` item the G-series paragraph lists as Gate 8's one open technical
+item was discharged by Q4 during Gate 2a. The paragraph is left as written per the
+G9/G12 rule; the correction is a line in the new section. Gate 8's remaining items
+are the two tags and the single merge.
+
+The suite is unchanged at **654 passing**, and `make_figures.py --check` exits 0.
+
+### Gate 5 — the ask baseline priced, and the bound attained (2026-08-26–27)
+
+The first per-case VoI computation in the project: not the analytic bound but the whole
+`V_q` term, over 400 case-question pairs on each of four belief arms, with the
+entropy-threshold ask baseline priced over the pre-registered decile grid for τ. The
+pre-registration was committed before any of these numbers existed.
+
+Entropy-thresholding is never free. At the cheapest threshold that asks at all — the
+0.9 decile, 5 or 6 of 50 test cases — it costs +13.80 realised on published, +7.70 on
+raw and +5.60 on calibrated. Ask on everything and it costs +113.62 to +128.02. There
+is no threshold on any arm at which asking pays for itself, and the answer-model-free
+expected tier is positive at every firing threshold on every arm. That is the baseline
+sentence §6 was owed.
+
+Invariant 6 was supposed to be the cross-check tying this gate's VoI to Gate 4's
+ceiling, and it is a tautology. Its slack equals `V_q` to within 7.77e-16, so
+substituting VoI's definition cancels the other two terms and the invariant reduces to
+`V_q ≥ 0` — free, since every entry of `costs.COST` is non-negative. It passes on all
+400 pairs per arm and its passing is worth close to nothing. The pre-registration is
+locked and was not edited; the correction is X2.
+
+`ceiling_agreement` is the check that was actually wanted: a different invariant with
+the same intended outcome. Recomputing `EC(ask | b) − V_act(b)` from the beliefs
+against the per-case ceilings committed in Gate 4 gives a maximum delta of exactly
+**0.0** on all four arms — bit-identical, because `widen` mirrors `state_probability`
+and `STATES` iterates in the order `expected_cost` sums in. Two further routes agree:
+`EC(ask | b)` against the exact `2 + 2·b_h` of invariant 5 to 8.9e-16, and `V_act`
+recovered as `ceiling + EC(ask | b)` to 2.2e-16. Non-positive tier-1 excesses: 0 of
+400 on every arm.
+
+The bound is attained, not merely respected. `V_q = 0` exactly on 16 published, 12
+rebaselined, 0 raw and 52 calibrated pairs. On those pairs a free, perfect oracle
+drives the post-answer expected cost to zero and asking still loses by the full
+`−ceiling`. The ceiling's negativity is therefore not slack in the bound, and on
+roughly a quarter of the calibrated pairs there is no slack to be had. Raw has none
+because its beliefs are continuous. This is the gate's real new content, and it goes
+in the theorem section as a second beat sharpening the main claim rather than as a
+separate finding.
+
+Three things the pre-registration did not anticipate. A cost-side adapter was needed:
+`costs.expected_cost` requires a factorised belief, `q_specifics` produces posteriors
+that do not factorise, and `narrow` raises rather than projecting onto marginals — so
+`ec_joint` prices the joint directly and is asserted to agree with `expected_cost` on
+all 500 (prior, action) pairs, maximum delta 0. Each arm is scored against its own
+committed v1 total — 86, 86, 70, 75 — and not against published's 86; the first
+version of the render printed 86 under every table while computing each excess against
+the arm's own total, which is S4's shape in a new place. And the realised column is not
+monotone in τ.
+
+The exception is worth keeping. The expected tiers must fall as τ rises, since the
+firing sets are nested and every firing case contributes a positive excess, and both
+are now asserted. The realised column carries no such guarantee: on the rebaselined
+arm the firing count falls 12 to 11 between the 0.7 and 0.8 deciles while the realised
+total rises 109.60 to 113.60. One case does it. `a02-deep-017` leaves the firing set;
+v1 answers it and eats a realised 10 where ask-then-act realised 6. Its expected
+tier-1 excess is `+0.40` throughout. Asking was expected to lose that case and won it
+— the cleanest illustration in the repo that the impossibility result constrains
+expected cost and says nothing about a single realised draw. It is written off the case
+and not off that arm's totals, which carry no claim.
+
+The anchors hold. Terminal `always_ask` pricing from v1 is 142 total, 2.84 mean; the
+same 50 cases under ask-then-act cost 199.62, mean 3.9924, strictly dearer as required
+— the follow-up action is not free. Invariant 8 reproduces v1 exactly on the published
+arm: 0 mismatches across 100 per-case actions and a recomputed test aggregate of 86
+total, 1.72 mean, on v1's legacy tie-break. It is checked on the published arm only,
+because asserting it on a rebuilt arm would be asserting that recalibration changed
+nothing. The VoI oracle agrees with argmax-IG on 29 of 50 test cases, which is why the
+ordering-fragile IG route stays secondary.
+
+The honesty check is named self-consistency, never validation: the exact expectation of
+199.62 against a Monte Carlo mean of 199.607 over 2000 draws, delta 0.013, seed
+20260826. The answer is simulated from the same `P(u | s)` that produced the
+prediction, so it is circular with respect to the answer model by construction and
+checks arithmetic rather than reality. The seed is recorded and is not offered as a
+defence.
+
+The suite is **690 passing**, up from 654: 36 new tests, most of them negative controls
+that doctor one input and assert the guard raises — a disagreeing committed ceiling, a
+non-positive excess, an unnested firing set, a rising expected tier, a mislabelled
+per-arm reference, a state-reachable answer with no belief branch.
+
+### Gate 6 — the lookahead boundary, and a theorem that survives depth (2026-08-27)
+
+The smallest gate, and the only one that computed nothing. Gate 1 defined the
+one-question lookahead and left a note that Gate 6 would have to state the boundary it
+implies. Gate 4 then asserted, off a `k = 1` ceiling, that "the horizon was not the
+binding constraint" — a claim a reader was entitled to refuse, since a one-step ceiling
+does not obviously speak for a two-step policy. This gate supplies the argument, in
+`decisions/v2-policy-boundary.md`.
+
+The policy class is written down: `W_0(b) = V_act(b)` and
+`W_k(b) = min{ V_act(b), EC(ask | b) + Σ_u P_b(u)·W_{k−1}(b^u) }`. The shipped analysis
+is `W_1`, and the only thing that fixes the depth at one is that `V_q`'s continuation is
+`V_act(b^u)`, a terminal act. Nothing else in the definition of VoI sets a depth. The
+budget counts questions, not turns.
+
+Then the trap, which is worth more than the boundary it protects. Substituting `V(b^u)`
+for `V_act(b^u)` looks like buying a second step for free, and is wrong twice. `ask` is
+in the menu, so `V(b^u) ≤ EC(ask | b^u)` identically — the tautology already recorded in
+the definitions, moved one level down and hidden rather than fixed. And the result is
+not `W_2`: `W_2` charges the second question a continuation too, and the difference is
+that whole missing term. What `V(b^u)` implements is a policy that believes the second
+question's follow-up is free. Because the under-pricing sits entirely on the ask branch,
+it tilts the comparison toward the action the analysis exists to test. The file carries
+the instruction not to call it "two-step," since that name makes a rigged test sound
+like an upgrade.
+
+The result needs two premises, no new code, and holds at every depth. Premise A is
+Gate 4's ceiling, leaning on a property of it not used before: `check_global_ceiling`
+maximises over *all* beliefs — the whole readiness simplex crossed with `b_h ∈ [0,1]` —
+in exact `Fraction` arithmetic, attained at the all-hot vertex at `b_h = 3/13`, where
+`V_act = 30/13` against `EC(ask) = 32/13`. Posteriors are beliefs, so the bound binds at
+every node of any lookahead tree and not only at its root. Premise B is `W_k ≥ 0`, from
+the non-negativity of the cost matrix. The chain is three lines: the ask branch is at
+least `EC(ask | b)`, which is at least `V_act(b) + 2/13`, which exceeds `V_act(b)`. So
+`W_k = V_act` for every `k`. Asking is never rational on the unconstrained action menu
+at any lookahead depth, and the margin cannot narrow with depth, because every term the
+chain drops is non-negative.
+
+Premise B is invariant 6 — the check Gate 5 demoted to a tautology. The feature that
+made it worthless as evidence for the `k = 1` bound is exactly what makes it usable
+here: it follows from the matrix alone, with no reference to the data, the answer model,
+the question set or the depth, so it can be asserted at every node of a tree nobody
+enumerates. A data-dependent check would have to be verified per node. It is
+load-bearing *because* it is trivial. Two gates running, being precise about what a
+check actually proves has changed what could be claimed with it.
+
+What this settles about v1: the myopia claim splits, and the halves go different ways.
+"A strict one-step rule does not price asking" is true — v1's policy compared
+`EC(ask | b) = 2 + 2·b_h` terminally against the other actions, which is not a price for
+a question — and it stays a named limitation. "Asking is undervalued, and would earn its
+place if priced" is false here: it was priced, and it loses by at least `2/13` per case,
+at every depth. Five passages carry the old framing (`main.tex:249`, `:343`, `:687`,
+`:947`, `:1050`) and are Gate 7's to rewrite, with `:687` folded into the `:683`
+band-claim debt so that line is touched once.
+
+The four scope limits are what keep it honest, and they are stated as flatly as the
+result. Premise A fails on the constrained menu, where removing `answer` lifts the
+ceiling to `+1.0` and asking can be rational for `b_h < 1/5` on the hot ray; that region
+is empty here for two different reasons, unreachable by construction on the calibrated
+arm because the isotonic range starts at `6/23`, and merely unoccupied on the other
+three. The bound is a statement about the `(2, 4)` ask row, and `λ = 15/16` — 6.25% —
+flips it. No row of `costs.COST` prices a state transition, so "hold now, decide later"
+is outside all of this, which leaves v1's turn-boundary limitation exactly where it was.
+And the claim bounds the value of one more question inside a deeper policy; it is not
+the claim that no interaction design could justify asking.
+
+No code, no new tests, and no `W_2`. Both premises are already under test — the
+ceiling in the `voi_ceiling` suite, `V_q ≥ 0` as invariant 6 in
+`tests/test_entropy_baseline.py`. A `W_2` computation would have exhibited depth 2
+while the argument covers every depth, so building it would have added scope and
+subtracted nothing. The suite is unchanged at **690 passing** and
+`make_figures.py --check` exits 0.
+
+Recorded as Y1–Y5 in `decisions/v2-design-decisions.md`, with one-line pointers into
+`decisions/v2-definitions.md` at the boundary note and at the horizon sentence. This is
+the one gate with no pre-registration, because nothing is computed and so there is no
+result to be tempted by after the fact.
