@@ -1052,3 +1052,80 @@ not anticipate, and one of them corrects it.
 | X5 | The realised column inverts once, on the no-claim arm: `a02-deep-017` leaves the firing set, v1 answers it for 10 where ask-then-act realised 6. Expected excess `+0.40`. Recorded with its cause | (AI-proposed) | **noted** |
 | X6 | The attainment result lands in the theorem section as a second beat — "asking never wins on the unconstrained menu" then "and on N pairs the ceiling is attained, so it loses by the full margin even against perfect information." A sharpening, not a separate finding | (Kaps-decided) | **confirmed** |
 | X7 | The realised inversion is written as a mechanism illustration drawn from `a02-deep-017`, in failure analysis or discussion, framed off the case and not off the rebaselined arm's totals | (Kaps-decided) | **confirmed** |
+
+## Resolutions after Gate 6
+
+Gate 6 wrote no code. It states the one-question-lookahead boundary the definitions
+carried forward, and proves that the impossibility result does not depend on it.
+Everything below traces to `decisions/v2-policy-boundary.md`, whose numbers come from
+`results/voi-ceiling.json` and `results/entropy-baseline.json` and were all committed
+in earlier gates. This is the one gate with no pre-registration, because there is
+nothing to pre-register: no quantity is computed, so there is no result to be tempted
+by after the fact.
+
+- **Y1 — the shipped policy is `W_1` in a family that is now written down.** With
+  `W_0(b) = V_act(b)` and
+  `W_k(b) = min{ V_act(b), EC(ask | b) + Σ_u P_b(u)·W_{k−1}(b^u) }`, the analysis
+  priced in Gate 5 is exactly `W_1`, because `V_q(b) = Σ_u P_b(u)·V_act(b^u)` uses
+  `W_0` as its continuation. Naming that inner term is the whole of what fixes the
+  depth at one; nothing else in the definition of VoI sets a depth. The budget counts
+  questions, not turns.
+
+- **Y2 — `V(b^u)` in place of `V_act(b^u)` is wrong twice, and neither error is
+  depth.** First, `ask` is in the menu, so `V(b^u) ≤ EC(ask | b^u)` identically — the
+  same tautology recorded at `v2-definitions.md:129`, moved one level down and hidden
+  rather than fixed. Second, the object is not `W_2`: `W_2` charges the second question
+  a continuation, `V(b^u)` does not, and the gap is exactly the missing
+  `Σ_{u'} P_{b^u}(u')·W_0(b^{u,u'}) ≥ 0`. So it implements a policy that believes the
+  second question's follow-up is free. The under-pricing sits entirely on the ask
+  branch, which biases the comparison in favour of the action under test — the one
+  place the analysis cannot afford a thumb on the scale. The file carries the
+  instruction not to call it "two-step," because that name makes a rigged test sound
+  like an upgrade.
+
+- **Y3 — depth-independence: the theorem is now proven for every depth, not asserted
+  from `k = 1`.** Two premises, both already committed. Premise A, the ceiling
+  `V_act(b) − EC(ask | b) ≤ −2/13`, is a maximum over *all* beliefs — the whole
+  readiness simplex crossed with `b_h ∈ [0,1]`, exact in `Fraction`, attained at the
+  all-hot vertex with `b_h = 3/13`, cross-checked by a 60-step grid reaching `−0.1667`
+  — so it binds at every node of any lookahead tree, since posteriors are beliefs.
+  Premise B is `W_k ≥ 0`, from the non-negativity of `costs.COST`. Then for every
+  `k ≥ 1` the ask branch is `≥ EC(ask | b) ≥ V_act(b) + 2/13 > V_act(b)`, so
+  `W_k = V_act` and the tree collapses to acting now.
+
+  Premise B is invariant 6, and this is where X2's correction earns its keep. What made
+  invariant 6 worthless as an independent check — that it follows from the matrix alone,
+  with no reference to the data, the answer model, the question set or the depth — is
+  precisely what makes it the only kind of premise assertible at every node of a tree
+  nobody enumerates. A data-dependent check would have to be verified per node and
+  could not be quantified over. It is load-bearing *because* it is trivial. This
+  upgrades `v2-definitions.md:259` from a claim to a result, and splits v1's myopia
+  framing: "a strict one-step rule does not price asking" stays true and stays a named
+  limitation, while "asking is undervalued and would earn its place if priced" is false
+  on this matrix and menu, at every depth.
+
+- **Y4 — the four scope limits are kept exactly as written, including the last
+  restraint.** The constrained menu, where `no_direct_answer` lifts the ceiling to
+  `+1.0` and premise A fails, with the region's emptiness structural for `calibrated`
+  (the isotonic range starts at `6/23`, above `1/5`) and contingent for the other three
+  arms. A cheaper question, since premise A is a statement about the `(2, 4)` row and
+  `λ = 15/16` flips it. Deferral, which no row of `costs.COST` prices, leaving v1's
+  turn-boundary limitation untouched. And the scope of the claim itself: this bounds the
+  value of one more question inside a deeper policy, not every interaction design. The
+  claim must not be allowed to drift into "no interaction design could justify asking."
+
+- **Y5 — the boundary owes the paper two edits, both in Gate 7.** A third beat in the
+  theorem section, after the theorem and X6's attainment sharpening, saying the margin
+  does not close at any lookahead depth because the bound needs only non-negative
+  continuation costs. And the retraction of the myopia framing in Limitations, where v1
+  made the claim — `main.tex:249`, `:343`, `:687`, `:947`, `:1050`. `:687` sits inside
+  the `:683` band-claim debt (V2), so Gate 7 rewrites that line once, not twice.
+
+| # | Resolution | Provenance | Status |
+| --- | --- | --- | --- |
+| Y1 | The shipped policy is `W_1` in the family `W_k(b) = min{ V_act(b), EC(ask \| b) + Σ_u P_b(u)·W_{k−1}(b^u) }`; `V_q`'s inner `V_act(b^u) = W_0(b^u)` is what fixes the depth at one, and the budget counts questions, not turns | (AI-proposed) | **noted** |
+| Y2 | `V(b^u)` is wrong twice — it re-prices `ask` terminally one level down, and it is not `W_2` but a policy that believes the second question's follow-up is free, biasing the comparison toward the action under test. Not to be called "two-step" | (AI-proposed) | **noted** |
+| Y3 | Depth-independence is proven, not asserted: the simplex-wide ceiling plus `W_k ≥ 0` give an ask branch `≥ V_act(b) + 2/13` at every node and every depth. Invariant 6 is load-bearing because it is trivial. `v2-definitions.md:259` becomes a result, and v1's myopia claim splits | (AI-proposed) | **changed** |
+| Y4 | The four scope limits stay exactly as written — the constrained menu, a cheaper question, deferral, and the restraint that this bounds one more question inside a deeper policy rather than every interaction design | (Kaps-decided) | **confirmed** |
+| Y5 | Two paper edits in Gate 7: a theorem-section third beat on depth, and the myopia retraction in Limitations where v1 made it (`main.tex:249`, `:343`, `:687`, `:947`, `:1050`), with `:687` handled once under V2's `:683` | (Kaps-decided) | **confirmed** |
+

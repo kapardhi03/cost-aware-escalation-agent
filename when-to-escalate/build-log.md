@@ -1190,3 +1190,81 @@ The suite is **690 passing**, up from 654: 36 new tests, most of them negative c
 that doctor one input and assert the guard raises — a disagreeing committed ceiling, a
 non-positive excess, an unnested firing set, a rising expected tier, a mislabelled
 per-arm reference, a state-reachable answer with no belief branch.
+
+### Gate 6 — the lookahead boundary, and a theorem that survives depth (2026-08-27)
+
+The smallest gate, and the only one that computed nothing. Gate 1 defined the
+one-question lookahead and left a note that Gate 6 would have to state the boundary it
+implies. Gate 4 then asserted, off a `k = 1` ceiling, that "the horizon was not the
+binding constraint" — a claim a reader was entitled to refuse, since a one-step ceiling
+does not obviously speak for a two-step policy. This gate supplies the argument, in
+`decisions/v2-policy-boundary.md`.
+
+The policy class is written down: `W_0(b) = V_act(b)` and
+`W_k(b) = min{ V_act(b), EC(ask | b) + Σ_u P_b(u)·W_{k−1}(b^u) }`. The shipped analysis
+is `W_1`, and the only thing that fixes the depth at one is that `V_q`'s continuation is
+`V_act(b^u)`, a terminal act. Nothing else in the definition of VoI sets a depth. The
+budget counts questions, not turns.
+
+Then the trap, which is worth more than the boundary it protects. Substituting `V(b^u)`
+for `V_act(b^u)` looks like buying a second step for free, and is wrong twice. `ask` is
+in the menu, so `V(b^u) ≤ EC(ask | b^u)` identically — the tautology already recorded in
+the definitions, moved one level down and hidden rather than fixed. And the result is
+not `W_2`: `W_2` charges the second question a continuation too, and the difference is
+that whole missing term. What `V(b^u)` implements is a policy that believes the second
+question's follow-up is free. Because the under-pricing sits entirely on the ask branch,
+it tilts the comparison toward the action the analysis exists to test. The file carries
+the instruction not to call it "two-step," since that name makes a rigged test sound
+like an upgrade.
+
+The result needs two premises, no new code, and holds at every depth. Premise A is
+Gate 4's ceiling, leaning on a property of it not used before: `check_global_ceiling`
+maximises over *all* beliefs — the whole readiness simplex crossed with `b_h ∈ [0,1]` —
+in exact `Fraction` arithmetic, attained at the all-hot vertex at `b_h = 3/13`, where
+`V_act = 30/13` against `EC(ask) = 32/13`. Posteriors are beliefs, so the bound binds at
+every node of any lookahead tree and not only at its root. Premise B is `W_k ≥ 0`, from
+the non-negativity of the cost matrix. The chain is three lines: the ask branch is at
+least `EC(ask | b)`, which is at least `V_act(b) + 2/13`, which exceeds `V_act(b)`. So
+`W_k = V_act` for every `k`. Asking is never rational on the unconstrained action menu
+at any lookahead depth, and the margin cannot narrow with depth, because every term the
+chain drops is non-negative.
+
+Premise B is invariant 6 — the check Gate 5 demoted to a tautology. The feature that
+made it worthless as evidence for the `k = 1` bound is exactly what makes it usable
+here: it follows from the matrix alone, with no reference to the data, the answer model,
+the question set or the depth, so it can be asserted at every node of a tree nobody
+enumerates. A data-dependent check would have to be verified per node. It is
+load-bearing *because* it is trivial. Two gates running, being precise about what a
+check actually proves has changed what could be claimed with it.
+
+What this settles about v1: the myopia claim splits, and the halves go different ways.
+"A strict one-step rule does not price asking" is true — v1's policy compared
+`EC(ask | b) = 2 + 2·b_h` terminally against the other actions, which is not a price for
+a question — and it stays a named limitation. "Asking is undervalued, and would earn its
+place if priced" is false here: it was priced, and it loses by at least `2/13` per case,
+at every depth. Five passages carry the old framing (`main.tex:249`, `:343`, `:687`,
+`:947`, `:1050`) and are Gate 7's to rewrite, with `:687` folded into the `:683`
+band-claim debt so that line is touched once.
+
+The four scope limits are what keep it honest, and they are stated as flatly as the
+result. Premise A fails on the constrained menu, where removing `answer` lifts the
+ceiling to `+1.0` and asking can be rational for `b_h < 1/5` on the hot ray; that region
+is empty here for two different reasons, unreachable by construction on the calibrated
+arm because the isotonic range starts at `6/23`, and merely unoccupied on the other
+three. The bound is a statement about the `(2, 4)` ask row, and `λ = 15/16` — 6.25% —
+flips it. No row of `costs.COST` prices a state transition, so "hold now, decide later"
+is outside all of this, which leaves v1's turn-boundary limitation exactly where it was.
+And the claim bounds the value of one more question inside a deeper policy; it is not
+the claim that no interaction design could justify asking.
+
+No code, no new tests, and no `W_2`. Both premises are already under test — the
+ceiling in the `voi_ceiling` suite, `V_q ≥ 0` as invariant 6 in
+`tests/test_entropy_baseline.py`. A `W_2` computation would have exhibited depth 2
+while the argument covers every depth, so building it would have added scope and
+subtracted nothing. The suite is unchanged at **690 passing** and
+`make_figures.py --check` exits 0.
+
+Recorded as Y1–Y5 in `decisions/v2-design-decisions.md`, with one-line pointers into
+`decisions/v2-definitions.md` at the boundary note and at the horizon sentence. This is
+the one gate with no pre-registration, because nothing is computed and so there is no
+result to be tempted by after the fact.
