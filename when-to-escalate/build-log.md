@@ -877,3 +877,190 @@ case is being asked about — is false in detail and accepted for the reason giv
 the pre-registration. No claim about `ask` follows from any number in this gate.
 The reliability diagram (Q5) is still the one item carried from Gate 2, and
 `order_preserved_on_test: false` is still carried, not addressed.
+
+### Gate 4 — four belief arms, a calibration floor, and abstention priced (2026-08-26)
+
+Gate 4 owed three things: the answer-model-free ceiling recomputed on the belief
+sets Gate 2 produced, the cost of abstention measured rather than argued, and the
+reliability-diagram data path Q5 has been carrying since Gate 2. It makes **zero API
+calls** — every belief comes from `results/run.json` or
+`results/logprob-elicitation.json`, and the cost matrix is read, never written.
+Every number below traces to `results/voi-ceiling-arms.json`,
+`results/abstention.json`, or `paper/figures/make_figures.py --check`.
+
+**1. The pre-registration was locked first, and the git history is the proof again.**
+`decisions/v2-gate4-preregistration.md` landed alone in `785adce`: 1 file, 404
+insertions, with `experiments/abstention.py` verified absent from that tree. The
+arms re-run followed in `d537ec2` and the abstention measurement in `874ecf2`. §9
+names twelve conditions that would make the document false, including "τ defined in
+absolute bits anywhere", "the analytic half of §4 written up as a finding", and "the
+abstention call made on anything other than the measured numbers". All twelve held.
+Two are checkable mechanically and were checked: nothing under `src/` and neither
+`results/run.json` nor `results/voi-ceiling.json` changed between the lock and the
+close, and no `COST[...] =` assignment exists anywhere in the repo.
+
+**2. Four belief arms, and the part of the result no arm can move.** The arms are
+`published` (the committed Gate 1 run), `rebaselined` (the cache's written digit
+with fresh readiness), `raw` and `calibrated`. The last three share one fresh
+readiness vector and differ only in `needs_human`, so each contrast isolates the
+component that changed.
+
+| arm | `b_h` range on test | positive ceilings | least negative | `V_act` argmin census |
+| --- | --- | ---: | ---: | --- |
+| `published` | 0.0000–0.9000 (8 distinct) | 0 / 50 | −0.4000 | `{answer: 30, escalate_notify: 43, hold: 27}` |
+| `rebaselined` | 0.0000–0.9000 (9 distinct) | 0 / 50 | −0.4000 | `{answer: 29, escalate_notify: 44, hold: 27}` |
+| `raw` | 0.0000–0.8996 (100 distinct) | 0 / 50 | −0.2598 | `{answer: 25, escalate_notify: 45, hold: 30}` |
+| `calibrated` | 0.2609–1.0000 (84 distinct) | 0 / 50 | −0.4640 | `{escalate_notify: 83, hold: 17}` |
+
+Nothing crosses zero, on either split, on any arm. That is not the interesting part.
+`V_act(b) ≤ min(α·b_h, ν·(1−b_h))` for every belief and `EC(ask | b)` is flat in
+readiness, so `max_b [V_act(b) − EC(ask | b)]` is a function of the cost matrix
+alone — `−2/13` = −0.153846 — and on the unconstrained action menu the claim that
+the impossibility survives recalibration is **analytic**. The artifact says so in
+§2, not only the paper. Checked rather than assumed: the seven belief-independent
+sections are identical across all four arms by exact equality of
+`json.dumps(section, sort_keys=True)`, and the script refuses to report a contrast
+if they ever differ. §4's regression guards reproduce counts
+`results/rebaseline.json` already commits, including the calibrated arm's zero
+`answer` decisions on test, and state that this shows the arm loader rebuilds the
+same beliefs rather than discovering them.
+
+**3. The calibration floor, which is the finding.** The committed isotonic map
+cannot emit a score below `6/23`, and both thresholds that would let `answer` or
+`ask` fire sit beneath it:
+
+| | exact | float | what it is |
+| --- | --- | ---: | --- |
+| positive-VoI region bound | `1/5` | 0.200000 | `b_h` below which the constrained-menu ceiling is positive, on the argmax ray |
+| t\* | `3/13` | 0.230769 | `ν/(α+ν)`, where `answer` stops beating `escalate_notify` |
+| the map's floor | `6/23` | 0.260870 | the lowest score the committed map can emit |
+
+`1/5 < 3/13 < 6/23`, all three within 0.061 of each other, which is why they are
+carried as exact rationals: at 2dp the ordering is invisible. PAVA sets each pooled
+block's level to that block's positive rate, and the lowest block pooled 23 dev
+cases carrying 6 positives. All 12 blocks were recovered from the committed knots
+and the committed dev scores without refitting, each level checked against its own
+`positives / n`; the blocks cover 50 dev cases with 21 positives. Prediction
+interpolates linearly between knots and clamps outside them, so the image of ℝ is
+exactly `[6/23, 1]` — the flatness outside the fitted interval is what makes the
+floor a bound on the whole real line rather than only on the fitted range. The floor
+is attained by 1 case (`a11-repeated-097`, dev); interpolation lifts the other 22 in
+that block strictly above it, so the bound is on the range and not a claim about how
+many cases land on it.
+
+Two consequences. `answer` is unreachable: 0 of 100 calibrated beliefs fall below
+t\*, against 48 raw ones. And the positive-VoI region is unreachable: 0 calibrated
+beliefs meet even the necessary condition `b_h < 1/5`, against 31 raw ones — of
+which 0 also carry `no_direct_answer`.
+
+Those two emptinesses are not the same kind and are not merged. For `calibrated` the
+region is unreachable **by construction**: no input can produce a `b_h` below the
+floor, so the necessary condition fails for every belief the map can emit. For
+`published`, `rebaselined` and `raw` the bound **is** reached, and the region stays
+empty only because none of the cases reaching it carries the constraint — a
+contingent fact about these 100 cases. `b_h < 1/5` is also necessary and not
+sufficient: `1/5` is the bound on the most favourable ray in the simplex, and the
+sufficient test is the per-case ceiling with constraints applied, negative on all
+400 case-arm pairs.
+
+What generalises is not `6/23`. It is that **an isotonic map fitted by PAVA has a
+reachable range bounded below by the positive rate of its lowest pooled block, so a
+fixed decision threshold beneath that rate cannot fire post-calibration however many
+bits of discrimination the map buys.** A calibration map has a reachable range and a
+fixed-threshold policy has thresholds; cross-entropy and Brier score never check
+that the thresholds sit inside the range. This does not say calibration is harmful —
+the calibrated arm escalates more and misses fewer cases needing a human, which is
+Gate 2's result and stands — nor that the map is misfitted; `6/23` is the correct
+positive rate for that block.
+
+**4. Abstention costs more than it saves, on every arm at every τ.** The matrix
+settles most of it before any belief is loaded. `escalate_pause` costs strictly more
+than `escalate_notify` in all six labelled states — +3/+2/+2 with `needs_human`
+false, +2/+1/+1 with it true — so any notify→pause rule raises realised cost on
+every case it touches; and `is_escalation` counts both actions, so no such rule can
+change the miss count. What remained to measure is how many cases each rule touches.
+
+| variant | published | raw | calibrated |
+| --- | --- | --- | --- |
+| baseline (test) | 86 cost, 8 misses | 70, 7 | 75, 2 |
+| (b) fallback rewrite | 20 cases, +32, miss Δ 0 | 21, +33, 0 | 41, +74, 0 |
+| (a) `H(b) ≥ τ` override | beats baseline at no τ | no τ | no τ |
+
+(a) loses at all 33 arm-τ pairs; the cost of a miss it does avoid runs from 7.5
+(published, q=0.7) to 72.0 (calibrated, q=0.3). Firing on all 50 test cases costs
+177 as pause against 87 as notify, identically on all three arms, because both
+figures depend only on labels. The resolution is (c): the diagnostic flag stays, the
+override is dropped. **This is the abstention analogue of the impossibility result —
+the existing minimum-cost policy already handles the "stop and hand off" case
+correctly, so an abstention override is machinery the cost structure provably does
+not need.** (Kaps-decided, on the measured numbers, at the close.)
+`results/abstention.md` §8 records the call as open at the time it was written and
+states that it recommends no variant; the decision is in the design record instead,
+which is the ordering the pre-registration exists to enforce.
+
+**5. τ was locked as deciles, and 12 decimal places of `H(b)` turned out to be
+load-bearing.** S4's pre-lock check ran and earned itself: published `H(b)` spans
+0.000000–2.456426 bits with 8 distinct values, so an absolute grid over the 0–2.585
+theoretical range would have put most of its points where almost no cases live.
+Deciles of the observed distribution on the arm being scored make the step
+commensurate by construction, and both the quantile and the absolute bit value are
+reported per arm with cross-arm incomparability in absolute bits declared.
+
+Underneath that, mathematically equal `H(b)` values differ by up to 8.88e-16, and
+two identical published deciles were firing on 49 cases and 44. `H(b)` is now
+quantised to 12 decimals before any comparison, collapsing exactly 5 spurious
+distinctions on published (24 → 19) and none on raw or calibrated. The guard is
+non-circular by construction: the noise bound is derived independently as
+`8 · math.ulp(max|H|)` = 3.55e-15, the 1e-12 tolerance is asserted to sit strictly
+between it and the smallest genuine gap per arm (9.99e-03 published, 3.92e-05 raw,
+4.97e-06 calibrated), and gaps are classified by the noise bound rather than by the
+tolerance. Negative controls sit at both ends: `H_DECIMALS = 2` is refused for
+crossing the signal, `H_DECIMALS = 17` for sitting below the noise. Without it the
+artifact would have shipped two wrong firing counts.
+
+**6. `--check` found a wrong bracket in the paper on its first run.** Q5's data path
+landed: `figure_data()` now returns three panels — v1's `needs_human` diagram, and
+the Gate 2 test-split raw and calibrated diagrams — and `check()` re-derives every
+plotted number from the per-case records, taking ECE, cross-entropy in bits, Brier
+and base rate to 1e-12 and asserting no test score falls below `6/23`. `_bin_index`
+and `_ece` are restated in the module rather than imported from `src.calibrate`,
+which is what wrote the committed tables; re-deriving a number with the function
+that produced it checks nothing.
+
+It failed immediately, on a real defect. The shaded band carries two claims with two
+different brackets. No case takes a **value** in `(0.2, 0.3)` — open at both ends,
+because 17 of the 100 cases sit at exactly 0.3. Every **threshold** in `(0.2, 0.3]`
+decides identically — half-open, because the rule is `answer iff b_h < t`, so a
+threshold at 0.3 leaves those 17 cases on the escalate side exactly as `3/13` does.
+The script, its render legend, and two lines of `paper/main.tex` all wrote the
+threshold bracket on the value claim. The script and legend are fixed, and the
+threshold claim is now verified as a partition identity —
+`partition(3/13) == partition(0.3)` is True, `== partition(0.2)` and
+`== partition(0.4)` are False — rather than inferred from the emptiness of the gap.
+`paper/main.tex:499` and `:728` are recorded for the paper gate rather than edited
+by a figure script; `:971` is a threshold claim and its bracket was already right.
+The pre-registration's own bracket on that region was also right; it is the
+manuscript that drifted.
+
+Rendering stays deferred. matplotlib is absent from the test environment, so
+shipping a render path now would ship something untested; panels 2 and 3 declare
+`renders: false` and name the paper gate. The test file's negative controls doctor
+the committed payloads and assert each check family fires — including on a
+deliberately stale panel-versus-records pair, because the shaded band is derived and
+within one payload the band and the check move together and cannot disagree.
+
+The suite is **654 passing** at the close, from 510 at the open.
+
+**What Gate 4 has not done.** No `ask` feature was built and nothing was tuned to
+make `ask` fire; the abstention override was measured and dropped. The unconstrained
+impossibility is not an empirical result of this gate and is not written up as one.
+The floor is a property of this fit on this dev split — what transfers is that a
+floor exists and equals the lowest block's positive rate. `order_preserved_on_test:
+false` is discharged rather than carried, and the flag turned out to overstate the
+risk: isotonic regression is weakly monotone, so it cannot invert two cases, only
+send them to the same value. On the test split there are **0 inversions and 16
+merged pairs** at full precision (31 at the pre-registered 3dp). The ceiling is also
+pointwise in the belief — `EC(ask | b) = 2 + 2·b_h` and `V_act` is a minimum over
+that same belief — so it reads levels and not ranks, and merging cannot move it in a
+direction the per-arm tables do not already show. The figure renders nothing yet,
+and two `.tex` brackets are knowingly still wrong pending the paper gate.
