@@ -919,10 +919,31 @@ in `paper/main.tex` that the paper gate has to fix.
   this line is the correction. The only Gate 8 items now are the two tags and the
   single merge.
 
+- **V4 — Gate 7 gets a pre-registration, the same instrument Gates 2, 3 and 4
+  had.** Each of those pre-registrations caught something the gate would otherwise
+  have discovered too late: the collapse threshold's scale, the sweep grid's
+  absolute units, the τ grid's. Gate 7 folds four gates of results into 1102 lines
+  of existing prose containing three known-false claims, and prose has no test
+  suite, so it is the gate with the least grip and the most to get wrong. The
+  pre-registration fixes three things before any `.tex` is edited: which v2 result
+  lands in which section, which v1 sentences are **replaced** rather than extended,
+  and which number in the paper traces to which artifact.
+
+- **V5 — matplotlib is permitted, scoped as a figures-only dependency.** The
+  promise that matters is that the results reproduce with no dependencies:
+  `src/`, the cache-only belief path, the ceiling and the calibration fit stay
+  pure-stdlib, and none of them may import it. Rendering is not part of that path.
+  `make_figures.py --check` re-derives every plotted number in pure stdlib, so the
+  verification that a figure is honest survives in an environment that cannot draw
+  it — which is the environment the test suite runs in. Stated the other way round:
+  results reproduce with zero dependencies; figures need exactly one, declared.
+
 | # | Resolution | Provenance | Status |
 | --- | --- | --- | --- |
 | M5 | Everything stays on `v2`; a single merge to `main` at the very end, `v2.0.0` tagged at Gate 8 behind `v1.0.0`. Supersedes M1 and M2; M3 and M4 stand | (Kaps-decided) | **changed** |
 | V1 | `reliability-needs-human.pdf` was never committed on any branch, so the tracked `main.pdf` embeds a figure no clone can rebuild; `render()` has never run. Gate 7 owes three panels and the first PDF commit | (AI-proposed) | **noted** |
 | V2 | `paper/main.tex:683` attributes `ask`'s emptiness to a narrow band the quantized beliefs miss; there is no such band on the unconstrained menu and the raw arm's 100 distinct beliefs leave it empty too. Gate 7 replaces it with the theorem, keeping the binding wording | (AI-proposed) | **noted** |
 | V3 | "The floor" means belief granularity at `main.tex:1045` and the map's reachable range in Gate 4; both true, contradictory under one word. Gate 7 names them apart | (AI-proposed) | **noted** |
+| V4 | Gate 7 gets a pre-registration: which result lands in which section, which v1 sentences are replaced rather than extended, which number traces to which artifact | (Kaps-decided) | **confirmed** |
+| V5 | matplotlib is a figures-only dependency; the results-reproduction path stays dependency-free and `--check` is the stdlib verification that survives without it | (Kaps-decided) | **confirmed** |
 | — | The G-series Gate 8 open-item paragraph is superseded by Q4 and left unedited; Gate 8's remaining items are the two tags and the merge | (AI-proposed) | **noted** |
