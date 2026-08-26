@@ -48,9 +48,31 @@ grid search is only a cross-check. The flatness and the two monotonicity side
 conditions are asserted, not assumed, so a future matrix edit fails loudly rather
 than returning a quietly wrong optimum.
 
+Belief arms (Gate 4). `--arm` selects which beliefs the belief-dependent halves
+read. The four arms mirror experiments/rebaseline.py exactly, so a contrast means
+the same thing in both artifacts and each one varies a single thing:
+
+  published     v1's cache, i.e. results/run.json. The default, and the only arm
+                whose output is pinned: it must reproduce results/voi-ceiling.json
+                byte for byte, which tests/test_voi_ceiling_arms.py asserts.
+  rebaselined   fresh readiness and the fresh WRITTEN digit. Against `published`
+                this isolates cache drift.
+  raw           fresh readiness, continuous logprob expectation for needs_human.
+                Against `rebaselined` this isolates continuity.
+  calibrated    the same, through the committed isotonic map. Against `raw` this
+                isolates the map.
+
+Only `per_case` and `constrained_regime`'s two case-level fields are
+belief-dependent. `global_ceiling`, `witness_crosscheck`, `grid_crosscheck`,
+`feasibility`, `lambda_crosscheck` and `constrained_regime`'s maximum are maxima
+over the whole simplex in exact rational arithmetic, so no arm can move them —
+see decisions/v2-gate4-preregistration.md section 4, which also says why that makes
+the unconstrained-menu result analytic rather than empirical.
+
 Usage
     python experiments/voi_ceiling.py
     python experiments/voi_ceiling.py --json results/voi-ceiling.json
+    python experiments/voi_ceiling.py --arm calibrated
 """
 
 from __future__ import annotations
@@ -64,11 +86,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from src.belief import Belief                                     # noqa: E402
+from src.belief import Belief, to_belief                          # noqa: E402
 from src.costs import (ACTIONS, COST, READINESS_LABELS,            # noqa: E402
                        expected_cost, feasible_actions)
+import src.calibrate as calib                                     # noqa: E402
+import src.elicit as elicit_mod                                   # noqa: E402
 
 RUN_JSON = ROOT / "results" / "run.json"
+CASES_JSON = ROOT / "data" / "cases.json"
+ELICIT_JSON = ROOT / "results" / "logprob-elicitation.json"
 
 #: Actions that compete with `ask`. `ask` is excluded from its own baseline: the
 #: myopic V(b) already prices `ask` as a terminal action, so measuring the ask
@@ -85,6 +111,152 @@ def load_rows() -> tuple[list[dict], dict]:
 
 def belief_of(row: dict) -> Belief:
     return Belief.from_dict(row["belief"])
+
+
+# --------------------------------------------------------------------------- #
+# 0. Belief arms
+# --------------------------------------------------------------------------- #
+
+#: The four belief sources, in the order experiments/rebaseline.py established.
+#: `published` is first because it is the default and the only arm pinned to a
+#: committed file.
+ARMS = ("published", "rebaselined", "raw", "calibrated")
+
+#: What each arm reads, recorded in the artifact's `source` field so a findings
+#: file always names the beliefs it was computed on. `published` deliberately keeps
+#: Gate 1's exact string, because changing it would break byte-reproduction.
+ARM_SOURCES = {
+    "published": "results/run.json",
+    "rebaselined": "data/logprob_cache.json written digit + fresh readiness",
+    "raw": "results/logprob-elicitation.json raw + fresh readiness",
+    "calibrated": "results/logprob-elicitation.json calibrated + fresh readiness",
+}
+
+
+class ArmError(RuntimeError):
+    """An arm could not be built. Never downgraded to a warning, because a
+    silently short arm would compare 97 cases against 100 and look fine."""
+
+
+def _load_elicitation() -> dict:
+    """The committed Gate 2 results, with Gate 2's own provenance guards.
+
+    Same two refusals as experiments/rebaseline.py: a not-reportable file or one
+    with stub rows would produce numbers that look like measurements and are not.
+    """
+    if not ELICIT_JSON.exists():
+        raise ArmError(
+            f"{ELICIT_JSON.name} is absent. It is a committed Gate 2 artifact; "
+            "this script never calls a provider to rebuild it.")
+    payload = json.loads(ELICIT_JSON.read_text(encoding="utf-8"))
+    if not payload.get("reportable"):
+        raise ArmError(f"{ELICIT_JSON.name} is marked not reportable "
+                       f"({payload.get('stub_rows')} stub rows).")
+    if payload.get("stub_rows"):
+        raise ArmError(f"{ELICIT_JSON.name} contains "
+                       f"{payload['stub_rows']} stub rows.")
+    return payload
+
+
+def _fresh_beliefs() -> dict:
+    """Fresh readiness and the fresh written digit, per case.
+
+    Parses each elicitor-A payload back through `belief.to_belief` — v1's own
+    parser on v1's own JSON shape — so the readiness vector here is what v1 would
+    have recorded had it run today, not a reimplementation of its parsing.
+    """
+    cache_path = elicit_mod.logprob_cache_path()
+    if not cache_path.exists():
+        raise ArmError(f"{cache_path} is absent; this script reads the cache and "
+                       "never calls a provider.")
+    cache = elicit_mod.load_cache(cache_path)
+    out = {}
+    for entry in cache["entries"].values():
+        if entry["elicitor"] != elicit_mod.ELICITOR_A:
+            continue
+        b = to_belief(json.loads(entry["payload"]["text"]))
+        out[entry["case_id"]] = {"readiness": b.readiness,
+                                 "written": b.needs_human}
+    return out
+
+
+def _committed_scores(payload: dict) -> dict:
+    """The raw and calibrated scores Gate 2 committed, verified against the map.
+
+    The scores are read rather than recomputed — refitting would be a second fit
+    and a second chance to land elsewhere. But the stored knots and the stored
+    scores are two records of one thing, so they are checked against each other,
+    and the map's floor is checked to be what the knots say it is. Those are two
+    of the four falsifiers in the Gate 4 pre-registration section 3.4.
+    """
+    cal = payload["analysis"]["calibration"]
+    spec = cal["map"]
+    if spec["name"] != "isotonic":
+        raise ArmError(f"the committed map is {spec['name']!r}, not isotonic; the "
+                       "floor argument in the pre-registration assumes isotonic")
+    mapping = calib.IsotonicMap(knots=tuple(tuple(k) for k in spec["knots"]))
+    floor = spec["knots"][0][1]
+
+    scores = payload["analysis"]["recalibrated_scores"]
+    worst, worst_case = 0.0, None
+    for case_id, rec in scores.items():
+        delta = abs(calib.apply_map(mapping, [rec["raw"]])[0] - rec["calibrated"])
+        if delta > worst:
+            worst, worst_case = delta, case_id
+        if rec["calibrated"] < floor:
+            raise ArmError(
+                f"{case_id} has a calibrated score {rec['calibrated']!r} below the "
+                f"map's floor {floor!r}. The map cannot produce that, so one of the "
+                "two records is stale.")
+    if worst > 1e-12:
+        raise ArmError(
+            f"the committed knots do not reproduce the committed calibrated scores "
+            f"(worst delta {worst:.3e} at {worst_case}); one of them is stale.")
+    return scores
+
+
+def load_arm(name: str) -> tuple[list[dict], str]:
+    """Rows in run.json's shape for one arm, plus the source string.
+
+    Every arm carries all 100 cases and both splits. Stratification happens at
+    reporting time, not here, so an arm can never be quietly narrowed to the split
+    that suits it.
+    """
+    if name not in ARMS:
+        raise ArmError(f"unknown arm {name!r}; expected one of {ARMS}")
+    if name == "published":
+        rows, _ = load_rows()
+        return rows, ARM_SOURCES["published"]
+
+    payload = _load_elicitation()
+    fresh = _fresh_beliefs()
+    scores = _committed_scores(payload)
+    cases = json.loads(CASES_JSON.read_text(encoding="utf-8"))["cases"]
+
+    rows = []
+    for case in cases:
+        case_id = case["case_id"]
+        if case_id not in fresh:
+            raise ArmError(f"{case_id} has no {elicit_mod.ELICITOR_A} payload in "
+                           "the logprob cache")
+        if name != "rebaselined" and case_id not in scores:
+            raise ArmError(f"{case_id} has no recalibrated score in "
+                           f"{ELICIT_JSON.name}")
+        needs_human = (fresh[case_id]["written"] if name == "rebaselined"
+                       else scores[case_id]["raw"] if name == "raw"
+                       else scores[case_id]["calibrated"])
+        rows.append({
+            "case_id": case_id,
+            "split": case["split"],
+            "constraints": list(case.get("constraints") or ()),
+            "labels": case["labels"],
+            "belief": {"readiness": dict(fresh[case_id]["readiness"]),
+                       "needs_human": needs_human},
+        })
+
+    if len(rows) != len(cases):
+        raise ArmError(f"arm {name!r} built {len(rows)} rows from {len(cases)} cases")
+    return rows, ARM_SOURCES[name]
 
 
 # --------------------------------------------------------------------------- #
@@ -559,31 +731,52 @@ def check_invariants(rows: list[dict], k: dict) -> dict:
 
 # --------------------------------------------------------------------------- #
 
-def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--json", type=Path, help="also write the raw findings here")
-    ap.add_argument("--grid", type=int, default=60,
-                    help="steps per axis for the cross-check grid (default 60)")
-    args = ap.parse_args()
+def build_findings(rows: list[dict], source: str, grid: int = 60) -> dict:
+    """Every check, on one arm's beliefs. The key order is load-bearing.
 
-    rows, payload = load_rows()
+    `results/voi-ceiling.json` was written by json.dumps on this dict, and the
+    `published` arm has to reproduce that file byte for byte, so reordering these
+    keys or renaming one would break the guard in tests/test_voi_ceiling_arms.py.
+    That is deliberate: it is what makes "the arms are a superset of Gate 1, not a
+    revision of it" a checkable claim rather than a promise.
+    """
     k = matrix_constants()
-
     glob = check_global_ceiling(k)
     feas = check_feasibility(k)
-    findings = {
+    return {
         "n_cases": len(rows),
-        "source": str(RUN_JSON.relative_to(ROOT)),
+        "source": source,
         "cost_matrix_constants": {kk: str(vv) for kk, vv in k.items()},
         "per_case": check_per_case(rows),
         "global_ceiling": glob,
         "witness_crosscheck": witness_crosscheck(glob),
-        "grid_crosscheck": grid_crosscheck(glob, n=args.grid),
+        "grid_crosscheck": grid_crosscheck(glob, n=grid),
         "constrained_regime": check_constrained_regime(k, rows),
         "feasibility": feas,
         "lambda_crosscheck": lambda_crosscheck(k, feas),
         "invariants": check_invariants(rows, k),
     }
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--json", type=Path, help="also write the raw findings here")
+    ap.add_argument("--grid", type=int, default=60,
+                    help="steps per axis for the cross-check grid (default 60)")
+    ap.add_argument("--arm", choices=ARMS, default="published",
+                    help="which beliefs the belief-dependent checks read "
+                         "(default published, i.e. Gate 1's results/run.json)")
+    args = ap.parse_args()
+
+    try:
+        rows, source = load_arm(args.arm)
+    except ArmError as exc:
+        print(f"Cannot build the {args.arm!r} arm:\n\n  {exc}\n", file=sys.stderr)
+        return 2
+
+    findings = build_findings(rows, source, grid=args.grid)
+    if args.arm != "published":
+        print(f"\n### arm: {args.arm}   beliefs: {source}")
 
     p = findings["per_case"]
     print(f"\n=== 1. Ceiling on the {p['n']} committed beliefs "
