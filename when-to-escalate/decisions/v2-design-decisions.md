@@ -857,3 +857,72 @@ The suite is **654 passing** at this gate's close, from 510 at its open.
 | U8 | Pre-registration §8's "two bin schemes" is loose — one scheme, differing populations, score sources and empty-bin retention. §8's conclusion and its own bracket stand; §8 left as written | (AI-proposed) | **noted** |
 | U9 | Q5 lands the three-panel data path and a `--check` that re-derives every plotted number from the per-case records; rendering stays deferred to the paper gate | (Kaps-decided) | **confirmed** |
 | U10 | Gate 2's `order_preserved_on_test: false` flag is discharged: isotonic is weakly monotone, so 0 inversions and 16 merged pairs on test, and the ceiling is pointwise in the belief. The flag overstated the risk | (AI-proposed) | **changed** |
+
+---
+
+## Merge policy and paper debts — recorded at the Gate 4 close
+
+A review pass before Gate 5, over the four closed gates rather than any new work.
+Nothing here changes a number; M5 reverses a policy and V1–V3 name three defects
+in `paper/main.tex` that the paper gate has to fix.
+
+- **M5 — everything stays on `v2`; one merge to `main` at the very end.**
+  Supersedes M1 and M2. The per-gate merge policy was aimed at keeping `main`
+  current, and with a single person on the branch there is nothing for it to be
+  current *for*. The three-gate backlog — Gates 0–2, 3 and 4, 26 commits — stays
+  on `v2`, pushed, so nothing is at risk from not merging. `v2.0.0` is tagged at
+  Gate 8 as it always was, after `v1.0.0`, and the merge happens once behind it.
+  What M1
+  verified stays verified and is not re-verified: v1's published run still
+  reproduces from cache byte-for-byte, so nothing published moves when v2 lands.
+  M3 and M4 are unaffected — they describe what the merge carries, not when it
+  happens.
+
+- **V1 — `reliability-needs-human.pdf` has never existed in the repository.**
+  `git log --all --diff-filter=A -- '*reliability*'` returns nothing on any branch,
+  yet `paper/main.tex:719` includes it and the tracked `paper/main.pdf` embeds it:
+  three Form XObjects and the filename present in the PDF body. It was built from a
+  local, untracked file at a time when the root `figures/*` rule was still ignoring
+  it. The consequence is that the published artifact carries a figure that cannot be
+  rebuilt from a fresh clone. Q4 removed the `.gitignore` obstacle and Q5 recorded
+  that the figure "will be committable the moment it exists" — it still does not
+  exist, and `render()` in `paper/figures/make_figures.py` has never been executed
+  because matplotlib is absent from the environment. Gate 7 owes all three panels
+  and the first commit of panel 1's PDF.
+
+- **V2 — `paper/main.tex:683` is false in its mechanism, not only its wording.**
+  It reads that `ask` "is dominated at both ends and can only win in a narrow middle
+  band that the quantized beliefs never land in." There is no such band on the
+  unconstrained menu: the maximum of `V_act(b) - EC(ask|b)` over the whole simplex
+  is `-2/13`, so no belief anywhere makes asking pay. Quantization is also not the
+  cause of the emptiness — the raw arm carries 100 distinct beliefs and the region
+  stays empty. This is a heavier correction than U7's brackets, and it is also where
+  the theorem belongs: the sentence is already reaching for it. The replacement must
+  keep the binding wording — never rational **on the unconstrained action menu**,
+  with the constrained-menu region `b_h < 1/5` and its emptiness here stated.
+
+- **V3 — "the floor" names two different objects and they need separating before
+  either is written up.** `main.tex:1045` reads "The floor is therefore set by the
+  granularity of the elicitation, not by the calibration method," about v1's
+  in-sample survivors at `b_h = 0.20`. Gate 4's floor is `6/23` and is set precisely
+  *by* the calibration method — it is the lowest PAVA block's positive rate. Both
+  claims are true of different objects, a belief's granularity and a map's reachable
+  range, and neither needs correcting on its own. Together in one paper under one
+  word they read as a contradiction. Naming them apart is a Gate 7 obligation, not
+  an optional clarification.
+
+- **The Gate 8 open-item paragraph at the head of this file is already
+  superseded in place.** The G-series paragraph states that what remains genuinely
+  open at Gate 8 is the `.gitignore` conflict. Q4 fixed it during Gate 2a and the
+  build-log records it pulled forward; `.gitignore` lines 34 and 42 confirm it. The
+  paragraph is left as written, per the G9/G12 rule and the S1/U8 precedent, and
+  this line is the correction. The only Gate 8 items now are the two tags and the
+  single merge.
+
+| # | Resolution | Provenance | Status |
+| --- | --- | --- | --- |
+| M5 | Everything stays on `v2`; a single merge to `main` at the very end, `v2.0.0` tagged at Gate 8 behind `v1.0.0`. Supersedes M1 and M2; M3 and M4 stand | (Kaps-decided) | **changed** |
+| V1 | `reliability-needs-human.pdf` was never committed on any branch, so the tracked `main.pdf` embeds a figure no clone can rebuild; `render()` has never run. Gate 7 owes three panels and the first PDF commit | (AI-proposed) | **noted** |
+| V2 | `paper/main.tex:683` attributes `ask`'s emptiness to a narrow band the quantized beliefs miss; there is no such band on the unconstrained menu and the raw arm's 100 distinct beliefs leave it empty too. Gate 7 replaces it with the theorem, keeping the binding wording | (AI-proposed) | **noted** |
+| V3 | "The floor" means belief granularity at `main.tex:1045` and the map's reachable range in Gate 4; both true, contradictory under one word. Gate 7 names them apart | (AI-proposed) | **noted** |
+| — | The G-series Gate 8 open-item paragraph is superseded by Q4 and left unedited; Gate 8's remaining items are the two tags and the merge | (AI-proposed) | **noted** |

@@ -1064,3 +1064,48 @@ pointwise in the belief — `EC(ask | b) = 2 + 2·b_h` and `V_act` is a minimum 
 that same belief — so it reads levels and not ranks, and merging cannot move it in a
 direction the per-arm tables do not already show. The figure renders nothing yet,
 and two `.tex` brackets are knowingly still wrong pending the paper gate.
+
+### Review pass before Gate 5 — merge policy reversed, three paper debts (2026-08-26)
+
+No new measurement. A read over the four closed gates before the last four open,
+recorded as M5 and V1–V3 in `decisions/v2-design-decisions.md`.
+
+**The merge policy is reversed.** Everything stays on `v2` and there is one merge to
+`main` at the very end, with `v2.0.0` tagged at Gate 8 behind `v1.0.0`. This
+supersedes M1 and M2, which had gates merging one at a time as they closed. The
+reason is that keeping `main` current serves nobody on a single-person branch, and
+the backlog — 26 commits, `git rev-list --count v2..main` = 0 — is pushed, so not
+merging risks nothing. M3 and M4 describe what a merge carries and are unaffected.
+
+**v1's paper answers to two of its own three open questions.** `main.tex:1039` asked
+for a finer-grained belief and a held-out recalibration fit; Gate 2 did both.
+`main.tex:1050` asked whether `ask`, scored by one-step value of information, earns
+its place; Gates 3 and 4 answer no, and analytically rather than on these cases. The
+third, the turn boundary at `main.tex:1060`, is untouched by v2 and stays open.
+
+**Three defects in `main.tex` beyond U7's brackets.**
+
+`reliability-needs-human.pdf` has never been committed on any branch — `git log
+--all --diff-filter=A` finds no add — yet `main.tex:719` includes it and the tracked
+`main.pdf` embeds it, three Form XObjects with the filename in the PDF body. It was
+built from an untracked local file while the root `figures/*` rule still ignored it.
+The published artifact therefore carries a figure no clone can rebuild. Q4 cleared
+the `.gitignore` obstacle; the file itself is still missing and `render()` has never
+been executed, matplotlib being absent.
+
+`main.tex:683` says `ask` "can only win in a narrow middle band that the quantized
+beliefs never land in." There is no such band on the unconstrained menu — the
+maximum over every belief is `-2/13` — and quantization is not the cause either,
+since the raw arm's 100 distinct beliefs leave the region empty too. Heavier than a
+bracket, and it is where the theorem belongs.
+
+`main.tex:1045` attributes v1's floor to elicitation granularity "not the calibration
+method." Gate 4's floor, `6/23`, is set by the calibration method. Both are true of
+different objects; under one word they read as a contradiction.
+
+The `.gitignore` item the G-series paragraph lists as Gate 8's one open technical
+item was discharged by Q4 during Gate 2a. The paragraph is left as written per the
+G9/G12 rule; the correction is a line in the new section. Gate 8's remaining items
+are the two tags and the single merge.
+
+The suite is unchanged at **654 passing**, and `make_figures.py --check` exits 0.
