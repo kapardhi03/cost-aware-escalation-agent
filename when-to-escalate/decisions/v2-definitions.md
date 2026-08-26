@@ -156,6 +156,8 @@ act** — it may not ask again. That is what makes this one-question lookahead
 rather than sequential planning, and it is the carried-forward boundary Gate 6
 has to state. Using `V(b^u)` there would quietly turn this into a two-step policy.
 
+Stated as a boundary, with the substitution's two errors, in `v2-policy-boundary.md`.
+
 ### Two properties, both of which become assertions in code
 
 **`V_act(b) − V_q(b) ≥ 0`, always** — the information itself, before paying for
@@ -257,6 +259,8 @@ This is consistent with, and a stronger reading of, what v1 already observed:
 horizon. The ceiling says the horizon was not the binding constraint. The script
 also confirms `V_act == V` on **100/100** — `ask` is never even the myopic argmin,
 which is the same fact read off the arithmetic instead of off the census.
+
+The horizon claim is proven for every depth in `v2-policy-boundary.md`, part 3.
 
 **The one place the impossibility is not unconditional.** `no_direct_answer`
 removes `answer` from the non-ask menu, which removes the `α·t` half of the cap
