@@ -947,3 +947,88 @@ in `paper/main.tex` that the paper gate has to fix.
 | V4 | Gate 7 gets a pre-registration: which result lands in which section, which v1 sentences are replaced rather than extended, which number traces to which artifact | (Kaps-decided) | **confirmed** |
 | V5 | matplotlib is a figures-only dependency; the results-reproduction path stays dependency-free and `--check` is the stdlib verification that survives without it | (Kaps-decided) | **confirmed** |
 | — | The G-series Gate 8 open-item paragraph is superseded by Q4 and left unedited; Gate 8's remaining items are the two tags and the merge | (AI-proposed) | **noted** |
+
+## Resolutions after Gate 5
+
+Gate 5 computed per-case VoI for the first time — the whole `V_q` term, not just the
+analytic bound — and priced the entropy-threshold ask baseline on four belief arms
+over the pre-registered decile grid. Every number below traces to
+`results/entropy-baseline.json`, checked against `results/voi-ceiling-arms.json`,
+`results/rebaseline.json` and `results/run.json`. The choices the gate was held to
+are in `decisions/v2-gate5-preregistration.md`, committed before any of these
+numbers existed. Four of the five entries here are things that pre-registration did
+not anticipate, and one of them corrects it.
+
+- **X1 — a cost-side adapter was needed, because `narrow` refuses coupled
+  posteriors.** The pre-registration assumed `costs.expected_cost` would price the
+  posteriors. It cannot: it takes a factorised `Belief`, and `q_specifics` produces
+  posteriors that do not factorise — the committed example is `a01-first-001` on
+  answer `"concrete"` at `p_u = 0.4488`. `narrow` raises `NonFactorisingError`
+  rather than projecting onto marginals, by an earlier decision made to keep the
+  coupling visible, so there was no legitimate way to turn those posteriors into
+  something `expected_cost` accepts. `ec_joint(action, joint)` prices the joint
+  directly and is asserted to agree with `costs.expected_cost` on all 500
+  (prior, action) pairs, max delta 0. One cost matrix, two callers, agreement
+  checked rather than assumed. The test that matters is not that the adapter agrees
+  — it is that `narrow` still raises on the committed coupled case, because the day
+  it starts projecting silently, the adapter becomes dead weight hiding the
+  coupling.
+
+- **X2 — invariant 6 is not the independent cross-check the pre-registration called
+  it.** Substituting the definition of VoI into invariant 6 cancels `V_act` and
+  `EC(ask)` and leaves `V_q ≥ 0`, which holds for free because every entry of
+  `costs.COST` is non-negative. This is measured, not argued: the invariant's slack
+  equals `V_q` to within 7.77e-16 on all four arms. So the pre-registration, and the
+  instruction to report "invariant 6's result" as the cross-check that mattered
+  most, both overrated it. It passes, and its passing is worth close to nothing.
+
+  The independent check is `ceiling_agreement`, and it is exact. Recomputing
+  `EC(ask | b) − V_act(b)` from the beliefs and comparing to the committed per-case
+  ceiling gives `max_ceiling_delta = 0.0` on all four arms — bit-identical, because
+  `widen` mirrors `state_probability` and `STATES` iterates in the order
+  `expected_cost` sums in. Two further routes agree: `EC(ask | b)` against the exact
+  `2 + 2·b_h` of invariant 5 to 8.9e-16, and `V_act` recovered as
+  `ceiling + EC(ask | b)` to 2.2e-16. Non-positive tier-1 excesses: 0 of 400 on
+  every arm. Invariants 2, 3 and 4 hold on all 400 pairs per arm, invariant 4 with
+  exact residuals and a constant-argmin count of 234 / 235 / 236 / 253 that is
+  reported, not predicted.
+
+- **X3 — the committed bound is attained, not merely respected.** `V_q = 0` exactly
+  on 16 published, 12 rebaselined, 0 raw and 52 calibrated case-question pairs. On
+  those pairs a free, perfect oracle drives post-answer expected cost to zero and
+  asking still loses by the full `−ceiling`. That closes off the reading that the
+  ceiling is negative only because it is slack: on a quarter of the calibrated pairs
+  there is no slack to be had. Raw has none because its beliefs are continuous,
+  which is why the finding is stated per arm.
+
+- **X4 — each arm is scored against its own v1 total, not against published's 86.**
+  v1's policy replayed on rebuilt beliefs scores 86 on published, 86 on rebaselined,
+  70 on raw and 75 on calibrated, all four committed in Gate 2. The first version of
+  the render printed 86 as the reference line under every arm's table while the
+  excess column was computed against the arm's own total, so raw's `+7.70` at the
+  0.9 decile was labelled against a total raw never had. The reference is now the
+  arm's own, and it is checked: the top of every grid fires on nothing, so that row
+  has to reproduce the arm's committed Gate 2 score, and it raises if it does not.
+  This is S4's shape again in a new place — a number stated against a reference the
+  statement never consulted.
+
+- **X5 — the realised column is not monotone in τ, and the exception is worth
+  keeping.** The expected tiers must fall as τ rises: the firing sets are nested and
+  every firing case contributes a positive excess. Both are asserted. The realised
+  column has no such guarantee, and on the rebaselined arm it inverts once — the
+  firing count falls 12 to 11 between the 0.7 and 0.8 deciles and the realised total
+  rises 109.60 to 113.60. The cause is one case, `a02-deep-017`: v1 answers it and
+  eats a realised 10, where ask-then-act realised 6, so dropping it from the firing
+  set costs 4. Its expected tier-1 excess is `+0.40` throughout. Asking was expected
+  to lose on that case and did in fact win it. Nothing rests on this — it sits on the
+  arm that carries no claim — but it is the cleanest illustration in the repo that
+  the impossibility result constrains expected cost and says nothing about a single
+  realised draw, so it is recorded with its cause rather than smoothed away.
+
+| # | Resolution | Provenance | Status |
+| --- | --- | --- | --- |
+| X1 | `ec_joint` prices coupled posteriors because `narrow` raises rather than projecting; agreement with `costs.expected_cost` checked on all 500 (prior, action) pairs, max delta 0. The pre-registration did not anticipate a cost-side adapter | (AI-proposed) | **changed** |
+| X2 | Invariant 6 reduces algebraically to `V_q ≥ 0` — slack equals `V_q` to 7.77e-16 — and is not independent evidence for the bound. `ceiling_agreement` is, at `max_ceiling_delta = 0.0` exactly on all four arms | (AI-proposed) | **changed** |
+| X3 | The bound is attained: `V_q = 0` on 16 / 12 / 0 / 52 pairs, so the ceiling's negativity cannot be attributed to slack. Raw has none because its beliefs are continuous | (AI-proposed) | **noted** |
+| X4 | Each arm's excess is measured against its own committed v1 total — 86 / 86 / 70 / 75 — not published's 86; the τ top-of-grid row is checked against `rebaseline.json` per arm | (AI-proposed) | **changed** |
+| X5 | The realised column inverts once, on the no-claim arm: `a02-deep-017` leaves the firing set, v1 answers it for 10 where ask-then-act realised 6. Expected excess `+0.40`. Recorded with its cause | (AI-proposed) | **noted** |
