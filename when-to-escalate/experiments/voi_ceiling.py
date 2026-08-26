@@ -436,15 +436,37 @@ def check_global_ceiling(k: dict) -> dict:
     }
 
 
+#: Decimals the grid's argmax is decided at, and the width of the plateau it reports.
+#: The maximum is attained on a large flat region, not at a point, so a bit-exact `>`
+#: comparison picks whichever member of it float noise happened to put first — and
+#: CPython 3.12's compensated `sum()` changes that. Rounding first makes the plateau
+#: interpreter-independent; the tie-break below picks from it deterministically.
+GRID_DECIMALS = 12
+
+GRID_TIE_BREAK = ("lowest (hot, warm, b_h) among the maximisers at "
+                  f"{GRID_DECIMALS} decimals")
+
+
 def grid_crosscheck(k: dict, n: int = 60) -> dict:
     """An independent numeric search, to catch an error in the closed form.
 
     Deliberately dumb: a uniform grid over the readiness simplex and b_h, in
     floats, with no reference to the derivation above. It should never EXCEED the
     closed-form value, and should come close to it.
+
+    It does not have a unique argmax, and an earlier version of this function
+    implied one. The maximum is attained along a flat region — 1185 of the grid's
+    points at `n = 60` — because `min_a EC(a | b) - EC(ask | b)` is linear in the
+    belief and the same pair of actions is active across a whole face. Reporting one
+    point as *the* argmax was slightly false even before it became unstable: the
+    plateau size is reported alongside it now, and the point is the lexicographically
+    lowest member rather than whichever one the interpreter reached first.
     """
     step = 1.0 / n
-    best = (-float("inf"), None)
+    best_rounded = -float("inf")
+    best: tuple[float, dict] | None = None
+    n_at_max = 0
+    n_points = 0
     for i in range(n + 1):
         for j in range(n + 1 - i):
             hot, warm = i * step, j * step
@@ -458,15 +480,27 @@ def grid_crosscheck(k: dict, n: int = 60) -> dict:
                                         + t * COST[a][(r, True)])
                                 for r in READINESS_LABELS)
                 value = min(ec[a] for a in NONASK) - ec["ask"]
-                if value > best[0]:
+                n_points += 1
+                rounded = round(value, GRID_DECIMALS)
+                if rounded > best_rounded:
+                    # The loops ascend in (hot, warm, b_h), so the first member of a
+                    # plateau reached is its lexicographically lowest point.
+                    best_rounded = rounded
                     best = (value, {"readiness": {kk: round(vv, 4)
                                                   for kk, vv in p.items()},
                                     "b_h": round(t, 4)})
+                    n_at_max = 1
+                elif rounded == best_rounded:
+                    n_at_max += 1
     exact = float(Fraction(k["ceiling_exact"]))
     return {
         "grid_steps_per_axis": n,
+        "grid_points_searched": n_points,
         "grid_max": best[0],
         "grid_argmax": best[1],
+        "grid_argmax_tie_break": GRID_TIE_BREAK,
+        "n_grid_points_attaining_the_max": n_at_max,
+        "grid_argmax_is_unique": n_at_max == 1,
         "closed_form_max": exact,
         "grid_exceeds_closed_form": best[0] > exact + 1e-9,
         "gap_to_closed_form": exact - best[0],

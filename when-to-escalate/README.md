@@ -62,7 +62,7 @@ Supporting working files:
   (F1–F8). Rows are never edited after the fact; a reversal is added as a new row
   that supersedes the old one.
 - `PLAN.md` — the day-by-day working plan.
-- `tests/` — 337 tests; see step 6.
+- `tests/` — 712 tests; see step 6.
 
 ## How to reproduce the test
 
@@ -77,7 +77,20 @@ live there; each step says which.
 
 ### 1. Environment (from the repository root)
 
-Python 3.11+ (developed on 3.14).
+Python 3.12+ (developed on 3.14). The floor is not cosmetic: CPython 3.12 made
+`sum()` over floats use Neumaier compensated summation, and two committed exactness
+claims depend on it — `ceiling_agreement.max_ceiling_delta` is `0.0` exactly on all
+four arms, and `results/entropy-baseline.md` distinguishes an exactly-zero residual
+from a below-tolerance one. On 3.11 the same recomputation lands at `1.11e-15`: every
+tolerance still passes, but "exactly zero" is no longer true. The floor is declared as
+`MIN_PYTHON` in `tests/reproduction.py`, the CI matrix runs 3.12, 3.13 and 3.14, and
+`tests/test_reproduction.py` asserts that this sentence, that constant and that matrix
+all state the same number.
+
+Reproduction of the two float-bearing artifacts — `results/entropy-baseline.json` and
+`results/voi-ceiling.json` — is checked to a tolerance of 1e-9 on float-versus-float
+leaves and exactly on everything else, including all `Fraction` values, which are
+rendered as strings. Every other committed artifact is still compared byte for byte.
 
 ```bash
 python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt
@@ -183,9 +196,10 @@ verified; the render is not, on a machine without matplotlib.
 ./.venv/bin/python -m pytest when-to-escalate -q
 ```
 
-337 tests, all passing. They cover the cost matrix and the hard constraint
+712 tests, all passing. They cover the cost matrix and the hard constraint
 (including that no belief can buy past it), the tie-break, the cache's staleness
-and provenance behaviour, and configuration validation.
+and provenance behaviour, configuration validation, and the reproduction
+comparator and declared Python floor described in step 1.
 
 ### What a reproduction cannot check
 

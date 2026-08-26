@@ -20,10 +20,12 @@ src.questions.narrow raises NonFactorisingError on a coupled posterior rather th
 
 | arm | pairs | inv 2 min slack | inv 3 max resid | inv 4 constant argmin | inv 6 min slack | bound attained |
 | --- | --- | --- | --- | --- | --- | --- |
-| `published` | 400 | -2.22e-16 | 1.11e-16 | 234 | 0 | 16 |
-| `rebaselined` | 400 | -4.44e-16 | 1.11e-16 | 235 | 0 | 12 |
-| `raw` | 400 | -4.44e-16 | 1.11e-16 | 236 | 8.54e-08 | 0 |
-| `calibrated` | 400 | -4.44e-16 | 1.11e-16 | 253 | 0 | 52 |
+| `published` | 400 | ~0 | ~0 | 234 | 0 | 16 |
+| `rebaselined` | 400 | ~0 | ~0 | 235 | 0 | 12 |
+| `raw` | 400 | ~0 | ~0 | 236 | 8.54e-08 | 0 |
+| `calibrated` | 400 | ~0 | ~0 | 253 | 0 | 52 |
+
+`0` is exactly zero. `~0` is nonzero and below the 1e-12 tolerance, where the digits would be summation order rather than measurement.
 
 **What invariant 6 actually tests.** Less than it looks. Substituting VoI = V_act - EC_ask - V_q into the slack (V_act - EC_ask) - VoI cancels both other terms and leaves V_q, measured above as agreeing to 7.77e-16. So on these definitions the invariant reduces to V_q >= 0, which holds because every entry of costs.COST is non-negative. It confirms the implementation is self-consistent; it is not independent evidence for the bound.
 
@@ -31,10 +33,10 @@ src.questions.narrow raises NonFactorisingError on a coupled posterior rather th
 
 | arm | recomputed vs committed ceiling | EC(ask) vs 2+2b_h | V_act recovery |
 | --- | --- | --- | --- |
-| `published` | 0 | 4.44e-16 | 2.22e-16 |
-| `rebaselined` | 0 | 8.88e-16 | 2.22e-16 |
-| `raw` | 0 | 8.88e-16 | 2.22e-16 |
-| `calibrated` | 0 | 8.88e-16 | 2.22e-16 |
+| `published` | 0 | ~0 | ~0 |
+| `rebaselined` | 0 | ~0 | ~0 |
+| `raw` | 0 | ~0 | ~0 |
+| `calibrated` | 0 | ~0 | ~0 |
 
 **The bound is attained.** V_q = 0 exactly on these pairs, so the ceiling is reached rather than merely bounding. A free perfect oracle driving the post-answer expected cost to zero still loses by the full -ceiling, which means the bound's negativity cannot be attributed to slack in the bound.
 
@@ -144,6 +146,8 @@ Exact expectation 199.62, Monte Carlo mean over 2000 draws 199.607, delta 0.013.
 ## Question selection
 
 Oracle: argmax_q VoI(q | b) over the three real questions. It agrees with argmax-IG on 29 of 50 test cases.
+
+Tie-break: declaration order in QUESTIONS, among the maximisers at 12 decimals. Needed on 13 of 50 test cases. VoI is a float sum, so exactly-tied candidates order by their last bit, and CPython 3.12 changed which bit that is. Undeclared, both the oracle's pick and the agreement count above moved between interpreters. The count is only meaningful alongside the tie count: on a tied case, agreement is an artifact of the tie-break, not evidence that the two rules select alike.
 
 answer-model-dependent and ordering-fragile: 27 of 88 sweep variants flip the IG ordering of these three questions (results/answer-model.md), so it carries no headline.
 

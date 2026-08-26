@@ -44,6 +44,8 @@ from pathlib import Path
 
 import pytest
 
+import reproduction
+
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "experiments" / "entropy_baseline.py"
 COMMITTED_JSON = ROOT / "results" / "entropy-baseline.json"
@@ -82,9 +84,14 @@ def cases(eb):
 # The guard: the committed artifacts still come out of the code
 # --------------------------------------------------------------------------- #
 
-def test_json_reproduces_byte_for_byte(eb, report):
-    fresh = json.dumps(report, indent=2) + "\n"
-    assert fresh == COMMITTED_JSON.read_text(encoding="utf-8")
+def test_json_reproduces_within_float_tolerance(eb, report):
+    """Not byte-for-byte: this artifact carries float sums. See tests/reproduction.py.
+
+    Every leaf that is not a float-versus-float pair — every count, every question id,
+    every bool, and the key order itself — still has to match exactly.
+    """
+    reproduction.assert_reproduces(json.dumps(report, indent=2) + "\n",
+                                   COMMITTED_JSON)
 
 
 def test_md_reproduces_byte_for_byte(eb, report):

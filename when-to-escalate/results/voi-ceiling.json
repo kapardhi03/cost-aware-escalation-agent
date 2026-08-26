@@ -1227,18 +1227,22 @@
   },
   "grid_crosscheck": {
     "grid_steps_per_axis": 60,
-    "grid_max": -0.16666666666666652,
+    "grid_points_searched": 115351,
+    "grid_max": -0.16666666666666696,
     "grid_argmax": {
       "readiness": {
-        "hot": 0.2667,
-        "warm": 0.7,
+        "hot": 0.1333,
+        "warm": 0.8333,
         "cold": 0.0333
       },
       "b_h": 0.2333
     },
+    "grid_argmax_tie_break": "lowest (hot, warm, b_h) among the maximisers at 12 decimals",
+    "n_grid_points_attaining_the_max": 1185,
+    "grid_argmax_is_unique": false,
     "closed_form_max": -0.15384615384615385,
     "grid_exceeds_closed_form": false,
-    "gap_to_closed_form": 0.012820512820512664
+    "gap_to_closed_form": 0.012820512820513108
   },
   "constrained_regime": {
     "menu": [

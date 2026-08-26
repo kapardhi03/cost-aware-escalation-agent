@@ -150,7 +150,39 @@ H_DECIMALS = ab.H_DECIMALS
 #: informative. It stays in the reported table as the zero-information reference.
 ORACLE_CANDIDATES = tuple(q for q in QUESTIONS if q.id != "q_null")
 
+#: Decimals the oracle's argmax is decided at. VoI is a float sum over six states, so
+#: two questions that are equal in exact arithmetic can differ in the last bit — and
+#: which one is larger changed when CPython 3.12 moved `sum()` to compensated
+#: summation. On `a05-restricted-043` all three candidates have VoI = -2.8 exactly;
+#: undeclared, `max` returned whichever noise put first, so the oracle's pick flipped
+#: between interpreters and carried `oracle_and_ig_agree` and the reported agreement
+#: count with it. Rounding first makes the *set* of maximisers interpreter-independent;
+#: ARGMAX_TIE_BREAK then picks from it. 12 matches H_DECIMALS, three orders of
+#: magnitude above the largest drift measured (1.11e-15).
+ARGMAX_DECIMALS = 12
+
+ARGMAX_TIE_BREAK = ("declaration order in QUESTIONS, among the maximisers at "
+                    f"{ARGMAX_DECIMALS} decimals")
+
 TOL = 1e-12
+
+#: How a residual is printed. Three significant figures of a 1e-16 quantity report
+#: the interpreter's rounding, not the computation's: `4.44e-16` and `-2.22e-16` are
+#: the same measurement made twice, and which one appears — including its sign —
+#: depends on the CPython version. Anything nonzero below TOL prints as `~0`. Exact
+#: zero still prints as `0`, because "recomputation agrees to the last bit" is a
+#: stronger claim than "agrees within tolerance" and one of these tables makes it.
+NEAR_ZERO = "~0"
+
+RESIDUAL_LEGEND = (f"`0` is exactly zero. `{NEAR_ZERO}` is nonzero and below the "
+                   f"{TOL:g} tolerance, where the digits would be summation order "
+                   f"rather than measurement.")
+
+
+def _resid(x: float) -> str:
+    if x == 0.0:
+        return "0"
+    return NEAR_ZERO if abs(x) < TOL else f"{x:.3g}"
 
 #: Float slack for agreement against committed 6dp artifact values.
 ARTIFACT_TOL = 1e-6
@@ -350,6 +382,21 @@ def question_voi(question, joint, constraints) -> dict:
 # 4. Per case, per arm
 # --------------------------------------------------------------------------- #
 
+def _argmax_declared(candidates, score) -> tuple[object, list[str]]:
+    """The maximiser, and every candidate tied with it. Ties are not hidden.
+
+    Returns `(winner, tied_ids)` where `tied_ids` lists every candidate attaining the
+    maximum at ARGMAX_DECIMALS, in declaration order, winner first. A caller that
+    reports `winner` without also reporting `len(tied_ids)` is claiming a unique
+    argmax it does not have.
+    """
+    scored = [(round(score(q), ARGMAX_DECIMALS), q) for q in candidates]
+    best = max(s for s, _q in scored)
+    tied = [q.id for s, q in scored if s == best]
+    winner = next(q for s, q in scored if s == best)
+    return winner, tied
+
+
 def per_case(rows: list[dict]) -> list[dict]:
     """Every case of one arm: the fallback, the oracle's pick, and both excesses."""
     out = []
@@ -363,8 +410,10 @@ def per_case(rows: list[dict]) -> list[dict]:
         ec_ask = ec_joint("ask", joint)
 
         by_q = {q.id: question_voi(q, joint, constraints) for q in QUESTIONS}
-        oracle = max(ORACLE_CANDIDATES, key=lambda q: by_q[q.id]["voi"])
-        by_ig = max(ORACLE_CANDIDATES, key=lambda q: by_q[q.id]["ig"])
+        oracle, oracle_tied = _argmax_declared(
+            ORACLE_CANDIDATES, lambda q: by_q[q.id]["voi"])
+        by_ig, ig_tied = _argmax_declared(
+            ORACLE_CANDIDATES, lambda q: by_q[q.id]["ig"])
 
         out.append({
             "case_id": row["case_id"],
@@ -382,9 +431,12 @@ def per_case(rows: list[dict]) -> list[dict]:
             "tier1_excess": ec_ask - prior_v_act,
             "oracle_question": oracle.id,
             "oracle_voi": by_q[oracle.id]["voi"],
+            "oracle_maximisers": oracle_tied,
+            "oracle_pick_needed_the_tie_break": len(oracle_tied) > 1,
             "tier2_excess": -by_q[oracle.id]["voi"],
             "argmax_ig_question": by_ig.id,
             "argmax_ig_voi": by_q[by_ig.id]["voi"],
+            "argmax_ig_maximisers": ig_tied,
             "oracle_and_ig_agree": oracle.id == by_ig.id,
             "by_question": by_q,
         })
@@ -924,10 +976,22 @@ def build_arm(arm: str, committed_ceilings: dict, run: dict,
         "self_consistency": self_consistency(cases),
         "question_selection": {
             "oracle": "argmax_q VoI(q | b) over the three real questions",
+            "tie_break": ARGMAX_TIE_BREAK,
             "n_test_cases_where_oracle_and_argmax_ig_agree": sum(
                 1 for c in cases
                 if c["split"] == CLAIM_SPLIT and c["oracle_and_ig_agree"]),
+            "n_test_cases_where_the_oracle_needed_the_tie_break": sum(
+                1 for c in cases
+                if c["split"] == CLAIM_SPLIT
+                and c["oracle_pick_needed_the_tie_break"]),
             "n_test_cases": sum(1 for c in cases if c["split"] == CLAIM_SPLIT),
+            "why_the_tie_break_is_declared": (
+                "VoI is a float sum, so exactly-tied candidates order by their last "
+                "bit, and CPython 3.12 changed which bit that is. Undeclared, both "
+                "the oracle's pick and the agreement count above moved between "
+                "interpreters. The count is only meaningful alongside the tie count: "
+                "on a tied case, agreement is an artifact of the tie-break, not "
+                "evidence that the two rules select alike."),
             "argmax_ig_is_secondary": (
                 "answer-model-dependent and ordering-fragile: 27 of 88 sweep "
                 "variants flip the IG ordering of these three questions "
@@ -1069,10 +1133,13 @@ def render(report: dict) -> str:
     for arm in report["beliefs"]["arms"]:
         i = report["arms"][arm]["invariants"]
         w(f"| `{arm}` | {i['n_case_question_pairs']} | "
-          f"{i['invariant_2_min_slack']:.3g} | {i['invariant_3_max_residual']:.3g} | "
+          f"{_resid(i['invariant_2_min_slack'])} | "
+          f"{_resid(i['invariant_3_max_residual'])} | "
           f"{i['invariant_4_n_pairs_with_constant_argmin']} | "
-          f"{i['invariant_6_min_slack']:.3g} | "
+          f"{_resid(i['invariant_6_min_slack'])} | "
           f"{i['n_pairs_where_the_bound_is_attained']} |")
+    w("")
+    w(RESIDUAL_LEGEND)
     w("")
     pub = report["arms"]["published"]["invariants"]
     w(f"**What invariant 6 actually tests.** {pub['what_invariant_6_actually_tests']}")
@@ -1083,9 +1150,9 @@ def render(report: dict) -> str:
     w("| --- | --- | --- | --- |")
     for arm in report["beliefs"]["arms"]:
         c = report["arms"][arm]["ceiling_agreement"]
-        w(f"| `{arm}` | {c['max_ceiling_delta']:.3g} | "
-          f"{c['max_ec_ask_delta_from_2_plus_2bh']:.3g} | "
-          f"{c['max_v_act_recovery_delta']:.3g} |")
+        w(f"| `{arm}` | {_resid(c['max_ceiling_delta'])} | "
+          f"{_resid(c['max_ec_ask_delta_from_2_plus_2bh'])} | "
+          f"{_resid(c['max_v_act_recovery_delta'])} |")
     w("")
     w(f"**The bound is attained.** {pub['why_attainment_matters']}")
     w("")
@@ -1177,6 +1244,10 @@ def render(report: dict) -> str:
     w(f"Oracle: {qs['oracle']}. It agrees with argmax-IG on "
       f"{qs['n_test_cases_where_oracle_and_argmax_ig_agree']} of "
       f"{qs['n_test_cases']} test cases.")
+    w("")
+    w(f"Tie-break: {qs['tie_break']}. Needed on "
+      f"{qs['n_test_cases_where_the_oracle_needed_the_tie_break']} of "
+      f"{qs['n_test_cases']} test cases. {qs['why_the_tie_break_is_declared']}")
     w("")
     w(qs["argmax_ig_is_secondary"])
     w("")
