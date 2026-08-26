@@ -1109,3 +1109,84 @@ G9/G12 rule; the correction is a line in the new section. Gate 8's remaining ite
 are the two tags and the single merge.
 
 The suite is unchanged at **654 passing**, and `make_figures.py --check` exits 0.
+
+### Gate 5 — the ask baseline priced, and the bound attained (2026-08-26–27)
+
+The first per-case VoI computation in the project: not the analytic bound but the whole
+`V_q` term, over 400 case-question pairs on each of four belief arms, with the
+entropy-threshold ask baseline priced over the pre-registered decile grid for τ. The
+pre-registration was committed before any of these numbers existed.
+
+Entropy-thresholding is never free. At the cheapest threshold that asks at all — the
+0.9 decile, 5 or 6 of 50 test cases — it costs +13.80 realised on published, +7.70 on
+raw and +5.60 on calibrated. Ask on everything and it costs +113.62 to +128.02. There
+is no threshold on any arm at which asking pays for itself, and the answer-model-free
+expected tier is positive at every firing threshold on every arm. That is the baseline
+sentence §6 was owed.
+
+Invariant 6 was supposed to be the cross-check tying this gate's VoI to Gate 4's
+ceiling, and it is a tautology. Its slack equals `V_q` to within 7.77e-16, so
+substituting VoI's definition cancels the other two terms and the invariant reduces to
+`V_q ≥ 0` — free, since every entry of `costs.COST` is non-negative. It passes on all
+400 pairs per arm and its passing is worth close to nothing. The pre-registration is
+locked and was not edited; the correction is X2.
+
+`ceiling_agreement` is the check that was actually wanted: a different invariant with
+the same intended outcome. Recomputing `EC(ask | b) − V_act(b)` from the beliefs
+against the per-case ceilings committed in Gate 4 gives a maximum delta of exactly
+**0.0** on all four arms — bit-identical, because `widen` mirrors `state_probability`
+and `STATES` iterates in the order `expected_cost` sums in. Two further routes agree:
+`EC(ask | b)` against the exact `2 + 2·b_h` of invariant 5 to 8.9e-16, and `V_act`
+recovered as `ceiling + EC(ask | b)` to 2.2e-16. Non-positive tier-1 excesses: 0 of
+400 on every arm.
+
+The bound is attained, not merely respected. `V_q = 0` exactly on 16 published, 12
+rebaselined, 0 raw and 52 calibrated pairs. On those pairs a free, perfect oracle
+drives the post-answer expected cost to zero and asking still loses by the full
+`−ceiling`. The ceiling's negativity is therefore not slack in the bound, and on
+roughly a quarter of the calibrated pairs there is no slack to be had. Raw has none
+because its beliefs are continuous. This is the gate's real new content, and it goes
+in the theorem section as a second beat sharpening the main claim rather than as a
+separate finding.
+
+Three things the pre-registration did not anticipate. A cost-side adapter was needed:
+`costs.expected_cost` requires a factorised belief, `q_specifics` produces posteriors
+that do not factorise, and `narrow` raises rather than projecting onto marginals — so
+`ec_joint` prices the joint directly and is asserted to agree with `expected_cost` on
+all 500 (prior, action) pairs, maximum delta 0. Each arm is scored against its own
+committed v1 total — 86, 86, 70, 75 — and not against published's 86; the first
+version of the render printed 86 under every table while computing each excess against
+the arm's own total, which is S4's shape in a new place. And the realised column is not
+monotone in τ.
+
+The exception is worth keeping. The expected tiers must fall as τ rises, since the
+firing sets are nested and every firing case contributes a positive excess, and both
+are now asserted. The realised column carries no such guarantee: on the rebaselined
+arm the firing count falls 12 to 11 between the 0.7 and 0.8 deciles while the realised
+total rises 109.60 to 113.60. One case does it. `a02-deep-017` leaves the firing set;
+v1 answers it and eats a realised 10 where ask-then-act realised 6. Its expected
+tier-1 excess is `+0.40` throughout. Asking was expected to lose that case and won it
+— the cleanest illustration in the repo that the impossibility result constrains
+expected cost and says nothing about a single realised draw. It is written off the case
+and not off that arm's totals, which carry no claim.
+
+The anchors hold. Terminal `always_ask` pricing from v1 is 142 total, 2.84 mean; the
+same 50 cases under ask-then-act cost 199.62, mean 3.9924, strictly dearer as required
+— the follow-up action is not free. Invariant 8 reproduces v1 exactly on the published
+arm: 0 mismatches across 100 per-case actions and a recomputed test aggregate of 86
+total, 1.72 mean, on v1's legacy tie-break. It is checked on the published arm only,
+because asserting it on a rebuilt arm would be asserting that recalibration changed
+nothing. The VoI oracle agrees with argmax-IG on 29 of 50 test cases, which is why the
+ordering-fragile IG route stays secondary.
+
+The honesty check is named self-consistency, never validation: the exact expectation of
+199.62 against a Monte Carlo mean of 199.607 over 2000 draws, delta 0.013, seed
+20260826. The answer is simulated from the same `P(u | s)` that produced the
+prediction, so it is circular with respect to the answer model by construction and
+checks arithmetic rather than reality. The seed is recorded and is not offered as a
+defence.
+
+The suite is **690 passing**, up from 654: 36 new tests, most of them negative controls
+that doctor one input and assert the guard raises — a disagreeing committed ceiling, a
+non-positive excess, an unnested firing set, a rising expected tier, a mislabelled
+per-arm reference, a state-reachable answer with no belief branch.

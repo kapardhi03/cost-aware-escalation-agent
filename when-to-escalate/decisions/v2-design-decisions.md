@@ -1025,6 +1025,24 @@ not anticipate, and one of them corrects it.
   the impossibility result constrains expected cost and says nothing about a single
   realised draw, so it is recorded with its cause rather than smoothed away.
 
+- **X6 — the attainment result goes in the theorem section, as a second beat
+  sharpening the main claim.** Not a separate finding and not artifact-only. The
+  order is: asking is never rational on the unconstrained action menu, and then — on
+  16 published and 52 calibrated case-question pairs — the ceiling is attained, so
+  asking loses by the full margin even against perfect information. The second
+  sentence amplifies the first rather than qualifying it, which is why it sits
+  immediately after the theorem instead of in a results table.
+
+- **X7 — the realised inversion is written as a mechanism illustration off the
+  case, not off the arm.** `a02-deep-017` is the example: a case where asking was
+  expected to lose and realised a win. One or two sentences in failure analysis or
+  discussion, drawn from the case and its two realised costs — v1 answers for 10,
+  ask-then-act realises 6, expected tier-1 excess `+0.40` throughout. The
+  rebaselined arm's totals stay out of the paper: the 12-to-11 firing count and the
+  109.60-to-113.60 rise are how the case was found, not the claim, and that arm
+  carries no claim. Framing it off the case keeps the illustration and leaves the
+  no-claim lock intact.
+
 | # | Resolution | Provenance | Status |
 | --- | --- | --- | --- |
 | X1 | `ec_joint` prices coupled posteriors because `narrow` raises rather than projecting; agreement with `costs.expected_cost` checked on all 500 (prior, action) pairs, max delta 0. The pre-registration did not anticipate a cost-side adapter | (AI-proposed) | **changed** |
@@ -1032,3 +1050,5 @@ not anticipate, and one of them corrects it.
 | X3 | The bound is attained: `V_q = 0` on 16 / 12 / 0 / 52 pairs, so the ceiling's negativity cannot be attributed to slack. Raw has none because its beliefs are continuous | (AI-proposed) | **noted** |
 | X4 | Each arm's excess is measured against its own committed v1 total — 86 / 86 / 70 / 75 — not published's 86; the τ top-of-grid row is checked against `rebaseline.json` per arm | (AI-proposed) | **changed** |
 | X5 | The realised column inverts once, on the no-claim arm: `a02-deep-017` leaves the firing set, v1 answers it for 10 where ask-then-act realised 6. Expected excess `+0.40`. Recorded with its cause | (AI-proposed) | **noted** |
+| X6 | The attainment result lands in the theorem section as a second beat — "asking never wins on the unconstrained menu" then "and on N pairs the ceiling is attained, so it loses by the full margin even against perfect information." A sharpening, not a separate finding | (Kaps-decided) | **confirmed** |
+| X7 | The realised inversion is written as a mechanism illustration drawn from `a02-deep-017`, in failure analysis or discussion, framed off the case and not off the rebaselined arm's totals | (Kaps-decided) | **confirmed** |

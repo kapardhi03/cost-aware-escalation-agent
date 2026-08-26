@@ -512,7 +512,10 @@ def invariant_census(cases: list[dict]) -> dict:
             "against the per-case ceilings committed in "
             "results/voi-ceiling-arms.json, and recovers V_act a second way via "
             "ceiling + EC(ask). That is what ties this gate's new code to Gate 4's "
-            "analytic result."),
+            "analytic result. It is the check invariant 6 was meant to be: a "
+            "different invariant, the same intended outcome — this gate's computed "
+            "VoI held against Gate 4's committed ceiling, per arm, under "
+            "ceiling_agreement above."),
         "n_pairs_where_the_bound_is_attained": len(attained),
         "why_attainment_matters": (
             "V_q = 0 exactly on these pairs, so the ceiling is reached rather than "

@@ -27,7 +27,7 @@ src.questions.narrow raises NonFactorisingError on a coupled posterior rather th
 
 **What invariant 6 actually tests.** Less than it looks. Substituting VoI = V_act - EC_ask - V_q into the slack (V_act - EC_ask) - VoI cancels both other terms and leaves V_q, measured above as agreeing to 7.77e-16. So on these definitions the invariant reduces to V_q >= 0, which holds because every entry of costs.COST is non-negative. It confirms the implementation is self-consistent; it is not independent evidence for the bound.
 
-**Where the independent check is.** ceiling_agreement, which compares the recomputed EC(ask | b) - V_act(b) against the per-case ceilings committed in results/voi-ceiling-arms.json, and recovers V_act a second way via ceiling + EC(ask). That is what ties this gate's new code to Gate 4's analytic result.
+**Where the independent check is.** ceiling_agreement, which compares the recomputed EC(ask | b) - V_act(b) against the per-case ceilings committed in results/voi-ceiling-arms.json, and recovers V_act a second way via ceiling + EC(ask). That is what ties this gate's new code to Gate 4's analytic result. It is the check invariant 6 was meant to be: a different invariant, the same intended outcome — this gate's computed VoI held against Gate 4's committed ceiling, per arm, under ceiling_agreement above.
 
 | arm | recomputed vs committed ceiling | EC(ask) vs 2+2b_h | V_act recovery |
 | --- | --- | --- | --- |
