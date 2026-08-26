@@ -1268,3 +1268,82 @@ Recorded as Y1–Y5 in `decisions/v2-design-decisions.md`, with one-line pointer
 `decisions/v2-definitions.md` at the boundary note and at the horizon sentence. This is
 the one gate with no pre-registration, because nothing is computed and so there is no
 result to be tempted by after the fact.
+
+### Float reproduction — two undeclared tie-breaks and a Python floor (2026-08-27)
+
+Five tests failed on Python 3.11 and passed on 3.14. The cause is not the operating
+system: CPython 3.12 made `sum()` over floats use Neumaier compensated summation, so
+every float that reaches an artifact through a `sum()` differs in its last bit or two
+across the boundary. Verified by running the whole suite on 3.11, 3.12, 3.13 and 3.14 —
+green from 3.12 up, five failures below. Two earlier hypotheses, macOS versus Linux
+`libm` for `log2` and hash-order nondeterminism, were tested and disproved rather than
+left in the record as maybes.
+
+The float part is noise: 818 of the 826 differing leaves in
+`results/entropy-baseline.json` are floats, the largest disagreement is 1.110e-15, and
+no published number moves. The other 8 leaves are discrete, survive any tolerance, and
+are the actual find. Both trace to an `argmax` whose ties were resolved by the last bit
+of a float sum.
+
+The first is the oracle. `argmax_q VoI(q | b)` over the three real questions is a
+`max()` over a list, and on some cases those VoIs are exactly equal, so which question
+the oracle picked — and the "agrees with argmax-IG on 29 of 50" count computed from it —
+was decided by summation order. This is the S4 failure mode a fourth time: a numeric
+rule selecting on a quantity whose tie structure the rule never consulted. It now rounds
+at 12 decimals, resolves by declaration order in `QUESTIONS`, and records the tied set
+per case, since `by_question` is stripped from the JSON and nothing else would keep it.
+
+That declaration produced the one genuinely new number here. The oracle's pick needed
+the tie-break on **13 of 50 test cases** on the published arm and 12 of 50 on raw. So
+the agreement count was never a clean comparison of two selection rules: on a quarter
+of the cases, agreement is an artifact of whichever tie-break is in force. Both figures
+are now printed together, in the JSON and in `results/entropy-baseline.md`, and neither
+is quotable alone.
+
+The second is the grid crosscheck, which reported a single point as *the* argmax of the
+ceiling over the readiness simplex. 1185 of its 115351 points attain the maximum to 12
+decimals. The witness was never unique, so the claim was slightly false before it became
+unstable, and the truer statement is shorter: report the plateau. It now returns the
+plateau size, the points searched, `grid_argmax_is_unique: false`, and a declared
+lowest-`(hot, warm, b_h)` tie-break. The reported point moves across the plateau;
+`grid_max` moves 4.4e-16 to `-0.16666666666666696` and still rounds to the `−0.1667`
+that `decisions/v2-design-decisions.md:1090` and `decisions/v2-policy-boundary.md:93`
+cite. No file cites the point itself.
+
+Two smaller changes fall out of the same reading. The invariant tables printed residuals
+like `-2.22e-16` as three significant figures, which reads as a measurement when it is
+the order the terms were added in; they now print `0` for exact zero and `~0` for
+below-tolerance, with the legend under the table. Exact `0` keeps its own symbol because
+X2's "recomputed and committed ceilings agree to the last bit" is precisely the
+difference between the two. A magnitude form like `< 1e-12` was rejected:
+`invariant_2_min_slack` is signed and a bound drops the sign.
+
+And the reproduction guarantee is pinned. A claim that byte reproduction holds, which
+silently depends on the interpreter, is the same class of gap as v1's unrecorded model
+id — the artifact was produced under conditions the artifact does not record. Two
+committed claims genuinely need 3.12 or later: `ceiling_agreement.max_ceiling_delta` is
+`0.0` exactly on all four arms, and the md distinguishes an exactly-zero residual from
+a below-tolerance one. So the floor is 3.12, declared once as `MIN_PYTHON` in
+`tests/reproduction.py` with its reason beside it, and asserted against the CI matrix,
+the README and the running interpreter, plus a fourth test requiring the matrix to run
+the floor itself. The matrix moves from `["3.10", "3.12"]` to
+`["3.12", "3.13", "3.14"]`; the 3.10 leg it replaces could not have passed.
+
+`tests/reproduction.py` is the comparator the three JSON artifacts now use. It forgives
+a float-versus-float leaf within 1e-9 and nothing else, and it runs two independent
+comparisons — a walk over the parsed structure and a line-by-line text comparison —
+because each catches what the other cannot: the walk sees `100` becoming `100.0` and a
+reordered key, the text comparison sees a changed indent and a missing trailing newline.
+Every `Fraction` is rendered as a string, so the exactness claims still compare
+character for character, as do every count, id, bool, null, list length and the key
+order. `results/entropy-baseline.md` stays byte for byte.
+
+On 3.11 after the fix there are three failures instead of five, and they are the two
+real version-dependent exactness claims plus the floor test that names the reason —
+which is the intended behaviour, not a residue. The suite is **712 passing** on 3.12,
+3.13 and 3.14, up from 690 by the 22 tests in `tests/test_reproduction.py`. One earlier
+report to correct: I said the agreement count would move 29 → 30. It does not. Under the
+declared tie-break both interpreters produce 29 on published and 26 on raw, matching the
+committed artifact, so no paper line or decision file is touched by it.
+
+Recorded as AB1–AB7 in `decisions/v2-design-decisions.md`.

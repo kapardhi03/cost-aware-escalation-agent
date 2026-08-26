@@ -1129,3 +1129,90 @@ by after the fact.
 | Y4 | The four scope limits stay exactly as written — the constrained menu, a cheaper question, deferral, and the restraint that this bounds one more question inside a deeper policy rather than every interaction design | (Kaps-decided) | **confirmed** |
 | Y5 | Two paper edits in Gate 7: a theorem-section third beat on depth, and the myopia retraction in Limitations where v1 made it (`main.tex:249`, `:343`, `:687`, `:947`, `:1050`), with `:687` handled once under V2's `:683` | (Kaps-decided) | **confirmed** |
 
+## The float-reproduction fix — two undeclared tie-breaks and a Python floor
+
+- **AB1 — the five failing tests are a CPython version change, not an operating-system
+  difference.** CPython 3.12 made `sum()` over floats use Neumaier compensated
+  summation. Verified by running the whole suite under 3.11, 3.12, 3.13 and 3.14:
+  3.12 and later reproduce `results/entropy-baseline.json` byte for byte, 3.11 does
+  not. The disagreement is 826 leaves, of which 818 are floats differing by at most
+  1.110e-15. Two earlier hypotheses — macOS versus Linux `libm` for `log2`, and
+  hash-order nondeterminism — were tested and disproved rather than left standing.
+  The remaining 8 leaves are discrete and survive any tolerance, which is what turned
+  a float-noise report into two defects.
+
+- **AB2 — the comparator forgives a float-versus-float leaf within 1e-9 and nothing
+  else.** `tests/reproduction.py` runs two independent comparisons of the fresh render
+  against the committed file: a walk over the parsed structure, and a line-by-line text
+  comparison. Each catches what the other cannot — the walk sees `100` becoming `100.0`
+  and a reordered key, the text comparison sees a changed indent and a missing trailing
+  newline. Every `Fraction` is rendered as a string and so is not a float leaf: the
+  exactness claims the artifacts carry (`ceiling_exact`, `t_star`, `max_v_act`) still
+  compare character for character, as do all counts, ids, bools, nulls, list lengths
+  and the key order itself. Each of those has its own negative control in
+  `tests/test_reproduction.py`. Only `entropy-baseline.json` and `voi-ceiling*.json`
+  move to the tolerance; every other committed artifact, including
+  `entropy-baseline.md`, stays byte for byte.
+
+- **AB3 — the oracle's `argmax_q VoI` tie-break is declared.** On some cases the three
+  real questions come out at exactly equal VoI, and `max()` resolved the tie by the
+  last bit of a float sum — so the oracle's pick, and the agreement count computed from
+  it, moved with the interpreter. This is the S4 failure mode a fourth time: a rule
+  selecting on a quantity whose tie structure the rule never consulted. `ARGMAX_DECIMALS
+  = 12` now rounds before comparing and `ARGMAX_TIE_BREAK` names the resolution
+  (declaration order in `QUESTIONS`). The tied set is recorded per case, because
+  `by_question` is stripped from the JSON and the tied set would otherwise be the one
+  fact about the tie that nothing keeps.
+
+- **AB4 — the grid crosscheck reports a plateau, not a witness.** `grid_crosscheck`
+  returned one point as *the* argmax. 1185 of the 115351 points at `n = 60` attain the
+  maximum to 12 decimals, so the claim was slightly false before it became unstable —
+  which point got reported was decided by the same last bit. It now reports
+  `n_grid_points_attaining_the_max`, `grid_points_searched`, `grid_argmax_is_unique:
+  false`, and a declared `GRID_TIE_BREAK` (lowest `(hot, warm, b_h)`). The reported
+  point moves from `hot 0.2667, warm 0.7` to `hot 0.1333, warm 0.8333`; both are on the
+  plateau, and no file cites the point.
+
+- **AB5 — residuals print `0` or `~0`, never three significant figures of summation
+  order.** `-2.22e-16` in an invariant table reads as a measurement to three digits
+  when it is the order the terms were added in. `_resid` prints exact zero as `0`,
+  anything below the 1e-12 tolerance as `~0`, and a real value in full, with
+  `RESIDUAL_LEGEND` printed under the table. Exact `0` is preserved as its own symbol
+  because X2's "recomputed and committed ceilings agree to the last bit" claim is the
+  difference between an exactly-zero residual and a below-tolerance one. A magnitude
+  bound like `< 1e-12` was rejected: `invariant_2_min_slack` is signed, and a bound
+  drops the sign.
+
+- **AB6 — the Python floor is 3.12, declared in one place and asserted against three.**
+  A reproducibility claim that silently depends on the interpreter is the same class of
+  gap as v1's unrecorded model id (L10): the artifact was produced under conditions the
+  artifact does not record. Two committed claims genuinely need ≥ 3.12 —
+  `ceiling_agreement.max_ceiling_delta == 0.0` exactly on all four arms, and
+  `entropy-baseline.md`'s `0`-versus-`~0` cells — so the floor is real, not cosmetic.
+  `MIN_PYTHON` in `tests/reproduction.py` is the single declaration; `WHY_MIN_PYTHON`
+  carries the reason; and three tests pin it to the CI matrix, to the README, and to
+  the running interpreter, so none of the three can drift alone. A fourth asserts the
+  matrix runs the floor itself, since a floor no leg tests is a claim nothing checks.
+  The matrix moves from `["3.10", "3.12"]` to `["3.12", "3.13", "3.14"]`; the 3.10 leg
+  it replaces could not pass.
+
+- **AB7 — correction: the agreement count does not move.** I reported it as 29 → 30 in
+  published and 26 → 27 in raw. Under the declared tie-break both interpreters produce
+  29 and 26, which are the committed values, so the requirement that the change touch
+  no paper line or decision file is satisfied because there is no change. What the
+  declared tie-break does expose is new and material: the oracle's pick needed the
+  tie-break on 13 of 50 test cases on published and 12 of 50 on raw. On a tied case,
+  agreement with argmax-IG is an artifact of the tie-break rather than evidence that
+  the two rules select alike, so "agrees on 29 of 50" is now reported next to the tie
+  count in both the JSON and the markdown, and neither number may be quoted alone.
+
+| # | Resolution | Provenance | Status |
+| --- | --- | --- | --- |
+| AB1 | The five failures are CPython 3.12's compensated `sum()`, not an OS difference; 818 of 826 differing leaves are floats within 1.110e-15, and the surviving 8 are discrete. The `libm` and hash-order hypotheses were disproved | (AI-proposed) | **changed** |
+| AB2 | `tests/reproduction.py` forgives only a float-versus-float leaf within 1e-9, running a parsed walk and a line comparison because each catches what the other cannot. `Fraction` strings, counts, ids, bools, nulls, lengths and key order stay exact; only the three JSON artifacts move off byte comparison | (AI-proposed) | **confirmed** |
+| AB3 | The oracle's `argmax_q VoI` tie-break is declared — rounding at 12 decimals, then declaration order in `QUESTIONS` — and the tied set is recorded per case. S4 a fourth time | (Kaps-decided) | **changed** |
+| AB4 | The grid crosscheck reports the 1185-point plateau, the 115351 points searched, `grid_argmax_is_unique: false` and a declared lowest-`(hot, warm, b_h)` tie-break, instead of a witness that was never unique | (Kaps-decided) | **changed** |
+| AB5 | Residuals render as `0` (exactly zero) or `~0` (below the 1e-12 tolerance) with a printed legend, never as three significant figures of summation order. A magnitude bound was rejected because `invariant_2_min_slack` is signed | (AI-proposed) | **confirmed** |
+| AB6 | The floor is Python 3.12, declared once as `MIN_PYTHON` and asserted against the CI matrix, the README and the running interpreter, with a fourth test requiring the matrix to run the floor. An interpreter-dependent reproducibility claim is an L10-class gap | (Kaps-decided) | **confirmed** |
+| AB7 | Correction: the agreement count does not move — 29 published and 26 raw on both interpreters. The material new number is the tie count, 13 of 50 published and 12 of 50 raw, which qualifies the agreement figure and is reported beside it | (AI-proposed) | **changed** |
+

@@ -2,14 +2,21 @@
 The Gate 4 belief arms, and the guard that pins Gate 1's artifact.
 
 The load-bearing test here is
-`test_the_published_arm_reproduces_the_committed_artifact_byte_for_byte`. Gate 4
+`test_the_published_arm_reproduces_the_committed_artifact`. Gate 4
 adds three new belief sources to `experiments/voi_ceiling.py`, and the risk in
 doing that is not a wrong new number — it is a silently changed old one. If the
 refactor that introduced `--arm` shifted a key, rounded differently, or reordered
 the findings dict, every Gate 4 contrast would be measured against a moved
-baseline while still being described as Gate 1's. Comparing the rendered JSON byte
-for byte against the committed `results/voi-ceiling.json` is what makes "the arms
+baseline while still being described as Gate 1's. Comparing the rendered JSON
+against the committed `results/voi-ceiling.json` is what makes "the arms
 are a superset of Gate 1, not a revision of it" checkable.
+
+That comparison was byte-for-byte until the grid crosscheck's float columns turned
+out to depend on the CPython version. It now runs through
+`tests/reproduction.py`, which forgives a float-versus-float leaf by 1e-9 and
+nothing else: the `Fraction`s this file's exactness claims live in are string
+leaves, and a shifted key, a changed count, a reordered dict and a changed list
+length all still fail.
 
 The other tests here assert the two pre-registered falsifiers that are properties
 of the committed map rather than of any arm's decisions: that the stored knots
@@ -33,6 +40,8 @@ from fractions import Fraction
 from pathlib import Path
 
 import pytest
+
+import reproduction
 
 ROOT = Path(__file__).resolve().parents[1]
 COMMITTED = ROOT / "results" / "voi-ceiling.json"
@@ -91,14 +100,20 @@ def report(vca):
 # The guard
 # --------------------------------------------------------------------------- #
 
-def test_the_published_arm_reproduces_the_committed_artifact_byte_for_byte(vc):
+def test_the_published_arm_reproduces_the_committed_artifact(vc):
+    """Within float tolerance, not byte-for-byte — see tests/reproduction.py.
+
+    If this fails, Gate 4's contrasts are being measured against a moved baseline
+    while still being labelled Gate 1's.
+
+    The exact results in this file are `Fraction`s rendered with `str`, so they are
+    string leaves and still compare exactly; the grid crosscheck's columns are floats
+    and are the reason a byte comparison cannot hold across CPython versions.
+    """
     rows, source = vc.load_arm("published")
     findings = vc.build_findings(rows, source, grid=60)
     rendered = json.dumps(findings, indent=2, default=str)
-    assert rendered == COMMITTED.read_text(encoding="utf-8"), (
-        "the published arm no longer reproduces results/voi-ceiling.json. Gate 4's "
-        "contrasts would be measured against a moved baseline while still being "
-        "labelled Gate 1's.")
+    reproduction.assert_reproduces(rendered, COMMITTED)
 
 
 def test_the_published_source_string_is_the_one_gate_one_wrote(vc):
@@ -263,7 +278,7 @@ def test_the_arms_script_makes_no_api_calls():
 def test_the_arms_report_reproduces_the_committed_artifact(vca, report):
     """The arms artifact carries no timestamp, so it is reproducible from cache."""
     rendered = json.dumps(report, indent=2, default=str)
-    assert rendered == COMMITTED_ARMS.read_text(encoding="utf-8")
+    reproduction.assert_reproduces(rendered, COMMITTED_ARMS)
 
 
 def test_the_arms_markdown_reproduces_the_committed_artifact(vca, report):
