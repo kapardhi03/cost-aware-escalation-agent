@@ -1899,3 +1899,180 @@ disappearing, so neither half can be quoted without the other.
 | AJ10 | The three-questions sentence names one closed, one mostly answered, one open | (Kaps-decided) | **confirmed** |
 | AJ11 | Turn boundary, summary paragraph and AI-use statement untouched; AG11 discharged | (AI-proposed) | **confirmed** |
 | AJ12 | Z21 registered against future-work prose promising what the theorem disproves; the sentence it was raised against does not exist in `main.tex`, so the rule is prospective | (Kaps-decided) | **noted** |
+
+## The paper edit — the Introduction and Related Work read against the rewrites
+
+The section-by-section pass worked forward from the theorem section, so everything
+before it was still v1 prose. Read end to end against the rewritten sections, `:1`
+through `:742` carried twelve inconsistencies: five contradictions, three
+under-qualifications, two mis-descriptions of the paper itself, and two declaration
+gaps. All twelve are fixed in one pass. Two of the four items the instruction named
+could not be done as specified, and the reason is recorded rather than worked around.
+
+- **AK1 — the block is prefixed AK, not AJ.** AJ1–AJ12 are committed against the
+  Conclusion, and the instruction's AJ1–AJ8 point at findings from this read instead.
+  Reusing the prefix would give two different decisions the same identifier in the
+  same document, which is the one thing an index cannot survive. AK continues the
+  sequence.
+
+- **AK2 — the band claim the instruction asked to replace is not in the Introduction,
+  and no sentence before the theorem section makes it.** The two sites named, `:104`
+  and `:683`, are the abstract's uniform-baseline sentence and a row of
+  `tab:results`; neither mentions asking. Across the whole file "band" appears once
+  before the theorem section, now `:565`, and it is a different and true claim: every
+  threshold in (0.2, 0.3] produces identical decisions on these cases, so `3/13` is
+  one arbitrary point inside a band the measurement cannot resolve. That is a band of
+  thresholds, not a region where a question wins, and the theorem does not touch it.
+  Replacing it with "no band, max −2/13" would have deleted a true statement and
+  substituted a claim about a different quantity. Left as written.
+
+- **AK3 — the instruction's content was written into the Introduction as an addition
+  instead.** The defect it was aimed at is real and larger than one sentence: nothing
+  in `:1`–`:742` mentioned the theorem, the ceiling, `2/13`, value of information,
+  `c_F/ν + c_T/α < 1` or `1/5`, all six of which grep to zero hits there. The reader
+  met the paper's one data-independent result with no preparation for it. The new
+  paragraph states the bound at every belief in the simplex, that there is no narrow
+  middle band in which asking wins, that the coarseness of the elicited belief is not
+  what hides one, horizon-independence, the portable condition with its 6.25% margin,
+  and the constrained carve-out at `b_h < 1/5` on the hot ray with its emptiness in
+  this set. An addition, not a replacement, and flagged as one because the map does
+  not carry it.
+
+- **AK4 — the scope overclaim.** "We report both comparisons rather than only the
+  favourable one" was true of v1 and false of v2, which has three. The uniform
+  baseline's equivalence to a plain 0.5 threshold on all 100 cases now appears in the
+  Introduction, where it weakens the 1.72-against-2.58 gap at the point the gap is
+  first claimed, and the threshold sweep that selects escalate-everything is named as
+  the third and least favourable comparison. The abstract already carried the first
+  qualifier; the Introduction did not.
+
+- **AK5 — "the fix is recalibration, not a redesign of the state" is withdrawn.** The
+  AI7 shape at the top of the paper: a direction the later sections disprove. It is
+  now "the first fix to try", which is what §7 says, and the held-out outcome travels
+  with it in the same paragraph — all three measures improve and the policy stops
+  choosing *answer* at all, because the map cannot emit a probability low enough.
+  Stated without the cost and miss numbers, because on that half misses do fall 7 to
+  2 while mean cost rises 1.40 to 1.50, and "changes no decision for the better" would
+  be false.
+
+- **AK6 — "under-confident in exactly the range that suppresses escalation" is
+  deleted.** §7 puts that phrase in quotation marks to reject it: the bin containing
+  `3/13` is the one that reads slightly over-confident, with a Wilson interval
+  covering its prediction, and the under-confidence is in its neighbours. The
+  Introduction had been half-patched — "in two of the bins nearest the threshold" is
+  right — and then re-asserted the rejected phrasing in the same sentence.
+
+- **AK7 — the sign collision on calibration, two sites.** Related Work and the Agent
+  design's Belief paragraph both said overconfidence is "exactly the failure the
+  results show", while §7 measures under-confidence on the marginal that decides.
+  Both words are used as measured predicted-against-observed directions throughout
+  §6.6 and §7, so a reader carried the wrong sign into the results. The `guo2017`
+  finding stays theirs and stays as they report it; what this
+  paper measures is now stated as its own direction — a needs-human probability read
+  too low, which is under-confidence against observed frequency. Pre-existing in v1,
+  not created by the rewrites.
+
+- **AK8 — the second Y5b site.** The Agent design's Policy paragraph said *ask*'s
+  value "is mostly the better belief it buys next turn, which a one-step rule cannot
+  see". Both halves are refuted by the sections that came after it: the necessary
+  condition for positive value of information fails at every belief, so asking loses
+  on its fee before any continuation is counted, and it still loses by the full
+  ceiling on the 16 published pairs where the continuation term is exactly zero. The
+  shipped policy is `W_1`, which does price the continuation. Replaced with the fee
+  mechanism. Y5b's falsifier is the claim withdrawn once, in Limitations; this was a
+  re-assertion of it 900 lines earlier.
+
+- **AK9 — there are no bare-"floor" stragglers before the theorem section.** The
+  instruction called this the last batch surfaced by the back-to-front read. It is
+  empty: "floor" occurs once in `:1`–`:742`, at `:123`, and it is the qualified
+  reachable-score floor in the abstract, written that way in the abstract pass. This
+  was reported at the end of the previous pass and is recorded here rather than
+  answered with an edit.
+
+- **AK10 — the roadmap named neither spine.** It listed six sections and skipped
+  `sec:unused` and `sec:calibration`, so the impossibility theorem and the held-out
+  fit were both unannounced. Both are subsections of Results, so they are named
+  inside that clause rather than given their own sentences.
+
+- **AK11 — Metrics declared one of three measures.** §6.6 reports "all three proper
+  scoring rules named in advance"; the subsection where the paper says what it
+  measures listed expected calibration error alone. Cross-entropy and Brier are now
+  declared there, scoped to the held-out fit and marked as fixed before it. The L10
+  shape: a claim whose conditions the artifact does not record.
+
+- **AK12 — the bare 0.142.** AH11 attached populations to both expected calibration
+  errors in the abstract because §6.6 reports 0.1526 on the re-elicited test half.
+  The Introduction's unqualified 0.142 is the same confusability, D4's shape rather
+  than falsity, and now carries "of those 100 cases".
+
+- **AK13 — "it has a known cost of its own".** Related Work sent the reader to
+  Limitations for a cost that Limitations withdraws: what survives there is that
+  being myopic is safe on this matrix, with the cost hypothetical on a matrix
+  satisfying the condition. The paragraph self-corrected two sentences later, so only
+  the framing was wrong. Rewritten to make the cost conditional from the start.
+
+- **AK14 — what the pass did not touch.** The threshold band at `:565`, which is true
+  and about a different object (AK2); the problem-statement seed and its note, which
+  are verbatim by rule; the abstract, which was rewritten in its own pass; and every
+  section from the theorem onward, all of which this read used as the reference.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AK1 | Block prefixed AK; the instruction's AJ1–AJ8 collide with the committed Conclusion rows | (AI-proposed) | **changed** |
+| AK2 | No band claim about asking exists before the theorem section; `:104` and `:683` are the abstract's baseline sentence and a table row; `:565`'s threshold band is true and left as written | (AI-proposed) | **changed** |
+| AK3 | The theorem written into the Introduction as an addition: no band, ≤ −2/13 everywhere, coarseness not the cause, horizon-independent, the condition, the carve-out at `b_h < 1/5` | (Kaps-decided) | **confirmed** |
+| AK4 | Three comparisons, not two; the 0.5-threshold equivalence moved to where the gap is first claimed | (Kaps-decided) | **confirmed** |
+| AK5 | "The fix is recalibration" → "the first fix to try", with the held-out outcome in the same paragraph and no cost or miss numbers | (AI-proposed) | **confirmed** |
+| AK6 | "Under-confident in exactly the range that suppresses escalation" deleted; §7 rejects that phrase by name | (AI-proposed) | **confirmed** |
+| AK7 | The overconfidence/under-confidence sign fixed at both sites; guo2017's finding left as theirs | (AI-proposed) | **confirmed** |
+| AK8 | *Ask*'s value is not mostly the next-turn belief and a one-step rule does price it; replaced by the fee mechanism | (AI-proposed) | **changed** |
+| AK9 | No bare-"floor" instances exist before the theorem section; the batch is empty | (AI-proposed) | **noted** |
+| AK10 | The roadmap now names `sec:unused` and `sec:calibration` | (AI-proposed) | **confirmed** |
+| AK11 | Metrics declares cross-entropy and Brier alongside ECE, scoped to the held-out fit | (AI-proposed) | **confirmed** |
+| AK12 | The Introduction's 0.142 carries its population, per AH11 | (AI-proposed) | **confirmed** |
+| AK13 | Related Work's "known cost of its own" made conditional, matching what Limitations leaves standing | (AI-proposed) | **confirmed** |
+| AK14 | `:565`, the problem-statement seed, the abstract and everything from the theorem onward untouched | (AI-proposed) | **confirmed** |
+
+## The paper edit — naming the baseline behind the cost win
+
+The cost result is a comparison against two baselines that answer in opposite
+directions: a reduction of a third against the uniform-cost baseline, and no
+reduction at all against always-notify. Every site stating the first is now
+required to name which baseline it is against, and every site stating a
+human-load number is required to name the population it is counted over. Both
+are the D4 discipline — a numeric claim whose scale or denominator the claim
+never states — applied to the two places the paper is easiest to misread.
+
+Three rulings arrived before this pass proposing that `2.58` be deleted, that it
+was `always_notify` misattributed, and that it was a cross-population figure
+compared against a test-split number. `results/run.json` refuted each. The
+recorded ground truth, same population, `summaries.test`, n = 50:
+`policies.cost_aware.mean_cost = 1.72` (`total_cost` 86),
+`policies.always_notify.mean_cost = 1.74` (87), and
+`policies.uniform_baseline.mean_cost = 2.58` (129). The same three means hold at
+`summaries.dev` and `summaries.all`, because the halves were stratified by
+archetype and sub-variant and balanced on the needs-human count. There is no
+`summaries.hard` key; `summaries` holds exactly `dev`, `test`, `all`. So no cost
+comparison in the paper was cross-population, and the locked always-notify caveat
+matched the artifact on a single population and was confirmed rather than revised.
+
+The uniform baseline is not random. `src/costs.py:109-112` derives `UNIFORM_COST`
+by replacing every non-zero cost with `1.0`, holding the belief, the feasible set
+and the expected-cost machinery fixed. "Uniform-random" was proposed for the
+falsifier and is not written anywhere, because it would misdescribe the control.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AL1 | Block prefixed AL; AK1–AK14 are the Introduction read-back and this is a separate pass | (AI-proposed) | **confirmed** |
+| AL2 | `2.58` kept at every site: it is `uniform_baseline`, same population as every other headline cost, and the design's only control for the asymmetry | (Kaps-decided) | **changed** |
+| AL3 | The paper is not re-led on the theorem and the reachable-score floor; the uniform-baseline cost win is real and stays a reported result | (Kaps-decided) | **changed** |
+| AL4 | The locked always-notify caveat confirmed against `summaries.test`, not revised: 172 against 174 over 100, one point in 87 on each half | (Kaps-decided) | **confirmed** |
+| AL5 | Both baselines named wherever the cost win appears — abstract, Introduction, §7.1, Conclusion — so `2.58` cannot read onto always-notify | (Kaps-decided) | **confirmed** |
+| AL6 | "A reduction of a third" never stated without naming the uniform-cost baseline in the same sentence or the next | (Kaps-decided) | **confirmed** |
+| AL7 | §7.2's threshold sweep labels its populations: the `t = 0.35`/`t = 0.25` bracket is all 100, the tuning is the 50 development cases | (AI-proposed) | **confirmed** |
+| AL8 | The dev-tuned selection disclosed as dev-specific — on the test half `t = 0.05` and `t = 0.10` cost 1.68 against `t = 0.00`'s 1.740 | (AI-proposed) | **noted** |
+| AL9 | Human-load numbers carry their population: 43 of 100 and 0.605 against 0.420 are all-100; the test half is 20 of 50 at 0.65 against 0.42 | (Kaps-decided) | **confirmed** |
+| AL10 | No interval is claimed on the always-notify cost difference, because none was computed; `robustness.json` bootstraps ECE only | (AI-proposed) | **confirmed** |
+| AL11 | `\label{sec:tie}` added so §7.1 can point at the near-tie subsection rather than restating it | (AI-proposed) | **confirmed** |
+| AL12 | "Uniform-random" not written anywhere; the baseline replaces every non-zero cost with one and is not random | (AI-proposed) | **changed** |
+

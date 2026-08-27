@@ -1857,3 +1857,98 @@ or a better question model as a route to making *ask* worthwhile on this matrix,
 because the theorem disproves that direction at every belief and every depth. It is
 satisfied vacuously today, which is the honest status to record rather than claiming
 a fix. Recorded as AJ12.
+
+### Gate 7 — the Introduction read back against the rewritten sections (2026-08-28)
+
+The section-by-section pass worked forward from the theorem section, which left
+everything before it in v1 prose. Reading `:1` through `:742` against the sections
+that had been rewritten found twelve inconsistencies: five contradictions, three
+under-qualifications, two places where the Introduction described a paper without a
+theorem in it, and two declaration gaps. The load-bearing ones were both in the
+Introduction. "This means the fix is recalibration, not a redesign of the state"
+promised the direction §6.6 disproves, and "under-confident in exactly the range that
+suppresses escalation" repeated a phrase §7 quotes in order to reject. All twelve are
+fixed in one pass, recorded as AK1–AK14.
+
+Two of the four items the instruction named could not be done as specified. There is
+no band claim about asking anywhere before the theorem section: the two sites named
+are the abstract's uniform-baseline sentence and a row of `tab:results`, and the one
+occurrence of "band" in that range is a true statement about thresholds — every
+threshold in (0.2, 0.3] decides these 100 cases identically, so `3/13` is one
+arbitrary point inside a band the measurement cannot resolve. That is a band of
+thresholds, not a region where a question wins, and overwriting it with the theorem's
+result would have deleted something true and replaced it with a claim about a
+different quantity. The defect behind the instruction is real and larger: the theorem,
+the ceiling, `2/13`, value of information, the condition and `1/5` all grep to zero
+hits before `:742`, so the Introduction never told the reader the paper contains a
+proof. It does now, as an addition rather than a replacement, and the addition is
+flagged as beyond the map. The other item, a last batch of bare-"floor" stragglers, is
+empty: "floor" occurs once in that range, in the abstract, already qualified as the
+reachable-score floor.
+
+Verified after the pass: `python3 tests/paper_preflight.py paper/main.tex` PASS, with
+19 labels, 17 distinct references, 5 of 5 citations, 1 graphic and 4 tabulars, all
+unchanged; 772 tests passing; no banned token, and the protected-token counts
+unchanged; over-84 lines in
+`main.tex` down from six to five, the sixth being a v1 line at 116 characters that
+this pass rewrapped. Every number written is already in the abstract, §4, §6.6, §7,
+§7.2 or Limitations. Nothing was computed.
+
+### Gate 7 — naming the baseline behind the cost win (2026-08-28)
+
+Three rulings in three turns proposed tearing out `2.58`: that it was a
+cross-population figure, that it was `always_notify` misattributed, and that the
+reduction of a third was an inflated near-tie. `results/run.json` refuted each one,
+and the refutation is the same three lines every time. Same population,
+`summaries.test`, n = 50: `policies.cost_aware.mean_cost` 1.72 on `total_cost` 86,
+`policies.always_notify.mean_cost` 1.74 on 87, `policies.uniform_baseline.mean_cost`
+2.58 on 129. The same three means appear at `summaries.dev` and `summaries.all`,
+because the halves were stratified by archetype and sub-variant and balanced on the
+needs-human count. `summaries` holds exactly `dev`, `test` and `all` — there is no
+`summaries.hard`. So no cost comparison in the paper was ever cross-population, and
+the locked always-notify caveat was confirmed against the artifact rather than
+revised: 172 against 174 over all 100, one cost point in eighty-seven on each half,
+which is a near-tie and not a loss.
+
+What survived the three rulings was a real defect, narrower than any of them. The
+paper stated the reduction of a third in four places without naming which baseline it
+was against, and §7.1 stated it four subsections upstream of the near-tie that
+qualifies it. A reader arriving at the abstract could carry `2.58` onto always-notify
+and read a third off the strong baseline. That is fixed by naming both baselines
+wherever the cost win appears — abstract, Introduction, §7.1, Conclusion — and by
+giving the near-tie subsection a label so §7.1 can point at it instead of restating
+it.
+
+The one genuine mixed-population site was §7.2's threshold sweep. The bracket it
+quotes — 29 escalations at `t = 0.35` with 23 misses at cost 2.600, 46 at `t = 0.25`
+with 13 misses at 1.810 — is `threshold_rule.matched_load` in
+`results/robustness.json`, computed over all 100 cases, and it sat five lines from a
+selection tuned on the 50 development cases with neither population named. Both are
+named now. Checking it surfaced something the paragraph had not said: the dev-tuned
+selection is dev-specific. On the test half `t = 0.05` and `t = 0.10` both cost 1.68
+against `t = 0.00`'s 1.740, from `threshold_rule.sweep`, so tuning there by the same
+criterion would not have chosen escalate-everything. That sentence is an addition
+beyond what the ruling asked for and is flagged as one.
+
+Human-load numbers now carry their population everywhere they appear. 43 escalations
+of 100 and an escalation precision of 0.605 against 0.420 are all-100 figures; the
+test half is 20 of 50 against 50 of 50, at 0.65 against 0.42. §7.5 states both pairs,
+§8.3's recalibration load figures are scoped to the same 100, and no sentence mixes
+the two populations. No interval is claimed on the always-notify cost difference
+because none exists: `results/robustness.json` bootstraps ECE and nothing else, so
+Limitations says the difference is reported as a near-tie and nothing stronger.
+
+One term was proposed and not written. The falsifier as dictated said "against
+uniform-random". The baseline is not random — `src/costs.py:109-112` derives
+`UNIFORM_COST` by replacing every non-zero cost with `1.0`, holding the belief, the
+feasible set and the expected-cost machinery fixed. Writing "uniform-random" would
+have put a false description of the control into the paper, so the falsifier says
+uniform-cost.
+
+Verified after the pass: `python3 tests/paper_preflight.py paper/main.tex` PASS, with
+20 labels, 18 distinct references, 5 of 5 citations, 1 graphic and 4 tabulars — one
+more label and one more reference than before, both the new `sec:tie`; 772 tests
+passing; over-84 lines in `main.tex` down from five to four, the abstract's
+188-character line rewrapped by this pass. Every number written traces to
+`results/run.json` or
+`results/robustness.json` by key. Nothing was computed.

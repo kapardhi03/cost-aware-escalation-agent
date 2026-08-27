@@ -575,6 +575,23 @@ new at this gate and comes from the float fix.
 - Anything computed at this gate. No new number, no edit to a committed artifact, no
   API call. A result that appears in the paper and in no artifact on this branch is the
   clearest possible failure of this document.
+- **A cost comparison that does not name its baseline and its population.** Every cost
+  comparison in the paper names which baseline it is against and which set of cases it
+  is counted over. The reduction of a third never appears without naming that it is
+  against the uniform-cost baseline and not against always-notify; the always-notify
+  comparison never appears without being stated as a near-tie with the advantage
+  located in human load. Every human-load number names its population: 43 escalations
+  of 100 and an escalation precision of 0.605 against 0.420 are all-100 figures, and
+  the test half is 20 of 50 at 0.65 against 0.42. No sentence mixes an all-100 figure
+  with a test-split one. The word "split" is not used where "population" is meant,
+  because the headline table is all 100 cases while `tab:calibration` is the 50 test
+  cases. This is D4's shape again, applied to the number the paper is easiest to
+  misread: three separate rulings read `2.58` as always-notify's cost, and
+  `summaries.test.policies` in `results/run.json` refuted all three
+  (`cost_aware` 1.72 / 86, `always_notify` 1.74 / 87, `uniform_baseline` 2.58 / 129,
+  the same means at `summaries.dev` and `summaries.all`). The baseline is also never
+  called uniform-*random*: `src/costs.py:109-112` replaces every non-zero cost with
+  one, and nothing about it is random.
 - Any framing of this work as coursework, as a scheduled unit of delivery, or as a
   submission — in the paper, the repository, a filename, or a commit message. This is a
   standalone research repository and the paper is a preprint.

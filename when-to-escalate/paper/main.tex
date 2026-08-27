@@ -101,15 +101,22 @@ rather than a priced term.
 
 We test on 100 synthetic cases with cached language-model beliefs, comparing the
 cost-aware policy against the same policy with a uniform cost matrix and against
-three fixed-action baselines. The cost-aware policy reaches a mean cost of 1.72
-against 2.58 for the uniform-cost version, so the asymmetry does most of the
-work --- though the uniform baseline turns out to select the same action as a plain
-$0.5$ threshold on all 100 cases, and reweighting the case set toward the design's
-own readiness prior moves the gap from 0.86 to 1.07 rather than closing it, so the result's direction is robust to reweighting even as its magnitude shifts. Against a policy that escalates
-every message the result is close to a tie
-on cost, 1.72 against 1.74, but the cost-aware policy reaches it while escalating
-43 times out of 100 rather than all 100, so the gain there is in human load, not
-cost. Every missed escalation traces to one cause: the belief under-estimated the
+three fixed-action baselines. Two of those baselines give opposite answers, so
+both are named wherever the cost result appears. Against the uniform-cost version
+of the same rule --- same belief, same feasible set, only the asymmetry removed
+--- the cost-aware policy reaches 1.72 against 2.58 over all 100 cases, a
+reduction of a third; that gap is what cost-awareness buys, and it is against that
+baseline and no other. Against always-notify, which escalates every message, there
+is no cost win: 1.72 against 1.74 over the same 100 cases is a near-tie, a total
+of 172 against 174, so the cost-aware policy is not
+the cheaper policy and is not claimed to be. What it buys there is human load
+rather than cost --- over all 100 cases it reaches the same cost while escalating
+43 times rather than 100, at an escalation precision of 0.605 against 0.420. The
+uniform-baseline gap is also not all machinery: that baseline selects the same
+action as a plain $0.5$ threshold on all 100 cases, and reweighting the case set
+toward the design's own readiness prior moves the gap from 0.86 to 1.07 rather
+than closing it, so the direction is robust to reweighting even as the magnitude
+shifts. Every missed escalation traces to one cause: the belief under-estimated the
 needs-human probability rather than misreading readiness. Expected calibration error
 on that marginal is 0.142 (bootstrap 95\% CI $[0.100, 0.249]$), concentrated in the
 bins adjacent to the escalation threshold rather than the bin containing it;
@@ -193,25 +200,63 @@ as a high price but as a hard constraint that removes the answer action
 entirely.
 
 The contribution is not a new algorithm. The decision rule is a textbook
-one-step Bayes decision. The contribution is a careful and honest account of
-what cost-awareness actually buys on this problem, and where it does not help.
+one-step Bayes decision. What this paper adds is an account of what
+cost-awareness actually buys on this problem and where it does not help, and one
+result that does not depend on the data at all: a proof that under these costs a
+question can never pay, together with the condition on a cost matrix under which
+one could.
 Over 100 synthetic cases with cached language-model beliefs, the cost-aware
-policy reaches a mean cost of 1.72 against 2.58 for the same policy stripped of
-its cost asymmetry, a real gain from making the trade-off explicit. But against
-a policy that simply escalates everything, the cost is close to a tie, 1.72
-against 1.74. What the cost-aware policy buys there is not lower cost but far
-less human load, reaching the same cost while escalating 43 times instead of
-100. We report both comparisons rather than only the favourable one.
+policy reaches a mean cost of 1.72 against 2.58 for the uniform-cost baseline ---
+the same rule with every non-zero cost replaced by one, so that the belief, the
+feasible set and the expected-cost machinery are held fixed and only the asymmetry
+is removed. That is a reduction of a third, it is measured over all 100 cases, and
+it is against that baseline and no other. Not all of the gap is the asymmetry
+either. The uniform-cost baseline turns out to select the same action as a plain
+$0.5$ threshold on the needs-human probability on all 100 cases, so part of the
+distance is $0.5$ against the threshold the costs imply. Against always-notify,
+which simply escalates every message, there is no cost win at all: 1.72 against
+1.74 over the same 100 cases is a near-tie, a total of 172 against 174, and
+what the cost-aware policy buys there is not lower cost but far less human load,
+reaching the same cost while escalating 43 times rather than 100 and holding an
+escalation precision of 0.605 against 0.420 on that same set of 100. A third
+comparison is less favourable still and is reported with the other two: no
+threshold on that probability reproduces the policy's operating point at all, and
+tuning one on the 50 development cases by realised cost selects
+escalate-everything.
 
 The failure analysis is where the design earns or loses trust. Every missed
 escalation traces to a single cause: the belief under-estimated the needs-human
 probability, and did not misread readiness. The model is measurably
-under-confident on that one marginal in two of the bins nearest the threshold, with an expected calibration error of
-0.142 on needs-human, under-confident in exactly the range that suppresses
-escalation. This means the fix is recalibration, not a redesign of the state. We
+under-confident on that one marginal, with an expected calibration error of 0.142
+on the needs-human probabilities of those 100 cases --- but not in the bin the
+threshold falls in, which is the one bin that reads slightly over-confident. The
+under-confidence is in its neighbours, and the mechanism is that a large mass of
+cases sits pinned just below the line. So the first fix to try is recalibration
+rather than a redesign of the state. Section~\ref{sec:calibration} tries it on
+held-out cases and reports what it buys: all three calibration measures improve,
+and the policy that follows stops choosing \emph{answer} at all, because the
+fitted map cannot emit a probability low enough for answering to be cheapest. We
 also report a failure the test set cannot even exhibit by construction, a
 high-cost message dropped when batched with a routine one at a turn boundary,
 observed in a live run and named as a limitation rather than hidden.
+
+Two of the five actions are never chosen, and the reason is not that the case set
+never called for them. Scoring \emph{ask} by the value of the information it buys
+yields a bound rather than a measurement: on the unconstrained action menu the
+value of one more question is at most $-2/13$ at every belief in the simplex.
+There is no narrow middle band in which asking wins, and the coarseness of the
+elicited belief is not what hides one --- a re-elicited belief carrying 100
+distinct values leaves the region exactly as empty. The bound also holds at every
+node of a lookahead tree, so it is not an artefact of the one-step horizon.
+Asking is not underpriced here; it is priced, and it loses at every depth. What
+transfers off this matrix is the condition behind the bound. Writing $c_F$ and
+$c_T$ for the price of a question when no human is needed and when one is, $\nu$
+for a needless escalation and $\alpha$ for a false answer, a question can be
+rational at some belief only if $c_F/\nu + c_T/\alpha < 1$; these costs give
+$16/15$ and miss it by 6.25\%. The one place the bound turns positive is the
+constrained menu, where the hard constraint has removed \emph{answer}: there it
+is positive for $b_h < 1/5$ on the hot ray, and
+Section~\ref{sec:unused} reports that no case in this set falls inside it.
 
 The rest of the paper is organized as follows.
 Section~\ref{sec:related} places the work against learning-to-defer and
@@ -219,7 +264,11 @@ selective-prediction literature and records the design changes that came from
 public discussion with practitioners. Section~\ref{sec:design} gives the agent
 design. Section~\ref{sec:model} gives the probability model and decision rule.
 Section~\ref{sec:method} describes the test. Section~\ref{sec:results} reports
-results, Section~\ref{sec:failure} the failure analysis, and
+results, including Section~\ref{sec:unused}, which proves that two of the five
+actions cannot be chosen under this cost matrix, and
+Section~\ref{sec:calibration}, which re-elicits the belief and fits a calibration
+map on one half of the cases to score it on the other.
+Section~\ref{sec:failure} gives the failure analysis and
 Section~\ref{sec:limitations} the limitations, ethics, and human-control
 considerations.
 
@@ -249,21 +298,25 @@ thresholded at all depends on calibration. \citeauthor{guo2017}~\shortcite{guo20
 show that modern
 networks trained with a proper scoring rule are still often overconfident, and
 give the expected calibration error and reliability diagram used in
-Section~\ref{sec:results}. Overconfidence matters here in a specific way: it
-makes automated actions look cheaper than they are and suppresses escalation,
-which is exactly the failure the results show.
+Section~\ref{sec:results}. Their diagnosis matters here, though the sign this paper
+measures is the other one. What suppresses escalation is a needs-human probability
+read too low, which makes the automated actions look cheaper than they are;
+against observed frequency the belief reads under-confident on that marginal, and
+the calibration reported in Section~\ref{sec:results} is of that marginal rather
+than of the belief as a whole.
 
 Finally, the problem is framed as a POMDP, where the true state is hidden and the
 agent acts on a belief \cite{kaelbling1998}. Exact planning over belief space is
 intractable, so this work solves the one-step problem myopically: it minimises
 immediate expected cost under the current belief and does not plan over future
-beliefs. This is a deliberate scope choice, not an oversight, and it has a known
-cost of its own, discussed in Section~\ref{sec:limitations}: a one-step rule
-cannot price the better belief a question buys on the next turn. Whether that
-costs anything depends on the cost matrix, and on the one used here it does not
---- Section~\ref{sec:unused} shows the value of a question is negative at every
-belief on the unconstrained action menu, so planning further ahead would change
-no decision there.
+beliefs. This is a deliberate scope choice rather than an oversight, and what it
+costs depends on the cost matrix. A one-step rule carries no machinery that prices
+the better belief a question buys on the next turn, but on the costs used here
+that machinery would change no decision:
+Section~\ref{sec:unused} shows the value of a question is negative at every
+belief on the unconstrained action menu, and that the bound holds at every depth.
+Section~\ref{sec:limitations} states what that does and does not license, and on
+what kind of matrix the horizon would cost something.
 
 \subsection{User discussions}
 Several design choices came from posting the problem to practitioners rather than
@@ -288,8 +341,12 @@ point raised was that training on a proper scoring rule pushes toward calibratio
 but does not guarantee it, so calibration has to be measured rather than assumed,
 and measured where the decision actually turns rather than uniformly. This is
 what Section~\ref{sec:results} does: the reported calibration error is on the
-needs-human marginal, in the probability range where the escalation threshold
-sits, because that is the range that decides whether a handoff happens.
+needs-human marginal, because that is the marginal the escalation threshold acts
+on. Measuring it there is also what showed the error is not where it was expected
+to be --- the bin containing the threshold is not the under-confident one, and the
+under-confidence sits in its neighbours. Section~\ref{sec:calibration} carries the
+same point further, fitting a calibration map on one half of the cases and scoring
+it on the other.
 
 Other exchanges shaped earlier design decisions without tying as directly to a
 reported result: separating ``cannot parse the input'' from ``understood but not
@@ -326,9 +383,9 @@ consistent with this independence rather than against it.
 given everything seen so far: a distribution over hot, warm, cold that sums to
 one, and a separate probability that the case needs a human. The belief comes
 from a language model rather than a trained classifier, which makes calibration
-the load-bearing assumption of the whole design. A language model's stated
-probabilities are often overconfident, and overconfidence makes automated actions
-look cheaper than they are, which suppresses escalation. So the belief is checked
+the load-bearing assumption of the whole design. A needs-human probability read
+too low makes the automated actions look cheaper than they are and suppresses
+escalation, and that is the direction the check finds. So the belief is checked
 against labeled cases before any threshold is trusted, and the check is reported
 rather than assumed.
 
@@ -355,13 +412,13 @@ Section~\ref{sec:model}.
 action under the current belief and picks the lowest. It is myopic: it reasons
 one step ahead and does not plan over how the belief might change on future turns.
 This is enough for the answer, hold, and escalate actions, whose cost can be
-judged against the current belief. The \emph{ask} action is the one whose value is
-mostly the better belief it buys next turn, which a one-step rule cannot see, so
-whether the horizon costs anything turns on how expensive asking is against acting
-now. Under the costs set here it does not, on the unconstrained action menu:
-Section~\ref{sec:unused} shows the value of a question is negative at every belief
-there, and Section~\ref{sec:limitations} states what that does and does not
-license.
+judged against the current belief. It is also enough for \emph{ask}, though for a
+reason particular to this cost matrix rather than by construction: a question's
+value is the belief it buys next turn less the fee it charges now, and here the
+fee alone is at least what acting now costs, at every belief.
+Section~\ref{sec:unused} proves the value of a question is negative at every
+belief on the unconstrained action menu and that the bound is horizon-independent,
+and Section~\ref{sec:limitations} states what that does and does not license.
 
 \paragraph{Feedback.} After acting, the agent would in principle observe whether
 the lead converted or whether an escalated case was resolved. That signal is
@@ -631,7 +688,10 @@ realised cost per case, the number of missed escalations (a case that needed a
 human but did not get one), escalation precision and recall, the number of
 escalations, the number of hard-constraint violations, and the calibration of the
 belief. Calibration is measured as expected calibration error on the needs-human
-marginal, since that is the probability the escalation threshold acts on.
+marginal, since that is the probability the escalation threshold acts on. Two
+further measures are reported for the held-out fit of
+Section~\ref{sec:calibration}, both fixed before it and both on the same marginal:
+cross-entropy and Brier score.
 
 \paragraph{Entropy thresholds.} One further quantity is measured in bits rather
 than in cost points, and it is defined here rather than where it is used, because a
@@ -707,9 +767,12 @@ not choose. It should not be read as the baseline discriminating well.}
 
 \subsection{What cost-awareness buys}
 The cost-aware policy reaches a mean cost of 1.72 against 2.58 for the uniform
-baseline, a reduction of a third over 100 shared beliefs. Because the two
-policies differ only in whether the cost matrix is asymmetric, this gap is what
-cost-awareness buys and nothing else. The two disagree on 46 of the 100 cases,
+baseline, a reduction of a third over 100 shared beliefs. That reduction is
+against the uniform-cost baseline and not against always-notify, which
+Section~\ref{sec:tie} reports as a near-tie on the same 100 cases; the two must
+not be read for each other. Because the two policies compared here differ only in
+whether the cost matrix is asymmetric, this gap is what cost-awareness buys and
+nothing else. The two disagree on 46 of the 100 cases,
 and the cost-aware policy is not cheaper on more of them: it is cheaper on 15,
 the baseline is cheaper on 18, and 13 are ties. It wins overall because its
 losses are small and its wins are large. Almost every swap it makes is answer to
@@ -731,13 +794,19 @@ $3/13$ rather than the asymmetry as such.
 A threshold sweep separates the two contributions, and it does not go cleanly. No
 threshold on $b_h$ reproduces the cost-aware policy's 43 escalations: because the
 elicited values are quantized, the sweep jumps from 29 escalations at $t = 0.35$
-(23 misses, cost 2.600) to 46 at $t = 0.25$ (13 misses, cost 1.810). The
-cost-aware policy's 16 misses at 43 escalations is therefore not straightforwardly
+(23 misses, cost 2.600) to 46 at $t = 0.25$ (13 misses, cost 1.810), both counted
+over the same 100 cases as Table~\ref{tab:results}. The
+cost-aware policy's 16 misses at 43 escalations, also over all 100, is therefore
+not straightforwardly
 better than a tuned threshold at matched load, because matched load is not
 attainable; the nearest bracketing thresholds are worse on one axis and better on
-the other. Tuning a threshold on the development half by realised cost selects
-$t = 0.00$ --- escalate everything --- at cost 1.740, which recovers the
-always-notify result rather than the cost-aware one.
+the other. Tuning a threshold on the 50 development cases by realised cost selects
+$t = 0.00$ --- escalate everything --- at a cost of 1.740, which is its cost on
+the development half, on the test half and over all 100 alike; it recovers the
+always-notify result rather than the cost-aware one. That selection is specific to
+the half it was tuned on: on the test half $t = 0.05$ and $t = 0.10$ both cost
+1.68 against $t = 0.00$'s 1.740, so tuning there by the same criterion would not
+have chosen escalate-everything.
 
 \subsection{Two actions that are never used, and why neither can be}
 \label{sec:unused}
@@ -907,14 +976,19 @@ $W_k$ removes it. The action most obviously suited to an ambiguous inbound messa
 is unused because it is priced out, not because it is unpriced.
 
 \subsection{The comparison that is a tie, not a win}
+\label{sec:tie}
 Against always-notify, which escalates every message, the cost result is close to
-a tie: 1.72 against 1.74. This is not a mistake in the design, it is a property of
+a tie: 1.72 against 1.74 over all 100 cases, a total of 172 against 174, and one
+cost point in eighty-seven on each half of the split. This is not a mistake in the
+design, it is a property of
 the cost matrix. A needless notify costs 3 and a false assertion costs 10, so
 escalating everything is cheap and is barely punished; blanket escalation almost
 never pays the expensive error. The honest claim here is therefore not that the
 cost-aware policy is cheaper than always-notify, because on cost it essentially is
-not. What it buys is human load. It reaches the same cost while escalating 43
-times out of 100 rather than all 100, at a precision of 0.605 against 0.420. The
+not. What it buys is human load. Over all 100 cases it reaches the same cost while
+escalating 43 times rather than 100, at an escalation precision of 0.605 against
+0.420; on the test half alone it escalates 20 of those 50 cases against
+always-notify's 50, at 0.65 against 0.42. The
 same outcome without dragging a person into more than half again as many
 conversations is the operational win, and it is a different claim from a cost win,
 so both are reported.
@@ -1214,7 +1288,8 @@ wrong way, and 1 is \texttt{a11-repeated-097} at $b_h = 0.00$. Recalibration als
 down into the over-confident 0.7--0.8 bin and switches from
 \emph{escalate-notify} to \emph{hold}.
 
-The cost is paid in human load. Escalations rise from 43 to 60, precision falls from
+The cost is paid in human load. Over the same 100 cases escalations rise from 43 to
+60, escalation precision falls from
 0.605 to 0.567, and recall rises from 0.619 to 0.810. Recalibration does not make
 the policy better on every axis; it buys recall with load, and 8 misses remain that
 no amount of recalibrating this marginal removes. That residual-miss floor, not the
@@ -1264,10 +1339,14 @@ judgment of what each message was written to represent, not outcomes observed fr
 real leads, so they carry the author's assumptions about intent.
 
 Two scope limits on the headline result belong here as well as in
-Section~\ref{sec:results}. The cost improvement is against the uniform baseline
-only: against always-notify the comparison is a near-tie, 1.72 against 1.74, so the
-cost-aware policy is not the cheaper policy and is not claimed to be. What it buys
-is human load --- it escalates 43 times out of 100 rather than all 100, at a
+Section~\ref{sec:results}. The cost improvement is against the uniform-cost
+baseline only. Against always-notify the comparison is a near-tie: over the same
+100 cases the two differ by two cost points in 174, 1.72 against 1.74, and by one
+in eighty-seven on each half of the split, so the cost-aware policy is not the
+cheaper policy and is not claimed to be. No interval is put on that difference,
+because none was computed; it is reported as a near-tie and nothing stronger. What
+it buys is human load --- over all 100 cases it escalates 43 times rather than
+100, at an escalation
 precision of 0.605 against 0.420 --- and that operational reduction, not a cost
 win, is the claim. The second is the development and test split. Both halves reach
 the same total cost, but the split was stratified by archetype and sub-variant and
@@ -1439,8 +1518,10 @@ answer, ask, hold, or escalate to a human in one of two ways, when the lead's
 readiness and whether they need a person are both hidden. The decision rule is a
 textbook one: minimise expected cost under a belief. The contribution is not the
 rule but an honest account of what it buys. Making the cost matrix asymmetric
-cuts mean cost by a third against the same rule without that asymmetry. Against a
-policy that simply escalates everything, it does not cut cost at all, and the
+cuts mean cost by a third against the uniform-cost version of the same rule, over
+all 100 cases. That third is against that baseline only. Against always-notify,
+which simply escalates everything, it does not cut cost at all --- 1.72 against
+1.74 on the same 100 cases --- and the
 paper says so; what it buys there is reaching the same cost while escalating fewer
 than half as often. Every missed escalation traces to the needs-human marginal
 rather than to the readiness marginal, which points at recalibration rather than
