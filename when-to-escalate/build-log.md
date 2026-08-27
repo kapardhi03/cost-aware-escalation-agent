@@ -1654,3 +1654,121 @@ work. The ignore names the PNG only; the `!…/*.pdf` un-ignore above it is what
 clean-clone compile depends on and is untouched.
 
 Recorded as AF1–AF14 in `decisions/v2-design-decisions.md`.
+
+### Gate 7 — Limitations: v1's myopia claim withdrawn (2026-08-28)
+
+The section v1 got wrong. `:947` claimed the policy is myopic and therefore undervalues
+the ask action, that the honest handling would be to compute its one-step value of
+information, and that `ask`'s absence from the census was the consequence. The middle
+clause is now false — Gate 5 and Gate 6 computed it — and the other two are the wrong
+direction. Asking is not underpriced by the one-step rule; it is priced, and it loses at
+every belief and every depth. So the paragraph is a withdrawal, not a qualification,
+and it says so.
+
+What survives is smaller and it is the honest part. The policy is myopic and carries no
+machinery that prices a question's downstream value: true, and still a limitation. The
+collapse that makes this harmless is a property of this cost matrix — `c_F/ν + c_T/α <
+1` is the condition, this matrix gives `16/15`, the break-even multiplier on the ask row
+is `15/16` — and the policy never checks it. Being myopic is safe here for a reason the
+code does not verify, and on a matrix that satisfied the condition the myopia would cost
+exactly what v1 said it costs. Both misreadings are named in the text: `2/13` is a floor
+on the gap and not an estimate of it, and the theorem bounds one more question inside a
+deeper policy on this matrix and this menu, not interaction design in general.
+
+The retraction is written once. `:250` and `:347` state the result and point at
+`sec:unused`; neither carries retraction language, because five wordings of one
+withdrawal is how one of them overreaches. The Conclusion's passage is the fifth and is
+left for its own pass, where the map assigns it a replacement by the answer rather than
+a retraction.
+
+Three further entries. OQ3: the value-of-information machinery simulates replies from
+the design's own model of the lead, so running it and finding it consistent is a
+self-consistency check of the implementation and nothing more. That is written as a
+bounded result rather than a hedge, and what bounds it is the theorem's independence
+from the answer model — it needs only non-negativity of the cost matrix, so the
+unvalidated model touches the per-case ceilings and the count of resolving questions,
+not the result that `ask` is never selected. Abstention, new at this pass: priced out
+under this matrix by column-wise dominance of `escalate-pause` by `escalate-notify` in
+all six columns, by between 1 and 3, with the scope stated as the matrix rather than the
+design space, since the costs are expert-set and §4 already shows at least one magnitude
+is load-bearing. And L1's two carried caveats now have their own paragraph instead of
+living only in §6: the cost result is against the uniform baseline only,
+always-notify is a near-tie at 1.72 against 1.74 and the win is human load, and the
+dev/test totals agree
+because the split was matched by construction.
+
+AD3's debt is one line: 89 of 100 beliefs reproduce at temperature 0, 11 differ, none
+unparseable, cause not determinable from the record. The count comes from
+`results/rebaseline.md` and `reproduction_check.unparseable` in
+`results/logprob-elicitation.json`. It is not attributed to the calibration map, and
+L10's resolved-snapshot half stays out — v1 stored the alias, so "no dated snapshot is
+recorded" is the true statement about the beliefs this paper reports.
+
+AF8's debt is a paragraph: Python 3.12 named as the floor with the compensated-summation
+reason, the two float-bearing artifacts compared to 1e-9 rather than exactly, the figure
+excluded from the byte comparison because a PDF records its renderer's version and its
+render time, and every plotted value checked against `results/run.json` instead. A
+reproducibility claim in the paper without the interpreter floor is a named falsifier.
+
+Nothing was computed. Every number in the section resolves to `main.tex` §4 or §6, to
+`results/rebaseline.md`, to `results/logprob-elicitation.json`, or to the README's
+reproduction floor. Checks: preflight PASS on `main.tex` (19 labels, 17 distinct refs,
+5/5 citations, 1 graphic, 4 tabulars), 772 tests passing, no new line over 84
+characters, and the six that are over are the same six as before this edit.
+
+Recorded as AG1–AG11 in `decisions/v2-design-decisions.md`.
+
+One more defect, found by reading the abstract against the section just written. The
+abstract said recalibration "halves the misses, from 16 to 8" and moved straight on to
+the residual 8. §7.3 states the same change two-sidedly — escalations 43 to 60,
+precision 0.605 to 0.567, 9 of the 16 fixed and 1 new miss created — so the body was
+never one-sided; the summary was. That is the failure this whole gate is meant to catch,
+and it survived four sections because nobody reads the abstract again after writing it.
+Fixed at `paper/main.tex:116`, and registered as falsifier Z19 so it cannot drift back.
+
+The instruction that found it asked for "cost up". Cost falls: 1.650 to 1.250, in
+`results/robustness.json` and in §7.3. What rises is load. The abstract now says mean
+cost falls and names the load — escalations 43 of 100 to 60, precision 0.605 to 0.567 —
+with the composition, and every count carries its denominator. The pair 1.650/1.250 is
+left to §7.3 rather than printed eight lines under the abstract's 1.72, which is the
+legacy tie-break total against a different baseline.
+
+Recorded as AH1–AH4 in `decisions/v2-design-decisions.md`.
+
+The trade-off wording lasted one exchange. The next instruction removed the miss count
+from the abstract entirely: state the calibration result as a calibration-quality
+improvement scoped by the reachable-score floor, cite the held-out measures, carry no
+miss count. `paper/main.tex:116-129` now does that. The in-sample sentence keeps its
+scope claim — recalibrating on the same 100 cases is an in-sample ceiling and the body
+reports it as one — and loses its number. Next to it are §6.6's held-out figures on the
+50 test cases, ECE 0.1526 to 0.0696, cross-entropy 0.8546 to 0.8136 bits, Brier 0.2063
+to 0.1962, then the `6/23` reachable-score floor sitting above the `3/13` a belief must
+fall below for answering to be cheapest, then what that costs: `answer` gone from the
+census, precision 0.667 to 0.463, recall 0.667 to 0.905. R7 and R8 in one paragraph, as
+Z10 requires everywhere else. Zero miss counts remain in `:85-133`, checked numeral by
+numeral.
+
+Two premises came with that instruction and one of them is wrong. The abstract's
+"16 to 8" was not a train/test split artifact: `recalibration.before.misses` is 16 and
+`recalibration.after.misses` is 8 in `results/robustness.json`, both on the 100 cases,
+which is exactly what the abstract said. What is true is that restricting the same
+policy and beliefs from those 100 cases to the 50 test cases also prints 16 to 8
+(`paper/main.tex:1082`), so two unrelated operations render the same string within sight
+of each other — confusable, which is D4's shape and Z8's rule, not false. And "the floor
+sits above both thresholds so recalibration cannot improve the decision" holds for the
+held-out isotonic map, whose lowest pooled block puts `6/23` above both `3/13` and
+`1/5`, but not for the in-sample bin map, whose `recalibration.mapping` sends the
+`0.2-0.3` bin to `0.1714` — below the threshold — and which changes 8 decisions and 0.4
+of mean cost. In-sample recalibration does improve the decision. What it does not do is
+generalise.
+
+The reframing is still the right abstract, on the ground that survives: the abstract was
+carrying the weaker of the two calibration results. §7.3 fits and scores on the same 100
+cases; §6.6 fits on 50 and scores on the other 50. Held out is the stronger claim, and
+its ceiling is more interesting than the in-sample one, because the gain stops at the
+map's own range rather than at the data.
+
+Z19 is marked changed and superseded by Z20, which is the rule as now stated. Z11 wanted
+the in-sample sentence kept and extended; it is kept and shortened, and Z20 records that
+resolution. Recorded as AH5–AH12 in `decisions/v2-design-decisions.md`; AH1–AH4 stay as
+written because they record what was tried.

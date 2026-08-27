@@ -545,6 +545,19 @@ new at this gate and comes from the float fix.
   of them overreaches; it is canonical at `:947` and referenced elsewhere.
 - The abstract's in-sample sentence deleted rather than kept and extended. It is true,
   and v1 labelled its own scope at `:1048`.
+- **The abstract stating the calibration result as a decision or miss improvement.**
+  The abstract states the calibration result as a calibration-quality improvement
+  scoped by the reachable-score floor, never as a decision or miss improvement. No
+  miss count appears in the abstract at all: the in-sample `16 → 8` sits within sight
+  of a 50-case held-out table, so any miss count there needs a denominator and an
+  attribution that a summary paragraph cannot carry gracefully, which is D4 in the
+  most-read sentence of the paper. The held-out numbers the abstract does carry are
+  the three calibration measures on the 50 test cases, and they travel with the floor
+  that keeps the gain from reaching the decision — R7 and R8 together, per Z10.
+  §7.3 and §6.6 handle misses. An honest body under a one-sided abstract is still a
+  one-sided paper, because the abstract is what is read. Supersedes the wording added
+  earlier in this same pass, which required the halving to travel with its load
+  rather than to be absent.
 - The self-consistency check called a validation, or described as out-of-sample,
   anywhere in the paper.
 - Anything computed at this gate. No new number, no edit to a committed artifact, no
@@ -583,3 +596,5 @@ Everything else above is checkable by reading the shipped `main.tex` against thi
 | Z16 | The paper is not compiled at this gate: `pdflatex`, `latexmk` and `xelatex` are absent, `tectonic` has no package cache, and the network is blocked. "It builds" is Kaps's falsifier, and no claim here may imply otherwise | (AI-proposed) | **noted** |
 | Z17 | OQ3's Limitations entry is written at this gate as its own entry rather than a hedge inside Results, keeping Gate 5's naming discipline; S1's correction to OQ3's framing stays in the design record and is not folded back into OQ3's text | (AI-proposed) | **confirmed** |
 | Z18 | The grid crosscheck is cited as a plateau, never as a witness: 1185 of 115351 points attain the maximum, so the paper reports that a dumb float grid reaches `−0.166667` without exceeding the closed form, and names no belief. Same origin as Z15 | (Kaps-decided) | **confirmed** |
+| Z19 | The abstract states the calibration trade-off, never the miss reduction alone: the halving 16 to 8 travels with escalations 43 of 100 to 60, precision 0.605 to 0.567, and the composition 9 fixed against 1 created. Found by writing the Limitations section and reading the abstract against it | (Kaps-decided) | **changed** — superseded by Z20 within the same pass |
+| Z20 | The abstract states the calibration result as a calibration-quality improvement scoped by the reachable-score floor, never as a decision or miss improvement, and carries no miss count at all. Z19's rule kept the halving with its load; this one removes it, because in-sample `16 → 8` within sight of a 50-case held-out table needs a denominator and an attribution the abstract cannot carry gracefully. The abstract carries the three held-out measures on the 50 test cases and the `6/23` floor above `3/13` that keeps the gain off the decision. This also settles Z11 the other way: the in-sample sentence keeps its scope label and loses its count | (Kaps-decided) | **confirmed** |

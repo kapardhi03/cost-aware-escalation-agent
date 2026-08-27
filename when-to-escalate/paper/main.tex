@@ -113,9 +113,20 @@ cost. Every missed escalation traces to one cause: the belief under-estimated th
 needs-human probability rather than misreading readiness. Expected calibration error
 on that marginal is 0.142 (bootstrap 95\% CI $[0.100, 0.249]$), concentrated in the
 bins adjacent to the escalation threshold rather than the bin containing it;
-recalibrating the marginal in-sample halves the misses, from 16 to 8, and the
-residual 8 are traceable to the elicited probability taking only one-decimal values.
-We
+recalibrating that marginal on the same 100 cases is an in-sample ceiling, and the
+body reports it as one. Held out, the result is different in kind. Re-eliciting
+$b_h$ from the model's digit logprobs, fitting a map on 50 development cases and
+scoring the other 50, improves all three calibration measures named in advance ---
+on those 50 test cases expected calibration error falls from 0.1526 to 0.0696,
+cross-entropy from 0.8546 to 0.8136 bits, and Brier from 0.2063 to 0.1962. Better
+calibration does not buy a better decision. The fitted map is isotonic, and the
+lowest block it pools sets a reachable-score floor of $6/23 \approx 0.2609$, above
+the $3/13 \approx 0.2308$ a belief must fall below for answering to be cheapest, so
+the threshold sits inside an interval the map cannot emit: on those same 50 cases
+the policy stops choosing \emph{answer} at all, escalation precision falls from
+0.667 to 0.463, and recall rises from 0.667 to 0.905. The cause is the map's range
+rather than the scores it produced, and a calibration-quality gain that the range
+prevents from becoming a decision gain is the finding. We
 also report a failure the test set cannot produce by construction, a high-cost
 message dropped when it arrived batched with a routine one, observed in a live
 run. Code and data are available.
@@ -247,9 +258,12 @@ agent acts on a belief \cite{kaelbling1998}. Exact planning over belief space is
 intractable, so this work solves the one-step problem myopically: it minimises
 immediate expected cost under the current belief and does not plan over future
 beliefs. This is a deliberate scope choice, not an oversight, and it has a known
-cost of its own, discussed in Section~\ref{sec:limitations}: a strict one-step
-rule undervalues the ask action, whose payoff is a better belief on the next
-turn rather than an immediate gain.
+cost of its own, discussed in Section~\ref{sec:limitations}: a one-step rule
+cannot price the better belief a question buys on the next turn. Whether that
+costs anything depends on the cost matrix, and on the one used here it does not
+--- Section~\ref{sec:unused} shows the value of a question is negative at every
+belief on the unconstrained action menu, so planning further ahead would change
+no decision there.
 
 \subsection{User discussions}
 Several design choices came from posting the problem to practitioners rather than
@@ -341,10 +355,13 @@ Section~\ref{sec:model}.
 action under the current belief and picks the lowest. It is myopic: it reasons
 one step ahead and does not plan over how the belief might change on future turns.
 This is enough for the answer, hold, and escalate actions, whose cost can be
-judged against the current belief. It is a poor fit for the ask action, whose
-value is mostly the better belief it buys next turn, which a one-step rule cannot
-see. This tension is left in the open and discussed in
-Section~\ref{sec:limitations} rather than papered over.
+judged against the current belief. The \emph{ask} action is the one whose value is
+mostly the better belief it buys next turn, which a one-step rule cannot see, so
+whether the horizon costs anything turns on how expensive asking is against acting
+now. Under the costs set here it does not, on the unconstrained action menu:
+Section~\ref{sec:unused} shows the value of a question is negative at every belief
+there, and Section~\ref{sec:limitations} states what that does and does not
+license.
 
 \paragraph{Feedback.} After acting, the agent would in principle observe whether
 the lead converted or whether an escalated case was resolved. That signal is
@@ -1246,6 +1263,18 @@ The readiness and needs-human labels are the author's
 judgment of what each message was written to represent, not outcomes observed from
 real leads, so they carry the author's assumptions about intent.
 
+Two scope limits on the headline result belong here as well as in
+Section~\ref{sec:results}. The cost improvement is against the uniform baseline
+only: against always-notify the comparison is a near-tie, 1.72 against 1.74, so the
+cost-aware policy is not the cheaper policy and is not claimed to be. What it buys
+is human load --- it escalates 43 times out of 100 rather than all 100, at a
+precision of 0.605 against 0.420 --- and that operational reduction, not a cost
+win, is the claim. The second is the development and test split. Both halves reach
+the same total cost, but the split was stratified by archetype and sub-variant and
+balanced on the needs-human count, so the halves are matched by construction and
+the agreement follows from that; it is not out-of-sample evidence and is not read
+as any.
+
 The state space is deliberately coarse and this costs the model in two visible
 ways. Non-leads such as competitors and abusive messages are labelled cold rather
 than given their own state, which slightly distorts readiness calibration. And the
@@ -1254,13 +1283,69 @@ both come out as cold and needing a human, yet the two call for different action
 The state space simply cannot see the difference, which is a real finding about
 its granularity rather than a bug in the policy.
 
-Two limitations are structural to the method rather than to the data. The policy
-is myopic, so it undervalues the ask action, whose payoff is a better belief on
-the next turn that a one-step rule cannot price; the honest handling of the ask
-action would compute its one-step value of information, which this design does not
-do. Section~\ref{sec:results} shows the consequence is not hypothetical:
-\emph{ask} is selected zero times, as is \emph{escalate-pause}, so the reported
-results exercise three of the five actions. And the hard constraint that removes
+Several limitations are structural to the method rather than to the data, and the
+first is one an earlier draft got backwards. The policy is myopic: it minimises
+immediate expected cost and carries no machinery that prices the better belief a
+question buys on the next turn. That much is a true statement about the
+implementation and stays a limitation of it. What does not survive is the
+inference drawn from it --- that the \emph{ask} action is therefore undervalued
+here, that the honest handling this design omits would be to compute its value of
+information, and that \emph{ask}'s absence from the results follows from the
+horizon. Section~\ref{sec:unused} computes it. On the unconstrained action menu
+the value of one more question is at most $-2/13$ at every belief
+(Theorem~\ref{thm:ceiling}); posteriors are beliefs, so the bound binds at every
+node of a lookahead tree and the budgeted family collapses, $W_k =
+V_{\mathrm{act}}$ for every $k \ge 1$. Asking is not underpriced by the one-step
+rule. It is priced, and it loses at every depth. That is a withdrawal rather than
+a qualification, because the claim asserted a direction the analysis reverses.
+
+What remains is narrower, and it belongs here rather than in the results. The
+collapse is a property of this cost matrix, and the policy never checks the
+property it depends on. A question can be rational on the unconstrained menu only
+where $c_F/\nu + c_T/\alpha < 1$; this matrix gives $16/15$, and scaling the
+\emph{ask} row by $15/16$ would put the ceiling exactly at zero. On a matrix that
+satisfied the condition, lookahead would be worth having and this design would
+have nothing with which to take it --- there, being myopic would cost what the
+earlier draft said it costs here. So the statement that survives is not that
+asking is mispriced but that being myopic is safe on this matrix, for a reason the
+policy does not verify. Two readings are wrong and worth naming: $2/13$ is a floor
+on the gap and not an estimate of its size, and the theorem bounds one more
+question inside a deeper policy on this matrix and this action menu, not the value
+of interaction design in general. Where a question can pay is the constrained
+menu, at $b_h < 1/5$ on the hot ray, and Section~\ref{sec:unused} shows that
+region is empty here --- structurally so on the calibrated beliefs, whose
+reachable range starts above $1/5$, and contingently on the published ones.
+
+The value-of-information analysis carries a boundary of its own, and it is worth
+saying exactly where it falls. Computing the continuation term needs an answer
+model: a distribution $P_b(u)$ over what the lead would reply and a posterior
+$b^u$ for each reply. Both are simulated from the design's own model of the lead,
+the same one that produced the belief being scored, so a check that the
+computation agrees with its own definitions is a self-consistency check of the
+implementation. It is not evidence that the answer model matches how real leads
+reply, and nothing here measures that: a second turn per case would be new data.
+What that bounds is narrow, and the narrowness is the point.
+Theorem~\ref{thm:ceiling} does not use the answer model at all --- it needs only
+that the continuation term is non-negative, which follows from
+Table~\ref{tab:costs} alone. The quantities that do depend on the answer model are
+the per-case ceilings and the count of questions that resolve the state, not the
+result that \emph{ask} is never selected. What is unvalidated is the model of the
+reply; what does not rest on it is the bound.
+
+Abstention is priced out under this matrix, and that is a bounded result rather
+than an option left untested. \emph{Escalate-pause} is dominated by
+\emph{escalate-notify} in every one of the six columns of Table~\ref{tab:costs},
+by between 1 and 3, so a rule that hands the conversation over instead of
+notifying raises realised cost on every case it touches and cannot lower the count
+of missed escalations at all (Section~\ref{sec:unused}). With \emph{ask}
+unselected as well, the reported results exercise three of the five actions. The
+scope of that is the matrix, not the design space. These costs are expert-set
+rather than measured, and Section~\ref{sec:model} shows at least one magnitude is
+load-bearing, so a matrix in which pausing is not dominated --- one that prices an
+unattended conversation, or a handover acted on sooner than a notification ---
+would make abstention available again, and this experiment says nothing about that
+case. What it settles is that abstention does not help under these costs, not that
+it never helps. And the hard constraint that removes
 the answer action on restricted cases is treated here as observable and
 error-free, because a flag on the case says the message asks for legal or land
 documents. A production detector for that condition
@@ -1272,9 +1357,10 @@ reassurance, it is a restatement of the fact that the constraint never bound: on
 changes no decision. A detector's error rates would matter on restricted cases the
 cost model does \emph{not} already catch, and this case set contains none.
 
-A third structural limitation is the granularity of the belief itself. The elicited
-$b_h$ takes only 8 distinct values across the 100 cases, every one at a single
-decimal place, distributed $\{0.0{:}\,4,\ 0.1{:}\,15,\ 0.2{:}\,35,\ 0.3{:}\,17,\
+A further structural limitation is the granularity of the belief itself. The
+elicited $b_h$ takes only 8 distinct values across the 100 cases, every one at a
+single decimal place, distributed
+$\{0.0{:}\,4,\ 0.1{:}\,15,\ 0.2{:}\,35,\ 0.3{:}\,17,\
 0.4{:}\,6,\ 0.7{:}\,6,\ 0.8{:}\,5,\ 0.9{:}\,12\}$. The language model is being asked
 for a probability and is returning something closer to an ordinal grade. Three
 consequences follow, and all three are visible in the results: the threshold $3/13$
@@ -1286,7 +1372,25 @@ is the prerequisite for most of the improvements this paper proposes, and it is 
 tested here. Relatedly, the beliefs come from a single unpinned model
 (\texttt{gpt-4o-mini}) elicited once per case; no dated snapshot is recorded, no
 repeat elicitation measures the variance of the belief itself, and every number in
-the paper is conditional on that one draw.
+the paper is conditional on that one draw. A re-elicitation at temperature 0
+returns the same belief for 89 of the 100 cases and a different one for 11, with
+none unparseable. What the record contains does not determine the cause, and the
+count is reported here rather than explained.
+
+Reproducibility has a boundary inside the artifact and another outside it. Inside:
+every number reported here is regenerated from the committed beliefs by the
+committed code, deterministically, and the data artifacts are compared byte for
+byte --- except two that carry floats whose exactness depends on the interpreter,
+because compensated summation over floats arrived in CPython 3.12. That version is
+declared as the floor, and those two files are compared to a tolerance of
+$10^{-9}$ rather than exactly. The rendered figure is excluded from the byte
+comparison outright: a PDF records the version of the renderer that drew it and the
+moment it was drawn, so its bytes move when neither the data nor the code has.
+Every value the figure plots is checked against the run artifact instead, which
+verifies the numbers and not the drawing. Outside: the beliefs are not reproducible
+from scratch, for the reason just given, so the committed cache is an input to the
+experiment rather than an output of it, and regenerating it would move every number
+in this paper.
 
 Because the case set's readiness distribution does not match the prior the design
 assumes, the reported means are sensitive to reweighting. Importance-weighting each

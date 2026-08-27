@@ -1568,3 +1568,227 @@ disappearing, so neither half can be quoted without the other.
 | AF12 | The per-bin count labels removed from the reliability figure rather than repositioned; the count stays in marker area, legend and caption | (Kaps-decided) | **confirmed** |
 | AF13 | `paper/figures/*.png` ignored; the `*.pdf` un-ignore left alone | (Kaps-decided) | **confirmed** |
 | AF14 | No test added for the label removal; the untested render path recorded as the reason the defect shipped | (AI-proposed) | **noted** |
+
+## The paper edit — Limitations
+
+- **AG1 — the myopia retraction is written once, in Limitations, and the other two
+  live passages get consistency edits that carry no retraction language.** Z6 fixed
+  the canonical site as the place v1 made the claim. The two edits at
+  `paper/main.tex:250` (Related work) and `:347` (Agent design) now state the result —
+  a one-step rule cannot price the belief a question buys, and on this matrix that
+  costs nothing — and point at `sec:unused`. Neither says anything is withdrawn. The
+  falsifier is five wordings of one retraction, and the way to fail it is to let each
+  site apologise for itself.
+
+- **AG2 — the retraction is decomposed rather than reversed wholesale.** Three parts,
+  and only one of them goes. Withdrawn: that `ask` is undervalued here, that computing
+  its value of information is the honest handling this design omits, and that its
+  absence from the census follows from the horizon. Kept: the policy is myopic and
+  carries no machinery that prices a question's downstream value — a true statement
+  about the implementation, and still a limitation of it. Residual scope, which is the
+  part that is new: the collapse is a property of this cost matrix, and the policy
+  never checks the property it depends on, so what is safe here is safe for a reason
+  the code does not verify.
+
+- **AG3 — both misreadings of the theorem are named in the Limitations text, not left
+  to the theorem section.** `2/13` is a floor on the gap and not an estimate of its
+  size; the theorem bounds one more question inside a deeper policy on this matrix and
+  this action menu, not the value of interaction design. Two §7 falsifiers point at
+  exactly these, and a retraction paragraph is where a reader most likely over-reads
+  the result in the paper's favour.
+
+- **AG4 — the reachable-range sentence is worded off the bare word "floor".** Z9
+  reserves that word: the residual-miss floor is a count and the reachable-score floor
+  is a probability, and neither may appear bare. The structural-emptiness clause now
+  reads "whose reachable range starts above $1/5$". The one remaining "floor" in the
+  section is "a floor on the gap", which is a third object and carries its noun.
+
+- **AG5 — L1's two carried caveats get their own Limitations paragraph rather than
+  being left in Results.** A reader who reads only the Limitations section would
+  otherwise meet neither. The paragraph states both at full strength with the numbers
+  §6 already reports — the cost result is against the uniform baseline only, the
+  always-notify comparison is a near-tie at 1.72 against 1.74, the win is human load
+  at 43 escalations of 100 against all 100 and precision 0.605 against 0.420; and the
+  dev/test totals agree because the split was matched by construction, so they are not
+  out-of-sample evidence. Nothing is hedged into a softer form on the way across.
+
+- **AG6 — OQ3 is written as a bounded result, and the bound is the theorem's
+  answer-model independence.** The check simulates replies from the design's own model
+  of the lead, so it is a self-consistency check of the implementation and is named
+  that; it is never called a validation and never described as out-of-sample. What
+  makes it a scope statement rather than a hedge is the next sentence:
+  `Theorem~\ref{thm:ceiling}` does not use the answer model at all, needing only
+  non-negativity of `Table~\ref{tab:costs}`, so what the missing external evidence
+  touches is the per-case ceilings and the count of resolving questions — not the
+  result that `ask` is never selected. S1's correction stays in this record and is not
+  folded back into OQ3's text.
+
+- **AG7 — abstention gets its own entry, framed as priced out under this matrix.** New
+  at this pass and not in the approved plan. The argument is column-wise dominance of
+  `escalate-pause` by `escalate-notify` in all six columns by between 1 and 3, which is
+  already in §6.3, so no number is computed here. The scope qualifier is the matrix:
+  the costs are expert-set rather than measured and §4 shows at least one magnitude is
+  load-bearing, so a matrix in which pausing is not dominated makes abstention
+  available again and this experiment says nothing about that case. The census fact
+  that `escalate-pause` is never selected moves here from the myopia sentence, which is
+  where it had been doing duty as evidence for the horizon claim.
+
+- **AG8 — the drift line gives the count and stops.** AD3 owed Limitations one line.
+  It reads 89 of 100 unchanged, 11 different, none unparseable, and says the record
+  does not determine the cause. The three numbers come from `results/rebaseline.md` and
+  `reproduction_check.unparseable` in `results/logprob-elicitation.json`. The cause is
+  not attributed to the calibration map, and the resolved-snapshot half of L10 is left
+  out: v1 stored the alias, so "no dated snapshot is recorded" is the true statement
+  about the beliefs this paper reports, and naming v2's snapshot beside it would read
+  as though the reported numbers had one.
+
+- **AG9 — the reproducibility paragraph carries the interpreter floor.** A §7 falsifier
+  is a reproducibility claim in the paper without it. The paragraph names Python 3.12,
+  the reason (compensated summation over floats), the two float-bearing artifacts
+  compared to $10^{-9}$ rather than exactly, and the figure's exclusion from the byte
+  comparison with the renderer-metadata reason. It closes on the boundary that matters
+  most: the belief cache is an input to the experiment, not an output of it.
+
+- **AG10 — the section's counted enumeration is dropped.** "Two limitations are
+  structural" became "Several", and "A third structural limitation" became "A further".
+  A fixed count in the lead sentence breaks silently every time an item is added, and
+  the count carried no information.
+
+- **AG11 — the Conclusion's myopia passage is not touched at this pass.** It is the
+  fifth of the five passages and the map assigns it a replacement by the answer rather
+  than a retraction. Editing it here would put two retraction-shaped paragraphs in the
+  same commit, which is how the "written more than once" falsifier gets tripped.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AG1 | The myopia retraction written once in Limitations; `:250` and `:347` get consistency edits with no retraction language | (Kaps-decided) | **confirmed** |
+| AG2 | The retraction decomposed into withdrawn, kept, and residual scope rather than reversed wholesale | (AI-proposed) | **confirmed** |
+| AG3 | Both misreadings of the theorem named in the Limitations text: `2/13` is a floor on the gap, and the scope is this matrix and this menu | (AI-proposed) | **confirmed** |
+| AG4 | The structural-emptiness clause reworded off the bare word "floor" per Z9 | (AI-proposed) | **confirmed** |
+| AG5 | L1's two carried caveats given their own Limitations paragraph, at full strength | (Kaps-decided) | **confirmed** |
+| AG6 | OQ3 written as a bounded result, scoped by the theorem's independence from the answer model; never called validation or out-of-sample | (Kaps-decided) | **confirmed** |
+| AG7 | Abstention added as its own entry, priced out under this matrix by column-wise dominance, with the expert-set-costs scope | (Kaps-decided) | **confirmed** |
+| AG8 | The drift line gives the count and the undetermined cause only; the resolved-snapshot half of L10 left out | (AI-proposed) | **confirmed** |
+| AG9 | The reproducibility paragraph carries the Python 3.12 floor | (Kaps-decided) | **confirmed** |
+| AG10 | The section's counted enumeration dropped: "Two limitations" → "Several", "A third" → "A further" | (AI-proposed) | **confirmed** |
+| AG11 | The Conclusion's myopia passage left for its own pass | (AI-proposed) | **noted** |
+
+## The paper edit — the abstract's calibration sentence
+
+- **AH1 — the abstract now carries the trade-off, not the halving alone.** Raised as
+  "AH6" in the instruction that found it; this record has no AH block before this row,
+  so it is AH1. The sentence at `paper/main.tex:116` said recalibration "halves the
+  misses, from 16 to 8" and then went straight to the residual 8. §7.3 states the same
+  change two-sidedly — escalations 43 to 60, precision 0.605 to 0.567, and a
+  composition of 9 fixed against 1 new miss created — so the defect was the summary
+  keeping the flattering half of a paragraph written not to have one. The abstract is
+  what is read, and a one-sided abstract over a two-sided body is a one-sided paper.
+
+- **AH2 — the correction runs the other way on cost.** The instruction asked for "cost
+  up". Cost falls: `recalibration.before.mean_cost` is 1.650 and
+  `recalibration.after.mean_cost` is 1.250 in `results/robustness.json`, and §7.3 says
+  so. What rises is load, and that is the whole trade-off — escalations and precision,
+  not cost. Writing "cost up" would have put a number in the abstract that contradicts
+  the body and the artifact.
+
+- **AH3 — the two cost figures are named directionally rather than numerically.** The
+  abstract already quotes 1.72, which is the legacy tie-break total; the recalibration
+  pair is 1.650 to 1.250 against the corrected baseline. Printing 1.650 eight lines
+  under 1.72 with no room to explain which baseline is which trades one confusion for
+  another, so the abstract says mean cost falls and §7.3 carries the pair.
+
+- **AH4 — every count in the new sentence carries its denominator.** Z8 applies inside
+  the abstract too: "16 to 8" became "on those 100 cases, 16 to 8", escalations read
+  "43 of 100 to 60", and the composition reads "9 of the 16". The in-sample label is
+  kept, which is what Z11 requires: the sentence is extended, not replaced.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AH1 | The abstract carries the calibration trade-off, not the miss halving alone; registered as falsifier Z19 | (Kaps-decided) | **confirmed** |
+| AH2 | "Cost up" corrected to cost down, 1.650 to 1.250; the trade-off is load, not cost | (Kaps-decided) | **confirmed** |
+| AH3 | The recalibration cost pair named directionally in the abstract, numerically in §7.3, to avoid two baselines in one paragraph | (AI-proposed) | **confirmed** |
+| AH4 | Every count in the new abstract sentence carries its denominator per Z8; the in-sample label kept per Z11 | (AI-proposed) | **confirmed** |
+
+## The paper edit — the abstract reframed off the miss count
+
+- **AH5 — AH1 to AH4 are superseded inside the same pass.** The trade-off framing
+  kept the halving in the abstract and made it two-sided by adding the load it is
+  bought with. The instruction that followed removes it instead: the abstract states
+  the calibration result as a calibration-quality improvement scoped by the
+  reachable-score floor, cites the held-out measures, and carries no miss count at
+  all. The four earlier rows stay as written because they record what was tried.
+
+- **AH6 — two premises were given for the reframing and one of them does not hold.**
+  Both are recorded because the conclusion is adopted and the reasoning is not.
+  - *"The abstract's 16 to 8 is the train/test split artifact, not recalibration's
+    effect."* Not what the artifact says. `recalibration.before.misses` is 16 and
+    `recalibration.after.misses` is 8 in `results/robustness.json`, both on the 100
+    cases, so the pair is recalibration's measured in-sample effect and the abstract
+    attributed it correctly. The real defect is that restricting the same policy and
+    the same beliefs from those 100 cases to the 50 test cases *also* prints 16 to 8
+    (`paper/main.tex:1082`), so two unrelated operations produce an identical string
+    within sight of each other. That is a confusability failure — D4's shape, which
+    Z8 names — not a false attribution.
+  - *"The floor sits above both thresholds so recalibration cannot improve the
+    decision on this matrix."* True of the held-out isotonic map and false of the
+    in-sample fit, which are different objects. The isotonic map's lowest pooled
+    block puts its reachable-score floor at `6/23`, above both `3/13` and `1/5`, so
+    `answer` is unreachable and §6.6's action census loses it. The in-sample
+    recalibration is a bin map, and `recalibration.mapping` in
+    `results/robustness.json` sends the `0.2-0.3` bin to `0.1714`, below `3/13`. It
+    can and does change decisions: misses 16 to 8, escalations 43 to 60, mean cost
+    1.650 to 1.250. Recalibration improves the decision in-sample. What it cannot do
+    is generalise, which is a different objection and the one that holds.
+
+- **AH7 — the reframing is adopted on the ground that survives AH6.** Not that the
+  in-sample result is unreal, but that the abstract had the weaker of the two
+  calibration results in it. §6.6 fits on 50 development cases and scores the other
+  50; §7.3 fits and scores on the same 100. Held out beats in-sample, and the
+  held-out result is also the more interesting one, because the gain stops at the
+  map's range rather than at the data. The abstract now carries that.
+
+- **AH8 — no miss count survives in the abstract.** Checked by reading every numeral
+  in `paper/main.tex:85-133`. What is left is 100 and 50 as set sizes, the cost
+  figures 1.72, 2.58, 1.74 and the gap 0.86 to 1.07, the escalation count 43 of 100,
+  the in-sample ECE 0.142 with its interval, the three held-out measures, the two
+  rationals, and the held-out precision and recall. No count of misses, fixes, or
+  survivors appears.
+
+- **AH9 — the in-sample sentence keeps its scope label and loses its count.** Z11
+  required that sentence to be kept and extended rather than replaced, on the ground
+  that it is true and v1 labelled its own scope. Half of that survives: the abstract
+  still says recalibrating the marginal on the same 100 cases is an in-sample ceiling
+  and that the body reports it as one, which is the scope claim. The number it was
+  extended with is gone. Z11 is resolved the other way and registered as Z20.
+
+- **AH10 — the abstract prints §6.6's own digits.** The instruction gave ECE as 0.153
+  to 0.070; §6.6 prints 0.1526 to 0.0696. The abstract uses the body's four decimals
+  so a reader comparing the two finds the same string rather than a rounding they have
+  to reconcile. Cross-entropy 0.8546 to 0.8136 bits and Brier 0.2063 to 0.1962 are
+  carried as well, because "all three measures named in advance" is the claim and one
+  of the three alone does not support it.
+
+- **AH11 — the paragraph now holds two ECE values, so both carry their population.**
+  0.142 is on all 100 cases with the published beliefs; 0.1526 and 0.0696 are on the
+  50 test cases with the re-elicited ones. The second pair is introduced as "on those
+  50 test cases" for that reason. Same rule as Z14's caption requirement, applied to
+  prose.
+
+- **AH12 — R7 and R8 travel together into the abstract.** Z10 requires them in the
+  same subsection; putting R7 in the abstract without R8 would break the rule at the
+  one place it matters most. The floor sentence is therefore not a caveat attached to
+  the result, it is half of the result, and the paragraph closes on the join: a
+  calibration-quality gain that the map's range prevents from becoming a decision
+  gain. "Reachable-score floor" keeps its qualifier, per Z9.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AH5 | AH1-AH4 superseded within the same pass: the abstract carries no miss count rather than a two-sided one | (Kaps-decided) | **changed** |
+| AH6 | Both premises recorded; the split-artifact claim does not hold and the floor claim holds only for the held-out isotonic map, not the in-sample bin map | (AI-proposed) | **noted** |
+| AH7 | The reframing adopted because the abstract held the weaker of the two calibration results, not because the in-sample one is unreal | (AI-proposed) | **confirmed** |
+| AH8 | Zero miss counts in the abstract, verified numeral by numeral over `:85-133` | (Kaps-decided) | **confirmed** |
+| AH9 | The in-sample sentence keeps its scope label and loses its count; Z11 resolved the other way as Z20 | (Kaps-decided) | **changed** |
+| AH10 | The abstract prints §6.6's four decimals, and all three measures rather than ECE alone | (AI-proposed) | **confirmed** |
+| AH11 | Both ECE values in the paragraph carry their population, 100 published against 50 test re-elicited | (AI-proposed) | **confirmed** |
+| AH12 | R7 and R8 enter the abstract together per Z10; the floor is half the result, not a caveat | (AI-proposed) | **confirmed** |
+
