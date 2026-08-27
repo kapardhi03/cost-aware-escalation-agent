@@ -1420,3 +1420,66 @@ blocks every section after it. The bold run-in fallback is written down in case 
 collides.
 
 Recorded as AC1–AC4 in `decisions/v2-design-decisions.md`.
+
+### Gate 7 — the Calibration subsection, R7 and R8 as one object (2026-08-27)
+
+The second section, and the last one where two results have to be read together. v1's
+reliability diagnosis of the `needs_human` marginal stays whole: the figure, the 16
+misses that all came from that one marginal, and the two qualifications about the bin
+that actually contains `3/13`. What was missing is that the diagnosis was a testable
+claim about the elicitation, and Gate 2 tested it, so the fit now follows the diagnosis
+in the same subsection.
+
+R7 and R8 land in one paragraph, not one subsection. The pre-registration required the
+same subsection; a subsection can still be quoted a paragraph at a time, so the
+paragraph that reports cross-entropy 0.8546 → 0.8136 bits, ECE 0.1526 → 0.0696 and
+Brier 0.2063 → 0.1962 is the same paragraph that reports the action census going from
+`{answer 12, notify 21, hold 17}` to `{notify 41, hold 9}`. The mechanism follows in
+its own paragraph: PAVA's lowest block pools 23 dev cases with 6 positives, so the map
+cannot emit below `6/23 = 0.260870`, the ordering `1/5 < 3/13 < 6/23` spans less than
+0.061 end to end, and 24 of the 50 test cases sit below `3/13` on the raw score where 0
+do after the map. The calibrated arm is a two-action policy by construction.
+
+D4 is discharged three times, deliberately. The table header names the population; the
+caption states that the test half carries only 8 of the 100-case run's 16 misses, so a
+change of one or two on it is not evidence; and the closing paragraph says outright
+that the in-sample fit on 100 cases and the restriction from 100 cases to 50 produce
+the same pair "16 to 8" by unrelated routes. The mean is named as the quantity that
+survives the change of population and the count as the one that does not.
+
+The cost and miss numbers are in a table captioned as secondary, with the
+pre-registered caveat in the caption rather than in a footnote. The calibration
+contrast is 7 misses of 50 down to 2 of 50 at a mean rising 1.40 → 1.50, and the
+calibrated arm escalates 41 of 50 against always-notify's 50 — breakable, and not free.
+
+Nine key paths were not in §4.3 and were added to it. Two of them are prices rather
+than results: the 0.02-bit rule that allowed a non-order-preserving map to ship, and
+`order_preserved_on_test: false`. Reporting the win from the selection rule while
+leaving its cost unregistered is the shape of omission the trace exists to catch.
+
+The 11-of-100 belief drift stays out of Results. Its cause is undetermined, so the
+only honest sentence about it is that the cause is undetermined, which is a limitation
+and not a result. Results carries the aggregate consequence instead: the written-belief
+row reaches the same total, mean and miss count on this half as the cached beliefs do,
+aggregate agreement only and not a case-for-case replay. Keeping it out of Results is
+not the same as dropping it — Limitations owes it one line that gives the count and
+says the cause is undetermined, and that line is an open debt of this gate.
+
+The escalation precision and recall of the two re-elicited arms go into the same
+paragraph as the scores and the census: precision 0.667 to 0.463 against recall 0.667
+to 0.905. "Escalates 41 of 50" says how often the calibrated policy escalates; this
+pair says what the change bought and what it cost, which is the paragraph's tension
+stated as numbers instead of characterised. It sits immediately before "These are not
+two findings", so the pair cannot be lifted away from the sentence binding it to the
+score improvement. A tenth §4.3 row registers all four values.
+
+Three edits landed outside the subsection: `\label{sec:split}`, so the closing
+paragraph can point at the matched-by-construction argument instead of restating it;
+the theorem subsection's forward reference, wired to `Section~\ref{sec:calibration}`
+as AC3 deferred; and U7's prose twin at `:499`, which carries the same false bracket
+as the caption. U7 is one debt with two false lines and both are now replaced with the
+value gap `(0.2, 0.3)` open at both ends against the threshold interval `(0.2, 0.3]`,
+with the 17 cases at exactly `0.3` given as the reason. `:1123` was already correct and
+is untouched.
+
+Recorded as AD1–AD7 in `decisions/v2-design-decisions.md`.

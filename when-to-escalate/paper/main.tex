@@ -496,10 +496,13 @@ modestly above the line.
 
 The precision of the fraction is misleading, however, and it is worth saying so
 before the results lean on it. The elicited $b_h$ takes only eight distinct values
-over the 100 cases, all at one decimal place, and none of them falls in
-$(0.2, 0.3]$. Every threshold in that interval therefore produces identical
-decisions on every case, and $3/13 \approx 0.231$ is one arbitrary point inside a
-band the measurement cannot resolve. Nothing in the results distinguishes it from
+over the 100 cases, all at one decimal place, and none of them falls in the open
+interval $(0.2, 0.3)$. Every threshold in the half-open $(0.2, 0.3]$ therefore
+produces identical decisions on every case --- the value gap is open at the top
+because 17 of the 100 cases sit at exactly $0.3$, while a threshold at $0.3$ still
+leaves all 17 on the escalate side --- and $3/13 \approx 0.231$ is one arbitrary
+point inside a band the measurement cannot resolve. Nothing in the results
+distinguishes it from
 $0.25$.
 
 This clean single threshold holds only when the runner-up action is
@@ -805,7 +808,8 @@ inside the region. The two ways of being empty are different, and they are not
 merged. On the calibrated arm the emptiness is structural: the fitted map's
 reachable range has a floor above $1/5$, so no input can produce a belief low
 enough to qualify --- the reachable-score floor reported with the calibration
-result below. On the published, rebaselined and raw arms it is contingent: 31 of
+result in Section~\ref{sec:calibration}. On the published, rebaselined and raw arms
+it is contingent: 31 of
 the raw beliefs do fall below $1/5$, and the region stays empty only because none
 of those cases carries \texttt{no\_direct\_answer}. That is a fact about this
 dataset, not about the matrix.
@@ -855,6 +859,7 @@ conversations is the operational win, and it is a different claim from a cost wi
 so both are reported.
 
 \subsection{The development and test split}
+\label{sec:split}
 Both halves reach the same total cost for the cost-aware policy (86 each) and for
 the uniform baseline (129 each). This looks like clean generalization and is not.
 The split was stratified by archetype and sub-variant and balanced on the
@@ -866,6 +871,7 @@ built to mirror each other. On synthetic data of this kind, matched by design,
 this figure cannot stand as out-of-sample evidence, and it is not read as such.
 
 \subsection{Calibration}
+\label{sec:calibration}
 \begin{figure}[t]
     \centering
     \includegraphics[width=\columnwidth]{reliability-needs-human.pdf}
@@ -876,8 +882,11 @@ this figure cannot stand as out-of-sample evidence, and it is not read as such.
     are Wilson 95\% intervals, because the bins hold between 4 and 35 cases and
     most are individually consistent with perfect calibration. The vertical line is
     $b_h^{\star} = 3/13 \approx 0.231$; the shaded band is the interval of
-    thresholds that decide identically, since the elicited marginal takes only
-    one-decimal values and no case falls in $(0.2, 0.3]$. The bin that
+    thresholds that decide identically, which is the half-open $(0.2, 0.3]$. The
+    two brackets are not interchangeable: the elicited marginal takes only
+    one-decimal values, so no case falls in the \emph{open} interval $(0.2, 0.3)$,
+    while 17 of the 100 cases sit at exactly $0.3$ and a threshold placed there
+    still puts all 17 on the escalate side. The bin that
     \emph{contains} the threshold, 0.2--0.3, is the largest ($n = 35$) and is very
     slightly over-confident (predicted 0.200, observed 0.171, CI $[0.081, 0.327]$).
     Its neighbours at 0.1--0.2 and 0.3--0.4 are under-confident by 0.300 and 0.288.
@@ -888,7 +897,8 @@ this figure cannot stand as out-of-sample evidence, and it is not read as such.
     \label{fig:reliability}
     \end{figure}
     
-Every one of the 16 missed escalations came from the same place: the belief
+Every one of the 16 missed escalations in the 100-case run of
+Table~\ref{tab:results} came from the same place: the belief
 under-estimated the needs-human probability, not the readiness. On all 16, the
 needs-human estimate was 0.30 or below against a true label of needing a human,
 while the readiness argmax on those same cases was spread across cold, hot, and
@@ -912,14 +922,118 @@ perfect calibration, so the ECE point estimate carries most of the evidential
 weight here and its interval is wide.
 
 Because the failures trace to the needs-human marginal rather than to the readiness
-marginal, recalibrating that marginal is the natural first fix, and
-Section~\ref{sec:failure} reports what it recovers. This is weaker than the claim
+marginal, recalibrating that marginal is the natural first fix. Two fits are
+reported and they are not interchangeable: Section~\ref{sec:failure} fits on all
+100 cases and is an in-sample ceiling, while the fit below is fitted on 50
+development cases and scored on the 50 test cases. This is weaker than the claim
 an earlier draft made. That the misses localise to one marginal is consistent with
 the independent two-part belief, but it is not evidence \emph{for} independence: the
 experiment records only the two marginals, never the joint, so it cannot detect the
 two components interfering even if they did. Testing independence would require
 eliciting $P(s, h)$ directly and comparing it against $P(s)\,P(h)$, which this run
 does not do.
+
+\paragraph{A finer belief, fitted on one half and scored on the other.}
+The diagnosis above is a claim about the elicitation, so it can be tested by
+changing the elicitation. Re-eliciting $b_h$ as an expectation over the model's
+digit logprobs, rather than as a probability the model writes out in words,
+replaces the eight one-decimal values it produced over the 100 cases with 43
+distinct scores on the 50 test cases. The elicitor itself was chosen on the
+development half by cross-entropy: reading the digit distribution reaches 0.9934
+bits there against 1.8004 bits for asking the model Yes or No and taking the
+probability of Yes, a margin of 0.8071 bits. Three candidate maps were then fitted
+on those same 50 development cases --- identity, Platt, isotonic --- under a rule
+fixed before the fit, that an order-preserving map is kept unless a merging one
+beats it by more than 0.02 bits. Isotonic reached 0.8356 bits against Platt's
+0.9103 and identity's 0.9934, a margin of 0.0747, so the merging map was taken and
+the shipped map does not preserve the ranking of the test scores. Applied unchanged
+to the 50 test cases, it improves all three proper scoring rules named in advance:
+cross-entropy 0.8546 to 0.8136 bits, against a label entropy of 0.9815 bits at a
+base rate of 0.42; ECE 0.1526 to 0.0696; Brier 0.2063 to 0.1962, with the 43
+distinct scores merged to 33. On those same 50 cases the policy driven by the
+calibrated score stops using \emph{answer} at all: its action census goes from
+\{\emph{answer} 12, \emph{escalate-notify} 21, \emph{hold} 17\} to
+\{\emph{escalate-notify} 41, \emph{hold} 9\}, so on this arm the two never-used
+actions of Section~\ref{sec:unused} are three. The trade-off is sharpest in the
+escalation rates on those 50 cases: precision falls from 0.667 to 0.463 while
+recall rises from 0.667 to 0.905, so the calibrated belief catches nearly every
+case that needs a human and pays for it by escalating most of the ones that do
+not. These are not two findings. The
+second is caused by the first, and the cause is the map's range rather than the
+scores it happened to produce.
+
+\paragraph{Why \emph{answer} disappears.}
+Isotonic regression by PAVA sets each pooled block's level to that block's own
+positive rate. The lowest block of the committed map pools 23 of the 50 development
+cases, 6 of which are positive, so its level is the probability
+$6/23 = 0.260870$ --- the reachable-score floor of the map, a probability and not a
+count --- and no input can make the map emit a score below it. The interval
+$[0, 6/23)$ is unreachable rather than merely unpopulated. The boundary the score
+has to fall below for \emph{answer} to be the cheapest action is
+$b_h^{\star} = 3/13 \approx 0.230769$, and it lies inside that unreachable
+interval:
+\begin{equation}
+\frac{1}{5} < \frac{3}{13} < \frac{6}{23} ,
+\end{equation}
+an ordering that spans less than 0.061 end to end, which is why all three are
+carried as exact rationals rather than to two decimal places. Of the 50 test
+cases, 24 sit below $3/13$ on the raw score and none does after the map. The
+calibrated arm is therefore a two-action policy by construction rather than by
+preference, and the same ordering settles the constrained-menu region of
+Section~\ref{sec:unused}, since $6/23$ is above the $1/5$ bound as well. This is a
+statement about the map's range and not about how many cases land on it: of the 100
+scored cases exactly one sits at the reachable-score floor, and it is a development
+case, because interpolation lifts the rest of the lowest block strictly above it.
+The transferable form is that a PAVA-fitted
+map's reachable range is bounded below by the positive rate of its lowest pooled
+block, and that cross-entropy, ECE and Brier never check whether a policy's fixed
+thresholds sit inside that range.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Arm, on the 50 test cases & Total & Mean & Miss \\
+\midrule
+re-elicited, uncalibrated & 70 & 1.40 & 7 \\
+re-elicited, calibrated   & 75 & 1.50 & 2 \\
+written belief            & 86 & 1.72 & 8 \\
+always-notify             & 87 & 1.74 & 0 \\
+\bottomrule
+\end{tabular}
+\caption{Secondary numbers for the held-out fit, on the 50 test cases only. Total
+is the realised cost over those 50, Mean is per case, and Miss is missed
+escalations out of 50. These are reported next to the calibration metrics and are
+not the claim; the claim is the three proper scoring rules. The test half carries
+only 8 of the 16 missed escalations of the full 100-case run
+(Table~\ref{tab:results}), so a change of one or two misses on this half is not
+evidence. The written-belief row re-elicits the one-decimal probability of that run
+and reaches the same total, mean and miss count on this half as its cached beliefs
+do --- aggregate agreement only, not a case-for-case replay. It also shows why the
+denominators matter: the mean is unchanged from the 100-case run at 1.72 while the
+miss count is half, so the mean may be compared across the two populations and the
+count may not. The two re-elicited rows are the calibration contrast, 7 misses of
+50 down to 2 of 50 at a mean rising from 1.40 to 1.50 --- breakable, and not free.
+Always-notify escalates all 50 by construction and the calibrated arm escalates 41
+of them, so much of what calibration buys here is a move toward blanket
+escalation.}
+\label{tab:calibration}
+\end{table}
+
+\paragraph{What the held-out fit does and does not settle.}
+Table~\ref{tab:calibration} carries the cost and miss numbers for four arms on the
+test half, and they are secondary: the claim is the three scores above. The fit
+itself is a fit on one half of a synthetic set scored on the other, and
+Section~\ref{sec:split} has already said that the two halves are matched by
+construction, so it is not evidence that the belief would transfer to a deployment.
+What it is evidence for is narrower: the improvement in the three scores does not
+come from fitting the cases it is scored on. The two operations on the population
+also have to be kept apart. Section~\ref{sec:failure} fits the marginal on all 100
+cases in-sample and halves the misses from 16 to 8; restricting the same policy and
+the same beliefs from those 100 cases to these 50 also produces 16 to 8, and the
+two have nothing in common beyond the pair of numbers. Every miss count in this
+subsection carries the case set it was counted on for that reason.
+
 \section{Failure analysis}
 \label{sec:failure}
 

@@ -268,6 +268,30 @@ firing threshold up to +128 asking on everything, no free threshold on any arm.
 | `always_notify` 87 / 1.74 / 0 misses | `rebaseline.json` `belief_free_reference.always_notify` |
 | reachable-score floor `6/23 = 0.260870` | `make_figures.py` panel 3 `unreachable_region`, checked against `6/23` |
 
+Nine more, registered when the subsection was written. The table above fixes the
+three proper scores and the four arms; these are the numbers the prose needed to say
+*why* the scores moved and why the `answer` action vanished, which is the R7–R8
+adjacency itself. Two of them — the selection margins and the map's failure to
+preserve the test ranking — are costs of the committed map that the four arms do not
+show. The last row is D4's own pair, quoted in §5 from `rebaseline.json` but not
+registered here until the sentence that uses it was written. A tenth followed: the
+escalation precision and recall of the two re-elicited arms, which is the win and its
+cost as one pair of numbers, and the answer to the first question a referee asks
+about a policy that escalates 41 of 50.
+
+| Number | Key path |
+|---|---|
+| elicitor: `digit_expectation` 0.9934 vs `yes_no_probability` 1.8004 dev CE, a margin of 0.8071 bits | `logprob-elicitation.json` `analysis.per_elicitor.<name>.dev.cross_entropy_bits`, `analysis.elicitor_choice.reason` |
+| the map rule's 0.02-bit margin, and isotonic's 0.0747-bit margin over Platt | `preregistration.map_monotone_margin_bits`, `analysis.map_choice.rule`, `.reason` |
+| fitted on the 50 dev cases, scored on the 50 test cases | `analysis.calibration.fitted_on`, `.evaluated_on`, `analysis.per_elicitor.digit_expectation.{dev,test}.n` |
+| the shipped map does not preserve the ranking of the test scores | `analysis.calibration.order_preserved_on_test` (`false`) |
+| lowest pooled block: 23 dev cases, 6 positive, level `6/23` | `voi-ceiling-arms.json` `calibration_floor.mechanism.lowest_block` |
+| the ordering `1/5 < 3/13 < 6/23`, spanning less than 0.061 end to end | `calibration_floor.ordering.as_written`, `.gaps`, `.note_on_margins` |
+| exactly one of the 100 scored cases sits at the floor, and it is a dev case | `calibration_floor.reachable_range.n_cases_at_the_floor`, `.attained_by` |
+| 24 of the 50 test cases below `3/13` on the raw score, 0 after the map | `make_figures.py` panels 2 and 3, `n_cases_below_threshold` |
+| 16 misses on 100 cases against 8 on the 50 test cases, same policy and beliefs | `rebaseline.json` `published.all_100_reference`, `published.test` |
+| escalation precision 0.667 → 0.463 and recall 0.667 → 0.905 across the two re-elicited arms | `rebaseline.json` `arms.fresh_raw.escalation_precision`, `.escalation_recall`, and the same two paths on `arms.fresh_calibrated` |
+
 ### 4.4 Figures
 
 Three panels, from `paper/figures/make_figures.py`, populations

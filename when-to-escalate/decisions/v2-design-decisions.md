@@ -1271,3 +1271,82 @@ here rather than retracted twice.
 | AC3 | `6/23` and the three-action consequence stay with R7 in Results; the theorem subsection names the floor without its value and forward-references it | (Kaps-decided) | **confirmed** |
 | AC4 | The grid crosscheck appears as "reaches `−0.166667` and never exceeds the closed form", with no argmax point and no plateau count | (AI-proposed) | **confirmed** |
 
+
+## The paper edit — the Calibration subsection
+
+The second prose written at Gate 7, and the last of the two forced-adjacency
+sections. `\subsection{Calibration}` keeps v1's reliability diagnosis of the
+`needs_human` marginal on 100 cases whole and adds the held-out fit after it, so the
+subsection now runs diagnosis, then the fit that tests the diagnosis, then the fit's
+own defect. R7 and R8 are one paragraph and one mechanism paragraph, not two results:
+the paragraph that reports the three proper scores also reports the `answer` action
+disappearing, so neither half can be quoted without the other.
+
+- **AD1 — the three proper scores and the action collapse share a paragraph, and the
+  mechanism gets its own.** The required adjacency in §5 says the same subsection; the
+  stronger placement was chosen because a subsection can still be quoted a paragraph
+  at a time. `\paragraph{A finer belief...}` ends on the census going from three
+  actions to two and on the sentence that the second is caused by the first;
+  `\paragraph{Why \emph{answer} disappears.}` then carries `6/23`, the ordering
+  `1/5 < 3/13 < 6/23`, the 24-of-50-to-0-of-50 crossing count, and the transferable
+  form. Splitting cause from effect across a subsection boundary was the failure mode.
+
+- **AD2 — nine more trace rows, not nine numbers cut.** Same disposition as AC2 and
+  for the same reason. Two of the nine are costs of the committed map rather than
+  results of it — the 0.02-bit rule that let a non-order-preserving map ship, and
+  `order_preserved_on_test: false` — and a paper that reports the win without them is
+  quoting the selection rule's output while hiding its price. The last row is D4's own
+  pair, `published.all_100_reference` against `published.test`, which §5 quotes and
+  §4.3 had not registered.
+
+- **AD3 — the 11-of-100 belief drift stays out of Results, and one
+  undetermined-cause line is owed to Limitations.** Gate 2's framing rule holds that
+  its cause is undetermined, so the only honest sentence about it is that the cause is
+  undetermined, which is a limitation and not a result. Results carries the consequence
+  at the aggregate level instead: the written-belief row "reaches the same total, mean
+  and miss count on this half as its cached beliefs do --- aggregate agreement only,
+  not a case-for-case replay." That sentence is true without the number and it blocks
+  the reading the number would have corrected. Suppressing it entirely would not be
+  honest, so the drift is not dropped but deferred: Limitations owes it one line that
+  gives the count and says the cause is undetermined, and that line is a debt of this
+  gate until it is written.
+
+- **AD4 — three edits outside the subsection.** `\label{sec:split}` on the
+  development-and-test-split subsection, so the closing paragraph can point at the
+  matched-by-construction argument rather than restate it; the theorem subsection's
+  forward reference wired to `Section~\ref{sec:calibration}`, which AC3 deferred to
+  this pass; and U7's prose twin at `:499`, replaced with the same two brackets as the
+  caption. U7 is one debt with two false lines, and discharging half of it while
+  recording it as discharged is the failure that the split brackets exist to prevent.
+
+- **AD5 — the miss counts carry their denominators as "of 50" and "of 100", and the
+  table header carries the population.** D4's rule is discharged three times over: in
+  the table's header column, in the caption's caveat sentence, and in the closing
+  paragraph, which states outright that the in-sample fit and the population
+  restriction produce the same pair of numbers by unrelated routes. The mean is
+  labelled as the quantity that may be compared across the two populations and the
+  count as the one that may not.
+
+- **AD6 — the table's label is `tab:calibration`.** The internal gate numbering does
+  not appear in the paper, in a label or anywhere else.
+
+- **AD7 — the escalation precision and recall of the two re-elicited arms are stated
+  in the paper and registered in §4.3.** "The calibrated arm escalates 41 of them" is
+  how often the policy escalates; precision falling 0.667 to 0.463 while recall rises
+  0.667 to 0.905 is what that costs and what it buys, which is the section's tension as
+  numbers rather than as a characterisation. It goes in the same paragraph as the scores
+  and the census, immediately before "These are not two findings", so the pair cannot be
+  quoted away from the sentence that binds them. Rounded to three decimals to match
+  `tab:results`; the sources are `arms.fresh_raw.escalation_precision` and
+  `.escalation_recall` in `rebaseline.json` and the same two paths on
+  `arms.fresh_calibrated`.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AD1 | R7's scores and R8's action collapse share one paragraph, with the mechanism in the next; the pre-registration's subsection-level adjacency was tightened to paragraph level | (AI-proposed) | **confirmed** |
+| AD2 | Nine `logprob-elicitation.json`, `voi-ceiling-arms.json`, `make_figures.py` and `rebaseline.json` key paths registered in §4.3 rather than the numbers being cut | (AI-proposed) | **confirmed** |
+| AD3 | The 11-of-100 belief drift stays out of Results; the aggregate-agreement clause carries what a reader needs without asserting a cause, and Limitations owes one undetermined-cause line | (Kaps-decided) | **confirmed** |
+| AD4 | Three edits outside the subsection: `\label{sec:split}`, the theorem subsection's forward `\ref`, and U7's prose twin at `:499` | (AI-proposed) | **confirmed** |
+| AD5 | Every miss count carries its case set, and the mean is named as scope-invariant where the count is not | (Kaps-decided) | **confirmed** |
+| AD6 | The table label is `tab:calibration`; internal gate numbering never appears in the paper | (AI-proposed) | **confirmed** |
+| AD7 | Escalation precision 0.667 → 0.463 and recall 0.667 → 0.905 stated in the R7/R8 paragraph and registered as a tenth §4.3 row | (Kaps-decided) | **confirmed** |
