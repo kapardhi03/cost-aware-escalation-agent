@@ -1772,3 +1772,88 @@ Z19 is marked changed and superseded by Z20, which is the rule as now stated. Z1
 the in-sample sentence kept and extended; it is kept and shortened, and Z20 records that
 resolution. Recorded as AH5–AH12 in `decisions/v2-design-decisions.md`; AH1–AH4 stay as
 written because they record what was tried.
+
+### Gate 7 — Conclusion: the ask question closed, the two floors named (2026-08-28)
+
+Three sites, all in `paper/main.tex`, all assigned by the map.
+
+The ask entry at `:1474-1502` is the paper's last word on asking and the map files it as
+REPLACED by the answer rather than by a retraction, because v1 asked the exact question
+v2 settles — whether the action is genuinely useful or merely unpriced. The answer is
+neither: it was priced, and it lost. The replacement leads with the bound, at most
+`-2/13` at every belief in the simplex on the unconstrained menu, attained at the
+all-hot vertex, then closes the horizon question outright: posteriors are beliefs, the
+bound holds at every node of a lookahead tree, `W_k = V_act` for every `k >= 1`. Two
+short sentences carry it — asking does not fail here because the policy looks only one
+step ahead, it fails at every depth. What v1 had was the opposite shape, a myopic policy
+that "cannot price the value of asking, because that value is a better belief next
+turn," which reads as an admission. The one-step rule is still named as a rule that does
+not price downstream value; the inference that this is why *ask* is absent is gone. No
+retraction language anywhere in the Conclusion — that is written once, in Limitations,
+and Y5b's falsifier is exactly the claim being withdrawn in five wordings.
+
+Second paragraph carries R2 as the portable claim, which is where the map puts it:
+`c_F/ν + c_T/α < 1` in words and symbols, the `16/15` that fails it, the 6.25% margin,
+the `15/16` scaling that puts the ceiling at zero, and the designer with a cheaper
+question who is on the other side of the line. The constrained carve-out is referenced
+and not re-derived — a region of hot beliefs that no case in this set occupies — since a
+second thinner version of a committed passage is how two versions come to disagree.
+
+The calibration entry at `:1454-1472` discharges KEPT-AND-PROVEN. v1 claimed the
+residual-miss floor is set by the granularity of the elicitation and not by the
+calibration method, and named a finer belief plus a held-out fit as the next step.
+Gate 2 took that step and the claim held, so the entry reports it as tested rather
+than
+asserted and the "next step is" becomes a reference to §6.6. On the 50 test cases the
+misses go 7 of 50 to 2 of 50 — breakable, and it broke when the elicitation got finer,
+which is what the claim predicted. Not free: mean 1.40 to 1.50 and 41 of the 50
+escalated, with R8's mechanism in the same sentence per Z10, so the granularity
+claim survives and the bound moves out of the elicitation and into the calibration
+map.
+
+One number in the pre-registration is wrong and stays as written. D1 at
+`decisions/v2-gate7-preregistration.md:394` says Gate 2 moved misses "8 → 2 on the same
+50 test cases". `tab:calibration` gives the re-elicited uncalibrated arm 7 of 50 and the
+calibrated arm 2 of 50; the 8 is the written-belief arm on that half, a third row. The
+pre-reg pairs a before from one arm with an after from another. The Conclusion uses 7 to
+2 and no historical row is edited for wording.
+
+The bare-"floor" stragglers are four sites, not one, and the instruction misnamed the
+first. `:1220` closes §7.3, the in-sample bin map on 100 cases, and its antecedent is
+the 8 misses that recalibrating this marginal cannot remove — a count, which is Z9's
+residual-miss floor. `6/23` is §6.6's isotonic map and V3 keeps it in the Calibration
+subsection. Calling `:1220` the reachable-score floor would have put §6.6's probability
+onto §7.3's count, which is the two-maps collapse for the third time this pass. Fixed to
+residual-miss floor at `:1220`, `:1458` and `:1466`, and to reachable-score floor at
+`:870`.
+Left alone: `2/13` is a floor on the gap at `:837` and `:1311`, a third object and
+qualified there on purpose per AG3, and the declared Python floor at `:1385`.
+
+`:1451` stops calling all three questions open, since one closes here and one is mostly
+answered. Raised in the plan as an addition beyond the map rather than folded in
+quietly.
+
+Untouched: the turn-boundary entry, which `v2-policy-boundary.md` part 4 depends on; the
+summary paragraph; the AI-use statement. AG11's deferral is discharged.
+
+Checks: preflight PASS on `main.tex` (19 labels, 17 distinct refs, 5/5 citations, 1
+graphic, 4 tabulars), 772 tests passing, `main.tex` at 1548 lines with over-84 lines
+only at 2, 108, 209, 436, 1356 and 1422 — the same six as before this edit — no banned
+token,
+`cohort` still 4, and no number that is not already in §4, §6.6, §7.3 or
+`results/`. Nothing was computed. Recorded as AJ1–AJ11 in
+`decisions/v2-design-decisions.md`.
+
+The closing sentence the instruction asked to replace is not in the paper. `main.tex`
+has no future-work section and no promise of richer belief representations to make
+asking worthwhile: "richer", "belief representation", "worthwhile", "future work" and
+"further work" all return zero hits, in v1's text as much as v2's. The Conclusion's
+three questions are the nearest thing, the ask one is now the closed one, and the
+transferable open question — which cost matrices satisfy `c_F/ν + c_T/α < 1` — is
+already stated in its designer-facing form at the end of the ask entry. So there is
+nothing to replace. The rule is worth having anyway and is registered as Z21 with a
+§7 falsifier: no forward-looking sentence may name a richer belief, a longer horizon
+or a better question model as a route to making *ask* worthwhile on this matrix,
+because the theorem disproves that direction at every belief and every depth. It is
+satisfied vacuously today, which is the honest status to record rather than claiming
+a fix. Recorded as AJ12.

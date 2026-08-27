@@ -558,6 +558,18 @@ new at this gate and comes from the float fix.
   one-sided paper, because the abstract is what is read. Supersedes the wording added
   earlier in this same pass, which required the halving to travel with its load
   rather than to be absent.
+- **The forward-looking prose promising a direction the theorem rules out.** Nothing
+  in the Conclusion or anywhere else may name a richer belief, a longer horizon, or a
+  better question model as a route to making *ask* worthwhile on this matrix. The
+  theorem is quantified over every belief in the simplex and every depth, so it
+  disproves that direction rather than leaving it open, and a paper whose closing
+  sentence promises what its own proof forbids contradicts itself where it is read
+  most. The open question that survives is the transferable one: which cost matrices
+  satisfy `c_F/ν + c_T/α < 1`, so that asking can be rational at all. Checked and
+  currently satisfied vacuously — `main.tex` contains no such promise, at this gate or
+  in v1; the words "richer", "belief representation", "worthwhile" and "future work"
+  appear nowhere in it, and the ask entry already states the condition in its
+  designer-facing form.
 - The self-consistency check called a validation, or described as out-of-sample,
   anywhere in the paper.
 - Anything computed at this gate. No new number, no edit to a committed artifact, no
@@ -598,3 +610,4 @@ Everything else above is checkable by reading the shipped `main.tex` against thi
 | Z18 | The grid crosscheck is cited as a plateau, never as a witness: 1185 of 115351 points attain the maximum, so the paper reports that a dumb float grid reaches `−0.166667` without exceeding the closed form, and names no belief. Same origin as Z15 | (Kaps-decided) | **confirmed** |
 | Z19 | The abstract states the calibration trade-off, never the miss reduction alone: the halving 16 to 8 travels with escalations 43 of 100 to 60, precision 0.605 to 0.567, and the composition 9 fixed against 1 created. Found by writing the Limitations section and reading the abstract against it | (Kaps-decided) | **changed** — superseded by Z20 within the same pass |
 | Z20 | The abstract states the calibration result as a calibration-quality improvement scoped by the reachable-score floor, never as a decision or miss improvement, and carries no miss count at all. Z19's rule kept the halving with its load; this one removes it, because in-sample `16 → 8` within sight of a 50-case held-out table needs a denominator and an attribution the abstract cannot carry gracefully. The abstract carries the three held-out measures on the 50 test cases and the `6/23` floor above `3/13` that keeps the gain off the decision. This also settles Z11 the other way: the in-sample sentence keeps its scope label and loses its count | (Kaps-decided) | **confirmed** |
+| Z21 | No forward-looking sentence may name a richer belief, a longer horizon or a better question model as a route to making *ask* worthwhile on this matrix, because the theorem disproves that direction at every belief and every depth. The open question that survives is which cost matrices satisfy `c_F/ν + c_T/α < 1`. Currently satisfied vacuously: no such promise exists in `main.tex` in v1 or v2 | (Kaps-decided) | **confirmed** |

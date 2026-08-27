@@ -1792,3 +1792,110 @@ disappearing, so neither half can be quoted without the other.
 | AH11 | Both ECE values in the paragraph carry their population, 100 published against 50 test re-elicited | (AI-proposed) | **confirmed** |
 | AH12 | R7 and R8 enter the abstract together per Z10; the floor is half the result, not a caveat | (AI-proposed) | **confirmed** |
 
+
+## The paper edit — Conclusion
+
+- **AJ1 — the prefix skips AI.** The next letter pair after AH is AI, and every table
+  in this file carries "(AI-proposed)" in its provenance column. A row id that
+  collides with the provenance vocabulary is a search hazard, so this block is AJ.
+
+- **AJ2 — the ask paragraph is replaced by the answer, not by a retraction.** The map
+  files the Conclusion passage as REPLACED by the answer and says why: v1 asked
+  exactly the question v2 settles — "whether the action is genuinely useful or merely
+  unpriced" — and a question a paper poses and its successor answers is a result. So
+  the paragraph opens on the question being closed and gives the answer as neither: it
+  was priced, and it lost. No retraction language appears anywhere in the Conclusion.
+  Y5b's falsifier is the claim withdrawn in five wordings; it is withdrawn once, in
+  Limitations, and the Conclusion points at the theorem instead.
+
+- **AJ3 — the myopia passage lands as the proven claim, not as a hedge.** This is the
+  paper's last word on asking and the thing it must not say is that the horizon is
+  what excluded the action. v1's version said a myopic policy cannot price asking
+  "because that value is a better belief next turn," which reads as an admission. The
+  replacement states the bound first — at most $-2/13$ at every belief in the simplex
+  on the unconstrained menu, attained at the all-hot vertex — then closes the horizon
+  question with depth-independence: posteriors are beliefs, the bound holds at every
+  node of a lookahead tree, and $W_k = V_{\mathrm{act}}$ for every $k \ge 1$. Two
+  sentences carry the whole point and are deliberately short: "Asking does not fail
+  here because the policy looks only one step ahead. It fails at every depth." The
+  one-step rule is still named as a rule that does not price downstream value; what is
+  gone is the inference that its not doing so is why *ask* is absent.
+
+- **AJ4 — R2 is restated in the Conclusion as the portable claim.** The map assigns it
+  there and the second paragraph of the ask entry carries it: $c_F/\nu + c_T/\alpha <
+  1$ in words as well as symbols, the $16/15$ that fails it, the 6.25\% margin, the
+  $15/16$ scaling that puts the ceiling at zero, and the designer with a cheaper
+  question who is on the other side of the line. The transfer claim is the inequality,
+  not the $-2/13$.
+
+- **AJ5 — the binding wording rule holds and the carve-out is referenced, not
+  restated.** Every claim in the passage says "on the unconstrained action menu" or
+  "on this matrix, and on the unconstrained menu." The constrained-menu positive
+  region is named as existing and as unoccupied — "a region of hot beliefs that no
+  case in this set occupies" — with the derivation left in the theorem section.
+  Restating $b_h < 1/5$ and the $+1$ ceiling in the Conclusion would be a second,
+  thinner version of a committed passage, which is the duplication the map warns
+  about.
+
+- **AJ6 — the calibration entry discharges KEPT-AND-PROVEN.** v1's causal claim is
+  that the residual-miss floor is set by the granularity of the elicitation and not by
+  the calibration method. Gate 2 did what v1's own next sentence named as the next
+  step — a finer belief and a held-out fit — and the claim held, so the entry says it
+  can now be reported as tested rather than asserted. v1's "the next step is" becomes
+  a reference to Section~\ref{sec:calibration}, since the step was taken. This is the
+  one place in the paper where the earlier draft predicted correctly, and it is filed
+  as a result rather than left reading as an open plan.
+
+- **AJ7 — the held-out miss pair is 7 to 2 of 50, not 8 to 2.** The pre-registration's
+  D1 discussion says Gate 2 moved misses "8 → 2 on the same 50 test cases".
+  `tab:calibration` gives the re-elicited uncalibrated arm 7 misses of 50 and the
+  calibrated arm 2; the 8 is the *written-belief* arm on that half, a third row. So
+  the pre-reg states a before-and-after across two different arms. The Conclusion uses
+  the table's 7 to 2, both counts carrying the 50. The pre-reg row is left as written,
+  since no historical row is edited for wording, and this is the correction on the
+  record.
+
+- **AJ8 — Z10 is honoured inside the Conclusion.** R7 without R8 anywhere is a gate
+  failure, so the sentence reporting what breaking the floor cost — mean 1.40 to 1.50,
+  41 of the 50 escalated — carries the mechanism in the same breath: a PAVA-fitted map
+  cannot emit a score below its lowest pooled block's positive rate, and the threshold
+  for answering lies underneath. `6/23` itself is not re-derived here; the object is
+  named and Section~\ref{sec:calibration} holds the arithmetic.
+
+- **AJ9 — four bare-"floor" sites fixed, and the naming in the instruction
+  corrected.** The instruction identified `:1209`, now `:1220` after the abstract
+  grew, as the `6/23` object. It is not. That sentence closes §7.3, which is the
+  in-sample bin map on 100 cases, and its antecedent is the clause before it: 8 misses
+  that recalibrating this marginal cannot remove. A count, on 100 cases, which is Z9's
+  residual-miss floor, and V3 assigns that object to the Conclusion and to in-sample
+  Results while `6/23` stays in the Calibration subsection. Naming it "reachable-score
+  floor" would have moved §6.6's probability onto §7.3's count — the same two-maps
+  collapse twice corrected already this pass. Fixed: `:1220` and `:1458` and `:1466`
+  to "residual-miss floor", `:870` to "reachable-score floor". Left alone: `$2/13$ is
+  a floor on the gap` at `:837` and `:1311`, which is a third object and qualified by
+  AG3, and the Python floor at `:1385`, which is a different word.
+
+- **AJ10 — the three-questions sentence no longer calls all three open.** With one
+  closed and one mostly answered, "Three questions follow directly from these results"
+  alone overstated what is outstanding. It now names the split. Raised in the plan as
+  an addition beyond the map rather than folded in silently.
+
+- **AJ11 — what the pass did not touch.** The turn-boundary entry, which is
+  KEPT-AS-LIMITATION and which `v2-policy-boundary.md` part 4 depends on; the summary
+  paragraph; the AI-use statement. AG11 is discharged by this pass and its status
+  stays **noted** as the deferral it recorded.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AJ1 | Block prefixed AJ, skipping AI, which collides with the provenance column | (AI-proposed) | **confirmed** |
+| AJ2 | The ask paragraph replaced by the answer with no retraction language, per the map and Y5b | (Kaps-decided) | **confirmed** |
+| AJ3 | The myopia passage lands as the proven claim: the bound first, then depth-independence, never "we did not look far enough ahead" | (Kaps-decided) | **confirmed** |
+| AJ4 | R2 restated in the Conclusion as the portable condition, in words and symbols, with the 6.25% margin | (AI-proposed) | **confirmed** |
+| AJ5 | Binding wording rule everywhere; the constrained carve-out referenced and its emptiness named contingent, not re-derived | (Kaps-decided) | **confirmed** |
+| AJ6 | KEPT-AND-PROVEN discharged: v1's granularity claim reported as tested, and its "next step" turned into a reference | (AI-proposed) | **confirmed** |
+| AJ7 | The held-out pair is 7 to 2 of 50; the pre-reg's "8 → 2" crosses two arms and is left as written | (AI-proposed) | **noted** |
+| AJ8 | R8's mechanism travels with R7 inside the Conclusion per Z10; `6/23` not re-derived there | (AI-proposed) | **confirmed** |
+| AJ9 | Four bare-"floor" sites qualified; `:1220` is the residual-miss count, not `6/23`, against the instruction's naming | (AI-proposed) | **changed** |
+| AJ10 | The three-questions sentence names one closed, one mostly answered, one open | (Kaps-decided) | **confirmed** |
+| AJ11 | Turn boundary, summary paragraph and AI-use statement untouched; AG11 discharged | (AI-proposed) | **confirmed** |
+| AJ12 | Z21 registered against future-work prose promising what the theorem disproves; the sentence it was raised against does not exist in `main.tex`, so the rule is prospective | (Kaps-decided) | **noted** |

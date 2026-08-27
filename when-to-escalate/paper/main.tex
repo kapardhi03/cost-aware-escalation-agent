@@ -867,8 +867,8 @@ region in which asking is rational does exist, and it is not reached here: 8 of 
 100 cases carry the constraint, every one of them at $b_h \ge 0.40$, and none lies
 inside the region. The two ways of being empty are different, and they are not
 merged. On the calibrated arm the emptiness is structural: the fitted map's
-reachable range has a floor above $1/5$, so no input can produce a belief low
-enough to qualify --- the reachable-score floor reported with the calibration
+reachable-score floor sits above $1/5$, so no input can produce a belief low
+enough to qualify --- the same floor reported with the calibration
 result in Section~\ref{sec:calibration}. On the published, rebaselined and raw arms
 it is contingent: 31 of
 the raw beliefs do fall below $1/5$, and the region stays empty only because none
@@ -1217,8 +1217,8 @@ down into the over-confident 0.7--0.8 bin and switches from
 The cost is paid in human load. Escalations rise from 43 to 60, precision falls from
 0.605 to 0.567, and recall rises from 0.619 to 0.810. Recalibration does not make
 the policy better on every axis; it buys recall with load, and 8 misses remain that
-no amount of recalibrating this marginal removes. That floor, not the halving, is
-the finding.
+no amount of recalibrating this marginal removes. That residual-miss floor, not the
+halving, is the finding.
 
 
 \subsection{A failure the test set cannot show}
@@ -1448,28 +1448,59 @@ redesign --- though, as Section~\ref{sec:results} notes, that localisation is
 consistent with the two-part belief without being evidence for it, since the
 experiment never observes the joint distribution.
 
-Three questions follow directly from these results.
+Three questions follow directly from these results. This version closes one of them,
+answers most of another, and leaves the third open.
 
-The first is calibration, and it is the one this version can partly answer.
-Recalibrating the needs-human marginal in-sample halves the misses, from 16 to 8,
+The first is calibration, and it is the one it answers most of. Recalibrating the
+needs-human marginal in-sample halves the misses on those 100 cases, from 16 to 8,
 and cuts mean cost from 1.650 to 1.250 --- but the composition is 9 fixed, 7
-surviving, and 1 newly created, and escalations rise from 43 to 60 to pay for it.
-The floor is real and it has a specific cause: 6 of the 7 survivors sit at
-$b_h = 0.20$, in a bin whose observed frequency is also below the threshold, so no
-mapping of that bin to a single value can rescue them. The floor is therefore set
-by the granularity of the elicitation, not by the calibration method. The next step
-is a finer-grained belief and a held-out recalibration fit, since the numbers here
-are an in-sample ceiling.
+surviving, and 1 newly created, and escalations rise from 43 of 100 to 60 to pay for
+it. The residual-miss floor is real and it has a specific cause: 6 of the 7
+survivors sit at $b_h = 0.20$, in a bin whose observed frequency is also below the
+threshold, so no mapping of that bin to a single value can rescue them. It is
+therefore set by the granularity of the elicitation, not by the calibration method
+--- and that last claim is the one thing here that can now be reported as tested
+rather than asserted. What an earlier draft named as the next step, a finer-grained
+belief and a held-out recalibration fit, is Section~\ref{sec:calibration}: eliciting
+$b_h$ from digit logprobs and fitting the map on 50 development cases takes the
+misses on the other 50 from 7 of 50 to 2 of 50. That residual-miss floor was
+breakable, and it broke when the elicitation got finer, which is what the claim
+predicted. It was not free. The mean rises from 1.40 to 1.50 on that half and the
+calibrated arm escalates 41 of the 50, because a PAVA-fitted map cannot emit a score
+below the positive rate of its lowest pooled block and the threshold for answering
+lies underneath that reachable-score floor. So the granularity claim survives and
+the bound moves: out of the elicitation, into the calibration map.
 
-The second is the ask action. A myopic policy cannot price the value of asking,
-because that value is a better belief next turn. This experiment makes the cost of
-that concrete: \emph{ask} is dominated by \emph{answer} when no human is needed and
-by \emph{escalate-notify} when one is, so it is selected zero times out of 100, as
-is \emph{escalate-pause}. The five-action set is really a three-action set in
-practice. Scoring the ask action by its
-one-step value of information, and testing whether it then earns its place against
-hold and escalate, would close the gap the current design leaves open, and would
-say whether the action is genuinely useful or merely unpriced.
+The second is the ask action, and it is the one that closes. An earlier draft left
+it open as a question --- whether asking is genuinely useful or merely unpriced ---
+and the answer is neither. It is priced, and it loses. Scoring the action by its
+one-step value of information is what Section~\ref{sec:unused} does, and what comes
+out is a bound rather than a measurement: on the unconstrained action menu the value
+of one more question is at most $-2/13$ at every belief in the simplex
+(Theorem~\ref{thm:ceiling}), attained at the all-hot vertex, so there is no belief a
+deployment could reach at which the question is worth its fee. Nor is that an
+artefact of the one-step horizon. Posteriors are beliefs, so the same bound holds at
+every node of a lookahead tree, and the budgeted family collapses:
+$W_k = V_{\mathrm{act}}$ for every $k \ge 1$. Asking does not fail here because the
+policy looks only one step ahead. It fails at every depth. \emph{Ask} is selected
+zero times out of 100 and \emph{escalate-pause} zero times as well, and the
+five-action set is a three-action set in practice --- what this version adds is that
+the two zeros follow from the cost matrix rather than from the case set.
+
+What transfers is not that number but the condition behind it. A question can be
+rational at some belief on the unconstrained menu only if
+$c_F/\nu + c_T/\alpha < 1$: the fee for asking when no human is needed, measured
+against the cost of a needless escalation, plus the fee for asking when one is,
+measured against the cost of a false answer, together coming to less than the whole.
+Here they come to $16/15$, so the condition fails, and it fails by 6.25\% ---
+scaling the \emph{ask} row by $15/16$ puts the ceiling exactly at zero. A designer
+with a cheaper question, a single tap or an inference from metadata already
+collected, is on the other side of that line, and the same inequality says where the
+line is. Asking
+is not useless in general. On this matrix, and on the unconstrained menu, it is
+priced out; Section~\ref{sec:unused} also carves out the one place it is not, where
+the hard constraint removes \emph{answer} and the ceiling turns positive over a
+region of hot beliefs that no case in this set occupies.
 
 The third is the turn boundary. The one failure the synthetic test set cannot
 produce is the one that came from a live run, where a high-cost signal was lost
