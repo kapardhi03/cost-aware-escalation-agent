@@ -33,6 +33,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}       % ADDED. Expectation and set symbols for the policy.
 \usepackage{amsthm}
+\newtheorem{theorem}{Theorem} % ADDED. amsthm declares no environment by itself.
 \usepackage{booktabs}
 \usepackage{algorithm}
 \usepackage{algorithmic}
@@ -495,10 +496,13 @@ modestly above the line.
 
 The precision of the fraction is misleading, however, and it is worth saying so
 before the results lean on it. The elicited $b_h$ takes only eight distinct values
-over the 100 cases, all at one decimal place, and none of them falls in
-$(0.2, 0.3]$. Every threshold in that interval therefore produces identical
-decisions on every case, and $3/13 \approx 0.231$ is one arbitrary point inside a
-band the measurement cannot resolve. Nothing in the results distinguishes it from
+over the 100 cases, all at one decimal place, and none of them falls in the open
+interval $(0.2, 0.3)$. Every threshold in the half-open $(0.2, 0.3]$ therefore
+produces identical decisions on every case --- the value gap is open at the top
+because 17 of the 100 cases sit at exactly $0.3$, while a threshold at $0.3$ still
+leaves all 17 on the escalate side --- and $3/13 \approx 0.231$ is one arbitrary
+point inside a band the measurement cannot resolve. Nothing in the results
+distinguishes it from
 $0.25$.
 
 This clean single threshold holds only when the runner-up action is
@@ -572,6 +576,16 @@ between development and test totals reflects that construction rather than
 out-of-sample generalization, and Section~\ref{sec:results} reads the split
 numbers with that in mind.
 
+The same split does double duty. The calibration map of
+Section~\ref{sec:calibration} is fitted on the 50 development cases and every
+number that map is judged by is scored on the 50 test cases, so the calibrated
+beliefs on the development half are in-sample and are not reported as a result.
+Matching the halves by construction cuts both ways here. It is why close agreement
+between the two is not evidence of generalization, and it is also why they are an
+acceptable place to fit a one-dimensional map and then score it: the fit cannot be
+flattered by an easier half to score on, because the archetypes and the
+needs-human count are balanced across the two.
+
 \subsection{Policies and baselines}
 Two policies are compared over the same beliefs. The \emph{cost-aware} policy is
 the minimum-expected-cost rule of Section~\ref{sec:model} under the full
@@ -601,6 +615,40 @@ human but did not get one), escalation precision and recall, the number of
 escalations, the number of hard-constraint violations, and the calibration of the
 belief. Calibration is measured as expected calibration error on the needs-human
 marginal, since that is the probability the escalation threshold acts on.
+
+\paragraph{Entropy thresholds.} One further quantity is measured in bits rather
+than in cost points, and it is defined here rather than where it is used, because a
+later section places a threshold on it. $H(b)$ is the entropy of the belief over
+the six hidden states, so it runs from 0 to $\log_2 6 \approx 2.585$ bits. The
+entropy-threshold baseline reported below asks whenever $H(b) > \tau$ and otherwise
+takes the cheapest action other than asking, which on these beliefs is the action
+the policy of Section~\ref{sec:model} takes case for case. That makes $\tau$ the
+only thing $H(b)$ is ever compared against. No quantity in bits is compared to a
+quantity in cost points anywhere in this paper: the entropy selects which cases are
+asked about, and the cost matrix scores what happens.
+
+$\tau$ is not set in absolute bits. It is a grid of eleven thresholds placed at the
+quantiles $0.0, 0.1, \ldots, 1.0$ of the observed $H(b)$ on the arm being scored,
+linearly interpolated. The reason is that the observed distribution is bunched: on
+the run's own beliefs $H(b)$ spans 0 to 2.456 bits with a median of 2.017, so an
+evenly spaced grid over the theoretical range would put most of its points in a
+region holding almost no cases, and would report the spacing of the grid rather
+than the behaviour of the rule. Deciles make the step commensurate with the
+observed spread by construction. $H(b)$ is rounded to twelve decimals before it
+meets $\tau$, a figure derived from the measured float-noise bound on each arm
+rather than chosen.
+
+Three things follow from that definition rather than from any result, and are
+stated here so that they are not read as findings later. A decile grid on a tied
+distribution repeats values: the eleven quantiles give eight distinct thresholds on
+the run's own beliefs and eleven on the re-elicited beliefs of
+Section~\ref{sec:calibration}, and two quantiles that yield the same $\tau$ yield
+the same set of asked cases and the same cost by construction rather than by
+coincidence. The same quantile is a different number of bits on each set of
+beliefs, because $H(b)$ moves when the belief moves, so the arms are compared at
+equal quantiles and never at equal bits. And the grid is taken over all 100 cases
+of an arm while the sweep is scored on the 50 test cases, so the top decile asks
+about nothing at all whenever an arm's highest-entropy case is a development case.
 
 \section{Results}
 \label{sec:results}
@@ -674,20 +722,172 @@ the other. Tuning a threshold on the development half by realised cost selects
 $t = 0.00$ --- escalate everything --- at cost 1.740, which recovers the
 always-notify result rather than the cost-aware one.
 
-\subsection{Two actions that are never used}
+\subsection{Two actions that are never used, and why neither can be}
+\label{sec:unused}
 Of the five actions, the cost-aware policy selects only three across all 100
 cases: \emph{answer} 30 times, \emph{hold} 27, \emph{escalate-notify} 43.
-\emph{Ask} and \emph{escalate-pause} are selected zero times. This is a property of
-the matrix rather than of the cases. \emph{Ask} costs 2 when no human is needed
-against 0 for \emph{answer}, and 4 when one is needed against 0 for
-\emph{escalate-notify}, so it is dominated at both ends and can only win in a
-narrow middle band that the quantized beliefs never land in. \emph{Escalate-pause}
-is dominated by \emph{escalate-notify} in every column. The paper describes a
-five-action set, but every reported number comes from a three-action policy, and
-the two unused actions are untested by this experiment. The myopia limitation in
-Section~\ref{sec:limitations} compounds this: a one-step rule cannot price
-\emph{ask}'s payoff, so the action most obviously suited to an ambiguous inbound
-message is both unpriced and unused.
+\emph{Ask} and \emph{escalate-pause} are selected zero times, and the same census
+is reproduced independently by the value-of-information analysis below. This is a
+property of the matrix rather than of the cases, and this section proves it rather
+than observing it. Each of the two unused actions fails for a different reason,
+and neither reason mentions the data.
+
+\paragraph{Asking.} \emph{Ask} costs 2 when no human is needed against 0 for
+\emph{answer}, and 4 when one is needed against 0 for \emph{escalate-notify}, so
+it is dominated at both ends. That arithmetic does not settle the middle, and the
+middle is what has to be settled, because a question is not priced by its own row
+alone but by its row plus the cost of acting afterwards. Write
+\begin{equation}
+V_{\mathrm{act}}(b) = \min_{a \,\neq\, \textit{ask}} \mathbb{E}_b[C(a)]
+\end{equation}
+for the cost of acting now on the best non-\emph{ask} action, let $c_F = 2$ and
+$c_T = 4$ be the \emph{ask} row, and let $\alpha = 10$ and $\nu = 3$ be the cost
+of a false answer and of a needless notify. Asking question $q$ pays only if
+$\mathbb{E}_b[C(\textit{ask})] + \sum_u P_b(u) V_{\mathrm{act}}(b^u)$ falls below
+$V_{\mathrm{act}}(b)$, where $b^u$ is the posterior after answer $u$. Every cost
+in Table~\ref{tab:costs} is non-negative, so that continuation term is
+non-negative, and a necessary condition for a positive value of information is
+that $\mathbb{E}_b[C(\textit{ask})] < V_{\mathrm{act}}(b)$ at some belief. No
+belief satisfies it.
+
+\begin{theorem}
+\label{thm:ceiling}
+With the costs of Table~\ref{tab:costs}, at every belief $b$ in the readiness
+simplex crossed with $b_h \in [0, 1]$,
+\begin{equation*}
+V_{\mathrm{act}}(b) - \mathbb{E}_b[C(\textit{ask})]
+  \;\le\; -\tfrac{2}{13} \;\approx\; -0.1538 ,
+\end{equation*}
+and the bound is attained. The value of information of every question at every
+belief is therefore at most $-2/13$, and \emph{ask} is never the $\arg\min$ on
+the unconstrained action menu.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+$\mathbb{E}_b[C(\textit{ask})] = c_F + (c_T - c_F)\,b_h$ is affine in $b_h$ and
+free of readiness, and $V_{\mathrm{act}}(b) \le \min\{\alpha b_h,\, \nu(1 - b_h)\}$
+because the \emph{answer} and \emph{escalate-notify} rows are themselves flat
+across readiness. The difference is thus bounded by a piecewise linear function
+whose \emph{answer} branch has slope $\alpha - (c_T - c_F) > 0$ and whose
+\emph{escalate-notify} branch has slope $-(\nu + c_T - c_F) < 0$, both signs
+following from $-\nu < c_T - c_F < \alpha$, which the implementation asserts
+rather than assumes. Its maximum is at the crossing $b_h = b_h^{\star} = 3/13$
+and equals $[\alpha\nu - (\alpha c_F + \nu c_T)]/(\alpha + \nu) = (30 - 32)/13$.
+The bound is attained where $V_{\mathrm{act}}$ meets that envelope: at the
+all-hot vertex with $b_h = 3/13$, \emph{hold} costs $84/13$ and
+\emph{escalate-pause} $66/13$, so neither lowers the cap, and
+$V_{\mathrm{act}} = 30/13$ against $\mathbb{E}_b[C(\textit{ask})] = 32/13$. The
+computation is in exact rational arithmetic; a deliberately crude 60-step float
+grid over the same domain reaches $-0.166667$ and never exceeds the closed form.
+\end{proof}
+
+The maximum is taken over the whole belief space and not over the 100 elicited
+beliefs, which is what exposes the two errors in the claim this passage replaces.
+There is no narrow middle band on the unconstrained menu: the ceiling is negative
+at every belief in the simplex, and its largest value anywhere is $-2/13$. And
+quantization is not the cause. The elicited $b_h$ takes eight distinct values, but
+a re-elicited arm carrying 100 distinct values leaves the region exactly as empty:
+across four belief arms and 400 case--arm pairs, no case has a positive ceiling,
+and the per-case maximum on the published beliefs is $-0.4000$. A finer belief
+does not find the band, because there is no band to find.
+
+Attainment is not a second result but what makes the first one sharp. A negative
+ceiling could otherwise be an artefact of a loose bound, and the strongest form of
+that objection is answerable directly. On 16 of the 400 case--question pairs scored
+on the published beliefs the continuation term $\sum_u P_b(u) V_{\mathrm{act}}(b^u)$
+is exactly zero: the question resolves the state and the action taken afterwards is
+free. Asking still loses, and it loses by the full ceiling at that belief rather
+than by a residue, because the fee is paid before the answer arrives. The count is
+52 such pairs on the calibrated arm, 12 on the rebaselined arm and 0 on the raw
+arm. The theorem does not rest on those pairs; they are where its inequality stops
+being one.
+
+Nor does the result rest on the policy's one-step horizon. Define the cost of
+acting under a budget of $k$ remaining questions by $W_0 = V_{\mathrm{act}}$ and
+\begin{equation}
+W_k(b) = \min\Bigl\{ V_{\mathrm{act}}(b),\;
+  \mathbb{E}_b[C(\textit{ask})] + \sum_u P_b(u)\, W_{k-1}(b^u) \Bigr\} ,
+\end{equation}
+so that the policy reported here is $W_1$. Two facts already in hand close every
+$k$ at once. Theorem~\ref{thm:ceiling} is quantified over all beliefs, and
+posteriors are beliefs: $b^u$, and every deeper node of any lookahead tree, is a
+point of the same simplex, so the ceiling binds at every node and not only at the
+root. And $W_k \ge 0$ for every $k$, by induction from the non-negativity of
+Table~\ref{tab:costs}. Together, at every belief and every $k \ge 1$, the ask
+branch costs at least $\mathbb{E}_b[C(\textit{ask})] \ge V_{\mathrm{act}}(b) +
+2/13$, so $W_k = V_{\mathrm{act}}$ and the tree collapses to acting now. Every
+term dropped in that chain is non-negative, so deeper lookahead can only make the
+ask branch dearer: $2/13$ is a floor on the gap, not an estimate of it. The second
+fact is trivial, following from the cost matrix alone with no reference to the
+beliefs, the answer model or the question set, and that is exactly why it can be
+asserted at every node of a tree nobody enumerates.
+
+The theorem is a statement about four numbers, and the part that transfers is
+worth separating from the part that is ours. Rearranged, a question can be
+rational at some belief on the unconstrained menu only if
+\begin{equation}
+\frac{c_F}{\nu} + \frac{c_T}{\alpha} < 1 ,
+\end{equation}
+that is, only if the fee for asking when no human is needed, measured against the
+cost of a needless escalation, plus the fee for asking when one is needed, measured
+against the cost of a false answer, together come to less than the whole. Here the
+sum is $2/3 + 4/10 = 16/15 > 1$, so the condition fails, and it fails by 6.25\%:
+scaling the \emph{ask} row by $\lambda = 15/16$, to $(1.875, 3.75)$, puts the
+ceiling exactly at zero. That is the useful form of the result. A designer with a
+cheaper question --- a single-tap reply, an inference from metadata --- crosses the
+line, and the same inequality says where the line is. What this experiment shows is
+not that asking is useless in general, but that on this matrix asking is priced
+out, by a margin small enough that the pricing rather than the principle is what
+decides it.
+
+One qualification is load-bearing, and the theorem is stated with it: the menu is
+the unconstrained one. On \texttt{no\_direct\_answer} cases \emph{answer} is
+removed from the feasible set, and with the cheapest row gone the ceiling turns
+positive --- $+1$ at the all-hot vertex with $b_h = 0$. Along the ray through that
+maximum the positive region is $b_h < 1/5$, bounded there by
+\emph{escalate-notify} rather than by \emph{hold} or \emph{escalate-pause}. So a
+region in which asking is rational does exist, and it is not reached here: 8 of the
+100 cases carry the constraint, every one of them at $b_h \ge 0.40$, and none lies
+inside the region. The two ways of being empty are different, and they are not
+merged. On the calibrated arm the emptiness is structural: the fitted map's
+reachable range has a floor above $1/5$, so no input can produce a belief low
+enough to qualify --- the reachable-score floor reported with the calibration
+result in Section~\ref{sec:calibration}. On the published, rebaselined and raw arms
+it is contingent: 31 of
+the raw beliefs do fall below $1/5$, and the region stays empty only because none
+of those cases carries \texttt{no\_direct\_answer}. That is a fact about this
+dataset, not about the matrix.
+
+\paragraph{Pausing.} \emph{Escalate-pause} is dominated by \emph{escalate-notify}
+in every column of Table~\ref{tab:costs}, and dominance in the matrix is a
+stronger statement than absence from the census. The gap is 3 in the hot state
+where no human is needed, 2 in the warm and cold states where none is needed, and
+2, 1 and 1 in the three states where one is: strictly positive in all six, and
+between 1 and 3. Expected cost is a belief-weighted average over columns, so no
+belief can invert a strict column-wise ordering, and \emph{escalate-pause} cannot
+be the $\arg\min$ anywhere --- not merely at the 100 beliefs elicited here.
+
+That also bounds abstention as a design option. A rule that hands the conversation
+over rather than notifying converts \emph{escalate-notify} decisions into
+\emph{escalate-pause} decisions, so it raises realised cost by between 1 and 3 on
+every case it touches, and it cannot reduce the count of missed escalations at all,
+since a miss is a case needing a human on which the agent did not escalate and both
+escalate actions count as escalating. Only a rule that converts a non-escalation
+into a pause can move that count. Abstention is therefore priced rather than
+unexplored, and what remains empirical is how many cases such a rule touches and
+whether the misses it avoids are worth the penalty it pays.
+
+The census is unchanged: the paper describes a five-action set and every reported
+number comes from a three-action policy. What changes is the reason. The two unused
+actions are not untested by this experiment --- both are tested, and each fails for
+a different proven reason: \emph{ask} by a ceiling on the value of information that
+is negative at every belief on the unconstrained menu, \emph{escalate-pause} by
+column-wise dominance in the matrix. The one-step horizon is a real limitation of
+the policy and is stated as one in Section~\ref{sec:limitations}, but it is not the
+reason \emph{ask} goes unused and it does not compound this: the horizon was the
+candidate explanation, and Theorem~\ref{thm:ceiling} together with the collapse of
+$W_k$ removes it. The action most obviously suited to an ambiguous inbound message
+is unused because it is priced out, not because it is unpriced.
 
 \subsection{The comparison that is a tie, not a win}
 Against always-notify, which escalates every message, the cost result is close to
@@ -703,6 +903,7 @@ conversations is the operational win, and it is a different claim from a cost wi
 so both are reported.
 
 \subsection{The development and test split}
+\label{sec:split}
 Both halves reach the same total cost for the cost-aware policy (86 each) and for
 the uniform baseline (129 each). This looks like clean generalization and is not.
 The split was stratified by archetype and sub-variant and balanced on the
@@ -714,6 +915,7 @@ built to mirror each other. On synthetic data of this kind, matched by design,
 this figure cannot stand as out-of-sample evidence, and it is not read as such.
 
 \subsection{Calibration}
+\label{sec:calibration}
 \begin{figure}[t]
     \centering
     \includegraphics[width=\columnwidth]{reliability-needs-human.pdf}
@@ -724,8 +926,11 @@ this figure cannot stand as out-of-sample evidence, and it is not read as such.
     are Wilson 95\% intervals, because the bins hold between 4 and 35 cases and
     most are individually consistent with perfect calibration. The vertical line is
     $b_h^{\star} = 3/13 \approx 0.231$; the shaded band is the interval of
-    thresholds that decide identically, since the elicited marginal takes only
-    one-decimal values and no case falls in $(0.2, 0.3]$. The bin that
+    thresholds that decide identically, which is the half-open $(0.2, 0.3]$. The
+    two brackets are not interchangeable: the elicited marginal takes only
+    one-decimal values, so no case falls in the \emph{open} interval $(0.2, 0.3)$,
+    while 17 of the 100 cases sit at exactly $0.3$ and a threshold placed there
+    still puts all 17 on the escalate side. The bin that
     \emph{contains} the threshold, 0.2--0.3, is the largest ($n = 35$) and is very
     slightly over-confident (predicted 0.200, observed 0.171, CI $[0.081, 0.327]$).
     Its neighbours at 0.1--0.2 and 0.3--0.4 are under-confident by 0.300 and 0.288.
@@ -736,7 +941,8 @@ this figure cannot stand as out-of-sample evidence, and it is not read as such.
     \label{fig:reliability}
     \end{figure}
     
-Every one of the 16 missed escalations came from the same place: the belief
+Every one of the 16 missed escalations in the 100-case run of
+Table~\ref{tab:results} came from the same place: the belief
 under-estimated the needs-human probability, not the readiness. On all 16, the
 needs-human estimate was 0.30 or below against a true label of needing a human,
 while the readiness argmax on those same cases was spread across cold, hot, and
@@ -760,14 +966,118 @@ perfect calibration, so the ECE point estimate carries most of the evidential
 weight here and its interval is wide.
 
 Because the failures trace to the needs-human marginal rather than to the readiness
-marginal, recalibrating that marginal is the natural first fix, and
-Section~\ref{sec:failure} reports what it recovers. This is weaker than the claim
+marginal, recalibrating that marginal is the natural first fix. Two fits are
+reported and they are not interchangeable: Section~\ref{sec:failure} fits on all
+100 cases and is an in-sample ceiling, while the fit below is fitted on 50
+development cases and scored on the 50 test cases. This is weaker than the claim
 an earlier draft made. That the misses localise to one marginal is consistent with
 the independent two-part belief, but it is not evidence \emph{for} independence: the
 experiment records only the two marginals, never the joint, so it cannot detect the
 two components interfering even if they did. Testing independence would require
 eliciting $P(s, h)$ directly and comparing it against $P(s)\,P(h)$, which this run
 does not do.
+
+\paragraph{A finer belief, fitted on one half and scored on the other.}
+The diagnosis above is a claim about the elicitation, so it can be tested by
+changing the elicitation. Re-eliciting $b_h$ as an expectation over the model's
+digit logprobs, rather than as a probability the model writes out in words,
+replaces the eight one-decimal values it produced over the 100 cases with 43
+distinct scores on the 50 test cases. The elicitor itself was chosen on the
+development half by cross-entropy: reading the digit distribution reaches 0.9934
+bits there against 1.8004 bits for asking the model Yes or No and taking the
+probability of Yes, a margin of 0.8071 bits. Three candidate maps were then fitted
+on those same 50 development cases --- identity, Platt, isotonic --- under a rule
+fixed before the fit, that an order-preserving map is kept unless a merging one
+beats it by more than 0.02 bits. Isotonic reached 0.8356 bits against Platt's
+0.9103 and identity's 0.9934, a margin of 0.0747, so the merging map was taken and
+the shipped map does not preserve the ranking of the test scores. Applied unchanged
+to the 50 test cases, it improves all three proper scoring rules named in advance:
+cross-entropy 0.8546 to 0.8136 bits, against a label entropy of 0.9815 bits at a
+base rate of 0.42; ECE 0.1526 to 0.0696; Brier 0.2063 to 0.1962, with the 43
+distinct scores merged to 33. On those same 50 cases the policy driven by the
+calibrated score stops using \emph{answer} at all: its action census goes from
+\{\emph{answer} 12, \emph{escalate-notify} 21, \emph{hold} 17\} to
+\{\emph{escalate-notify} 41, \emph{hold} 9\}, so on this arm the two never-used
+actions of Section~\ref{sec:unused} are three. The trade-off is sharpest in the
+escalation rates on those 50 cases: precision falls from 0.667 to 0.463 while
+recall rises from 0.667 to 0.905, so the calibrated belief catches nearly every
+case that needs a human and pays for it by escalating most of the ones that do
+not. These are not two findings. The
+second is caused by the first, and the cause is the map's range rather than the
+scores it happened to produce.
+
+\paragraph{Why \emph{answer} disappears.}
+Isotonic regression by PAVA sets each pooled block's level to that block's own
+positive rate. The lowest block of the committed map pools 23 of the 50 development
+cases, 6 of which are positive, so its level is the probability
+$6/23 = 0.260870$ --- the reachable-score floor of the map, a probability and not a
+count --- and no input can make the map emit a score below it. The interval
+$[0, 6/23)$ is unreachable rather than merely unpopulated. The boundary the score
+has to fall below for \emph{answer} to be the cheapest action is
+$b_h^{\star} = 3/13 \approx 0.230769$, and it lies inside that unreachable
+interval:
+\begin{equation}
+\frac{1}{5} < \frac{3}{13} < \frac{6}{23} ,
+\end{equation}
+an ordering that spans less than 0.061 end to end, which is why all three are
+carried as exact rationals rather than to two decimal places. Of the 50 test
+cases, 24 sit below $3/13$ on the raw score and none does after the map. The
+calibrated arm is therefore a two-action policy by construction rather than by
+preference, and the same ordering settles the constrained-menu region of
+Section~\ref{sec:unused}, since $6/23$ is above the $1/5$ bound as well. This is a
+statement about the map's range and not about how many cases land on it: of the 100
+scored cases exactly one sits at the reachable-score floor, and it is a development
+case, because interpolation lifts the rest of the lowest block strictly above it.
+The transferable form is that a PAVA-fitted
+map's reachable range is bounded below by the positive rate of its lowest pooled
+block, and that cross-entropy, ECE and Brier never check whether a policy's fixed
+thresholds sit inside that range.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Arm, on the 50 test cases & Total & Mean & Miss \\
+\midrule
+re-elicited, uncalibrated & 70 & 1.40 & 7 \\
+re-elicited, calibrated   & 75 & 1.50 & 2 \\
+written belief            & 86 & 1.72 & 8 \\
+always-notify             & 87 & 1.74 & 0 \\
+\bottomrule
+\end{tabular}
+\caption{Secondary numbers for the held-out fit, on the 50 test cases only. Total
+is the realised cost over those 50, Mean is per case, and Miss is missed
+escalations out of 50. These are reported next to the calibration metrics and are
+not the claim; the claim is the three proper scoring rules. The test half carries
+only 8 of the 16 missed escalations of the full 100-case run
+(Table~\ref{tab:results}), so a change of one or two misses on this half is not
+evidence. The written-belief row re-elicits the one-decimal probability of that run
+and reaches the same total, mean and miss count on this half as its cached beliefs
+do --- aggregate agreement only, not a case-for-case replay. It also shows why the
+denominators matter: the mean is unchanged from the 100-case run at 1.72 while the
+miss count is half, so the mean may be compared across the two populations and the
+count may not. The two re-elicited rows are the calibration contrast, 7 misses of
+50 down to 2 of 50 at a mean rising from 1.40 to 1.50 --- breakable, and not free.
+Always-notify escalates all 50 by construction and the calibrated arm escalates 41
+of them, so much of what calibration buys here is a move toward blanket
+escalation.}
+\label{tab:calibration}
+\end{table}
+
+\paragraph{What the held-out fit does and does not settle.}
+Table~\ref{tab:calibration} carries the cost and miss numbers for four arms on the
+test half, and they are secondary: the claim is the three scores above. The fit
+itself is a fit on one half of a synthetic set scored on the other, and
+Section~\ref{sec:split} has already said that the two halves are matched by
+construction, so it is not evidence that the belief would transfer to a deployment.
+What it is evidence for is narrower: the improvement in the three scores does not
+come from fitting the cases it is scored on. The two operations on the population
+also have to be kept apart. Section~\ref{sec:failure} fits the marginal on all 100
+cases in-sample and halves the misses from 16 to 8; restricting the same policy and
+the same beliefs from those 100 cases to these 50 also produces 16 to 8, and the
+two have nothing in common beyond the pair of numbers. Every miss count in this
+subsection carries the case set it was counted on for that reason.
+
 \section{Failure analysis}
 \label{sec:failure}
 

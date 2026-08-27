@@ -1347,3 +1347,310 @@ declared tie-break both interpreters produce 29 on published and 26 on raw, matc
 committed artifact, so no paper line or decision file is touched by it.
 
 Recorded as AB1–AB7 in `decisions/v2-design-decisions.md`.
+
+### Gate 7 — the theorem subsection, written first and alone (2026-08-27)
+
+`main.tex:677` was v1's `\subsection{Two actions that are never used}`: 14 lines
+carrying two false claims and, between them, the impossibility theorem asserted a year
+before it was proved. It is now 166 lines, and it was written before any other v2 prose
+because the pre-registration puts five of the eight results, three of the nine debts
+and seven of the sentence dispositions inside it. Writing the three beats separately is
+how the theorem ends up stated three times at three strengths.
+
+What was kept: the census — `answer` 30, `hold` 27, `escalate-notify` 43 — now with the
+note that the value-of-information analysis reproduces it independently; the `ask`
+arithmetic, 2 against 0 and 4 against 0, which is true; and `:681`, "a property of the
+matrix rather than of the cases," which is the theorem in v1's own words and is upgraded
+in place rather than replaced.
+
+What was replaced. The band claim is false twice and the rewrite says both: there is no
+narrow middle band on the unconstrained menu, because the ceiling is negative at every
+belief in the simplex with a maximum of `−2/13`; and quantization is not the cause,
+because the `raw` arm carries 100 distinct `b_h` where `published` carries 8 and leaves
+the region exactly as empty — no case with a positive ceiling on any of the four arms,
+400 case-arm pairs. Naming one error alone leaves a reader believing a finer belief
+would find the band. The "untested" claim is replaced by "tested, and each fails for a
+different proven reason," with the census unchanged. The myopia sentence is absorbed
+here rather than retracted a second time.
+
+Four beats. The theorem, with a proof sketch that carries the monotonicity conditions
+`−ν < c_T − c_F < α` the implementation asserts rather than assumes. Attainment, written
+as what makes the theorem sharp rather than as a second finding: on 16 of 400
+case-question pairs the continuation term is exactly zero — a free perfect oracle — and
+asking still loses the full ceiling, so the negativity cannot be read as slack in the
+bound. Depth-independence: `W_k = V_act` at every `k`, from the simplex-wide ceiling
+plus `W_k ≥ 0`, with `2/13` a floor on the gap and not an estimate of it. And the
+portable form, `c_F/ν + c_T/α < 1`, which fails here at `16/15` and fails by 6.25% —
+scaling the `ask` row by `15/16` to `(1.875, 3.75)` puts the ceiling at zero. That last
+beat is the one a reader can carry to another cost matrix.
+
+The binding wording holds throughout: the claim is asking is never rational **on the
+unconstrained action menu**. The constrained paragraph gives the positive region its
+own sentences — `+1` at the all-hot vertex with `b_h = 0`, the region `b_h < 1/5` on
+that ray bounded by `escalate_notify`, 8 cases carrying the constraint and every one at
+`b_h ≥ 0.40` — and keeps the two kinds of emptiness apart. Structural on `calibrated`,
+where the fitted map cannot emit a belief low enough to qualify. Contingent on the other
+three, where 31 raw beliefs do fall below `1/5` and none of them carries
+`no_direct_answer`. That is a fact about this dataset, not about the matrix.
+
+`escalate-pause` is the other half. Dominance in the matrix is stronger than absence
+from the census: the gap over `escalate-notify` is 3, 2, 2, 2, 1, 1 across the six
+states, strictly positive in all of them, and expected cost is a belief-weighted
+average over columns, so no belief can invert it. That also prices abstention: a
+notify-to-pause rewrite raises realised cost by 1 to 3 on every case it touches and
+cannot lower the missed-escalation count, since both escalate actions count as
+escalating.
+
+Every number in the subsection resolves against a committed key path; all 27 were
+re-checked after the prose was written, with no mismatch. Four of the paths were not in
+the pre-registration's §4.1 and were added to it rather than cut from the prose, since
+three of them carry the half of the band replacement a reader is most likely to doubt.
+
+Two things stayed out deliberately. `6/23` and the fact that the calibrated arm makes
+"two unused actions" three: both are consequences of the reachable-score floor, which
+belongs with the calibration result it cannot be separated from. The structural half of
+the emptiness argument therefore names that floor without its value and points forward.
+
+One edit landed outside the subsection. `amsthm` is loaded but declares no
+`\newtheorem`, and `ijcai26.sty` defines no theorem environment, so `\begin{theorem}`
+would not have compiled; one preamble line was added. No TeX distribution exists here,
+so that line is unfalsified rather than verified — Kaps holds the compile, on this
+subsection alone and ahead of the final build, because a broken theorem environment
+blocks every section after it. The bold run-in fallback is written down in case it
+collides.
+
+Recorded as AC1–AC4 in `decisions/v2-design-decisions.md`.
+
+### Gate 7 — the Calibration subsection, R7 and R8 as one object (2026-08-27)
+
+The second section, and the last one where two results have to be read together. v1's
+reliability diagnosis of the `needs_human` marginal stays whole: the figure, the 16
+misses that all came from that one marginal, and the two qualifications about the bin
+that actually contains `3/13`. What was missing is that the diagnosis was a testable
+claim about the elicitation, and Gate 2 tested it, so the fit now follows the diagnosis
+in the same subsection.
+
+R7 and R8 land in one paragraph, not one subsection. The pre-registration required the
+same subsection; a subsection can still be quoted a paragraph at a time, so the
+paragraph that reports cross-entropy 0.8546 → 0.8136 bits, ECE 0.1526 → 0.0696 and
+Brier 0.2063 → 0.1962 is the same paragraph that reports the action census going from
+`{answer 12, notify 21, hold 17}` to `{notify 41, hold 9}`. The mechanism follows in
+its own paragraph: PAVA's lowest block pools 23 dev cases with 6 positives, so the map
+cannot emit below `6/23 = 0.260870`, the ordering `1/5 < 3/13 < 6/23` spans less than
+0.061 end to end, and 24 of the 50 test cases sit below `3/13` on the raw score where 0
+do after the map. The calibrated arm is a two-action policy by construction.
+
+D4 is discharged three times, deliberately. The table header names the population; the
+caption states that the test half carries only 8 of the 100-case run's 16 misses, so a
+change of one or two on it is not evidence; and the closing paragraph says outright
+that the in-sample fit on 100 cases and the restriction from 100 cases to 50 produce
+the same pair "16 to 8" by unrelated routes. The mean is named as the quantity that
+survives the change of population and the count as the one that does not.
+
+The cost and miss numbers are in a table captioned as secondary, with the
+pre-registered caveat in the caption rather than in a footnote. The calibration
+contrast is 7 misses of 50 down to 2 of 50 at a mean rising 1.40 → 1.50, and the
+calibrated arm escalates 41 of 50 against always-notify's 50 — breakable, and not free.
+
+Nine key paths were not in §4.3 and were added to it. Two of them are prices rather
+than results: the 0.02-bit rule that allowed a non-order-preserving map to ship, and
+`order_preserved_on_test: false`. Reporting the win from the selection rule while
+leaving its cost unregistered is the shape of omission the trace exists to catch.
+
+The 11-of-100 belief drift stays out of Results. Its cause is undetermined, so the
+only honest sentence about it is that the cause is undetermined, which is a limitation
+and not a result. Results carries the aggregate consequence instead: the written-belief
+row reaches the same total, mean and miss count on this half as the cached beliefs do,
+aggregate agreement only and not a case-for-case replay. Keeping it out of Results is
+not the same as dropping it — Limitations owes it one line that gives the count and
+says the cause is undetermined, and that line is an open debt of this gate.
+
+The escalation precision and recall of the two re-elicited arms go into the same
+paragraph as the scores and the census: precision 0.667 to 0.463 against recall 0.667
+to 0.905. "Escalates 41 of 50" says how often the calibrated policy escalates; this
+pair says what the change bought and what it cost, which is the paragraph's tension
+stated as numbers instead of characterised. It sits immediately before "These are not
+two findings", so the pair cannot be lifted away from the sentence binding it to the
+score improvement. A tenth §4.3 row registers all four values.
+
+Three edits landed outside the subsection: `\label{sec:split}`, so the closing
+paragraph can point at the matched-by-construction argument instead of restating it;
+the theorem subsection's forward reference, wired to `Section~\ref{sec:calibration}`
+as AC3 deferred; and U7's prose twin at `:499`, which carries the same false bracket
+as the caption. U7 is one debt with two false lines and both are now replaced with the
+value gap `(0.2, 0.3)` open at both ends against the threshold interval `(0.2, 0.3]`,
+with the 17 cases at exactly `0.3` given as the reason. `:1123` was already correct and
+is untouched.
+
+Recorded as AD1–AD7 in `decisions/v2-design-decisions.md`.
+
+### Gate 7 — Method: τ as deciles, and the split that fits and scores (2026-08-27)
+
+The τ definition goes in §Method's metrics subsection rather than in the section that
+reports what thresholding costs. A threshold on `H(b)` set in absolute bits is the S4
+shape — a numeric rule governing a quantity whose scale the rule never consulted — and
+the fix only reads as a fix where the quantity is defined. Met for the first time in
+the section that reports its cost, a designed grid is indistinguishable from a
+convenient one.
+
+The paper gives the reason without naming the failure mode. `H(b)` runs from 0 to
+2.456 bits with a median of 2.017 on the run's own beliefs, so an evenly spaced grid
+over the theoretical `[0, log2 6]` range would put most of its points where almost no
+case sits and would report the spacing of the grid rather than the behaviour of the
+rule. Deciles make the step commensurate with the observed spread by construction.
+
+All three definitional consequences are stated in Method, not left for the section
+that uses them: the eleven quantiles collapse to eight distinct thresholds on the
+run's own beliefs and eleven on the two re-elicited sets, and equal thresholds give
+the same asked set and the same cost by construction; the same quantile is a
+different number of bits on each set of beliefs, because `H(b)` moves when the belief
+moves; and the grid is taken over all 100 cases of an arm while the sweep scores the
+50 test cases, so the top decile asks about nothing when an arm's highest-entropy
+case is a development case. Each is a place where a mechanical property of the grid
+could be presented later as a finding about the rule.
+
+The units constraint is now in the paper: no quantity in bits is compared to a
+quantity in cost points, the entropy selects which cases are asked about and the cost
+matrix scores what happens. It has held in the code since it was set; this is the
+first sentence that makes it checkable by a reader rather than only by the tests.
+
+The firing fallback is defined as the cheapest action other than asking, with the
+coincidence — that it is the policy's own action case for case on these beliefs, and
+reproduces the committed fallback total — as a following clause. Defining it as "what
+the policy would have done" would make the baseline depend on the theorem that asking
+never wins, and the baseline has to be readable without it.
+
+τ's consumer is named in words, not with a `\ref`. R5's subsection does not exist, so
+a `\ref` would dangle and fail the resolve check that runs at every paper commit; the
+wiring is owed to that pass, the same debt AC3 carried for `sec:calibration`.
+`\subsection{Policies and baselines}` is untouched: the entropy baseline is not one of
+Table 2's five policies and listing it there would misstate the table.
+
+§Method's split subsection gains the fit-and-score assignment — the map is fitted on
+the 50 development cases and judged on the 50 test cases, so calibrated beliefs on the
+development half are in-sample and are not reported as a result — and turns the
+existing matched-by-construction caveat both ways. It gets no `\label`; nothing points
+at it yet.
+
+Six definitional numbers are registered in §4.2. Definitions trace on the same terms
+as results, and an unregistered definition is where a later gate would be free to
+re-choose the grid and call the old numbers comparable. `[0, log2 6]` stays
+unregistered as arithmetic on the six-state belief.
+
+Recorded as AE1–AE9 in `decisions/v2-design-decisions.md`.
+
+### Gate 7 — the offline compile check, and the figure the README got wrong (2026-08-28)
+
+Three sections are now stacked on a build nobody has confirmed, and the compile is not
+mine to run: there is no TeX in this environment. `pdflatex`, `xelatex`, `lualatex`,
+`latexmk` and `latex` are all absent; `tectonic` is installed and panics creating its
+own cache directory, and would need network for its bundle either way. So "it builds"
+stays Kaps's falsifier. What could be established without TeX was established instead.
+
+The `\newtheorem` collision is statically excluded rather than merely unlikely.
+`ijcai26.sty` is 335 lines and contains zero occurrences of "theorem"; neither
+`article` nor `amsmath` nor `amsthm` defines a `theorem` environment. The tracked
+`paper/main.pdf` is a v1 build product, and the preamble at the commit that produced it
+already loaded `amssymb` and `amsthm` — so the package list is known to compile and the
+only delta since is one `\newtheorem` line that cannot collide with anything.
+
+The scratch preflight is now `tests/paper_preflight.py` with 60 tests over it, and the
+suite is **772 passing** on 3.14, up from 712. Nine checks: environment balance by
+stack rather than by count, preamble hygiene against the style file, duplicate labels
+and dangling references, `\cite` keys against `references.bib`, `\includegraphics`
+targets through `\graphicspath`, brace and math-mode balance, `tabular` column counts,
+an unknown-macro scan, and every float carrying a `\label`. It PASSes on the 1413-line
+working `main.tex`: 19 labels, 17 distinct references, notes only for `sec:intro` and
+`sec:conclusion`, which nothing references on purpose.
+
+Its own first run is why the tests are shaped the way they are. Eleven failures, every
+one false: four were inline math legally spanning two lines, six came from a
+column-spec regex truncating `lr p{3.2cm}` at the inner brace, one from not counting a
+`\multicolumn{3}` span. Parity is now checked per blank-line-separated block, the spec
+is read by brace matching, and spans are added back — and each of those three fixes has
+a positive-control test that must stay quiet, because a fix with no test against it
+comes back at the next refactor. Findings are split into failures and notes, and notes
+never fail a run: the paper has two deliberately unreferenced labels, and a check that
+fails on intent is a check that gets switched off.
+
+What the module cannot see is written into its docstring: an overfull box, a font
+substitution, a float landing three pages from its reference, a bibliography style
+error. A pass means the source is structurally sound, not that the PDF is right.
+
+It has already earned its place twice. Its one real failure was `\includegraphics`
+naming `figures/reliability-needs-human`, which is not in the repository — and README
+step 5 said that was deliberate, while `.gitignore` says the opposite in as many words:
+it un-ignores `when-to-escalate/paper/figures/*.pdf` and records "committing the
+rendered figure is the fix", because the figure needs matplotlib, which nothing else
+here depends on, so a clone that had to render it first could not compile at all. The
+README was the file that was wrong. Step 5 now states that the rendered PDF is committed
+so a fresh clone compiles without running the step.
+
+The second time was its own bug. After Kaps rendered the figure locally, the working
+tree held `reliability-needs-human.png` and no `.pdf`, and the check said the figure was
+present — because it tried `.pdf` and `.png` for every target, and the paper's target
+names `.pdf` explicitly. LaTeX loads what that names and nothing else. Extensions are
+now substituted only for a target that names none, and the case has a test. With that
+fixed the check correctly failed, which is how the missing render was found rather than
+committed around.
+
+Two questions were being conflated there, and are now separate. Whether the working
+tree can compile is what `check_graphics` asks. Whether a *fresh clone* can compile —
+V1's actual criterion — needs `git ls-files`, and the preflight module has to run on a
+fragment with no repository, so it does not know about git. That question is asked in
+the test module instead, and it is red as of this entry: the render is untracked, and it
+goes green when the figure is staged.
+
+One thing that render cannot claim is byte reproducibility, and that is now measured
+rather than argued. `make_figures.py:586` is
+`fig.savefig(out, dpi=300, bbox_inches="tight")` with no metadata argument, so
+matplotlib writes its own version into `/Creator` and `/Producer` and the render time
+into `/CreationDate`. The render of 2026-08-20 is 39907 bytes and says
+`Matplotlib v3.10.8`; Kaps's render of 2026-08-28 00:29 is 27151 bytes and says
+`Matplotlib v3.11.1`. Same data, same script, two files that share no useful prefix.
+Step 1 now excludes this one file from the byte-for-byte comparison and step 5 says why,
+and the values are checked instead by `make_figures.py --check` and
+`tests/test_make_figures.py` against `results/run.json` — both re-run against the new
+render, both pass, every plotted number still derived from `results/run.json`. Pinning
+`/CreationDate` is declined rather than left open: the criterion V1 carries is that a
+clean clone builds, committing the binary satisfies it, and byte-stability on a
+renderer's output is not worth engineering for. The matplotlib-version dependence is a
+noted limitation.
+
+The compile came back green — equation numbering, the theorem environment, the refs, the
+figure — and the figure was still wrong on the page. A stray `35` sat at
+`(0.200, 0.171)`, inside the largest marker and across the curve. Every check in this
+repository was green while it did, which is the part worth recording: `--check` and
+`tests/test_make_figures.py` verify each plotted *number* against `results/run.json`,
+neither imports matplotlib, and nothing verifies *placement*. The defect was found the
+only way it could be, by a human looking at a compiled PDF.
+
+The cause is one line of `render()`. `ax.annotate` used a fixed `xytext=(0, -3.2)`
+points with `va="center"`, while marker area is `s = 8 + 3.2n`, so the radius runs about
+2.6pt at `n = 4` to about 6.2pt at `n = 35`. A 3.2pt drop clears the small marker and
+lands well inside the large one — seven bins looked acceptable and the eighth looked
+broken. It is the S4 shape again: a numeric rule governing a quantity whose scale the
+rule never consulted, and here the scale is a function of the very number being printed,
+so the bin that most needs a legible count is the one guaranteed to get the worst
+placement.
+
+The labels are removed rather than nudged. Two things pass through every marker — the
+Wilson bar, vertical and straddling the point, `[0.081, 0.327]` around an observed 0.171
+for this bin, so up and down are both taken; and the segment joining the bins. Sideways
+fails here too: `r + pad` is roughly 0.04 in data units on this axis, which puts the
+digits on the dashed `3/13 = 0.2308` line. The count is already carried by marker area,
+by the legend entry that names it, and by the caption, which gives the 4-to-35 range and
+`n = 35` for this bin outright. A comment in place of the loop records why, so a later
+edit does not re-add it with a different offset. `--check` still passes and
+`tests/test_make_figures.py` is unchanged at 43 passing, because neither reads the
+render path. No test is added for the removal: the property is about pixels, matplotlib
+is absent here, and asserting that one `annotate` call is gone would pin the fix instead
+of the property. The render is Kaps's to regenerate and recompile before anything is
+committed.
+
+`paper/figures/*.png` is now ignored. One `savefig` loop writes both extensions,
+`main.tex` includes the PDF, nothing reads the PNG, and it kept showing as untracked
+work. The ignore names the PNG only; the `!…/*.pdf` un-ignore above it is what the
+clean-clone compile depends on and is untouched.
+
+Recorded as AF1–AF14 in `decisions/v2-design-decisions.md`.

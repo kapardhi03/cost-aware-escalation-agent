@@ -33,6 +33,12 @@ when-to-escalate/data/logprob_cache_DRY.json
 # which nothing else here depends on. Committing the rendered figure is the fix.
 !when-to-escalate/paper/figures/*.pdf
 
+# The PNG beside it is a byproduct. `make_figures.py` writes both extensions from
+# one `savefig` loop, LaTeX includes only the PDF, and nothing else reads the PNG,
+# so it is an output with no consumer. Ignored so it stops reading as untracked
+# work. Only the PNG: the un-ignore above is what the compile depends on.
+when-to-escalate/paper/figures/*.png
+
 # macOS Finder metadata. Never source, and easy to sweep in with `git add -A`.
 .DS_Store
 
