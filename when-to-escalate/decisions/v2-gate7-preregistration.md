@@ -251,6 +251,27 @@ result *on the arm with the dearest baseline*.
 The §6 sentence, locked: entropy-thresholding is never free, +5.60 at the cheapest
 firing threshold up to +128 asking on everything, no free threshold on any arm.
 
+Six more, registered when §Method's τ definition was written. These are definitional
+rather than results — they say what the threshold grid *is*, not what it cost — and
+they are registered anyway, because a number in the paper traces whether or not it
+is a finding, and because an unregistered definition is exactly where a later gate
+would be free to re-choose the grid and call the old numbers comparable.
+
+| Number | Source in `results/entropy-baseline.json` |
+|---|---|
+| `H(b)` spans 0 to 2.456 bits with a median of 2.017 on the run's own beliefs | `arms.published.tau_grid.observed_min_bits`, `.observed_max_bits`, `.observed_median_bits` |
+| eleven thresholds at the quantiles 0.0 through 1.0 | `arms.published.tau_grid.grid[]`, eleven rows carrying `quantile` |
+| eight distinct τ on the run's own beliefs, eleven on the two re-elicited ones | `arms.published.tau_grid.n_distinct_tau` = 8, `arms.raw…` = 11, `arms.calibrated…` = 11 (`rebaselined` is also 8, and the paper does not name it) |
+| the grid is taken over all 100 cases of an arm, the sweep is scored on the 50 test cases, so the top decile can fire on nothing | `arms.<arm>.tau_grid.population`, `arms.<arm>.threshold_sweep.population`, `.why_the_top_decile_can_fire_on_nothing` |
+| `H(b)` rounded to twelve decimals before it meets τ, derived against a measured float-noise bound | `s4_inventory.h_decimals` |
+| the firing rule: ask iff `H(b) > τ`, else the cheapest action other than asking | `arms.<arm>.threshold_sweep.firing_rule`, and `.reproduces_committed_fallback: true` for the clause that this coincides with v1's action case for case |
+
+The theoretical range `[0, log2 6] = [0, 2.585]` is arithmetic on the six-state
+belief, not a key path. The `\ref` from that paragraph to R5's own subsection is
+owed: the paragraph names its consumer in words, since the label does not exist
+until that subsection is written, and the wiring is the same debt AC3 carried for
+`sec:calibration` and AD4 discharged.
+
 ### 4.3 Calibration
 
 | Number | Source |

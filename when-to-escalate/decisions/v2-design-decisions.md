@@ -1350,3 +1350,221 @@ disappearing, so neither half can be quoted without the other.
 | AD5 | Every miss count carries its case set, and the mean is named as scope-invariant where the count is not | (Kaps-decided) | **confirmed** |
 | AD6 | The table label is `tab:calibration`; internal gate numbering never appears in the paper | (AI-proposed) | **confirmed** |
 | AD7 | Escalation precision 0.667 → 0.463 and recall 0.667 → 0.905 stated in the R7/R8 paragraph and registered as a tenth §4.3 row | (Kaps-decided) | **confirmed** |
+
+## The paper edit — Method, τ and the split
+
+- **AE1 — τ is defined in §Method's metrics, not where it is used.** A threshold on
+  `H(b)` in absolute bits is the S4 shape: a numeric rule governing a quantity whose
+  scale the rule never consulted. The fix is deciles of the observed `H(b)` on the arm
+  being scored, and the reason it is a fix has to sit where the quantity is defined. A
+  reader who meets the grid for the first time in the section that reports its cost has
+  no way to tell a designed grid from a convenient one.
+
+- **AE2 — the reason is given in the paper's own voice, not by naming the failure
+  mode.** The paper says that `H(b)` spans 0 to 2.456 bits with a median of 2.017, so
+  an evenly spaced grid over the theoretical range "would report the spacing of the
+  grid rather than the behaviour of the rule." That is the whole content of the
+  internal name, stated as a property of this distribution and this grid. The internal
+  vocabulary stays internal.
+
+- **AE3 — all three definitional consequences are stated in Method.** Repeated
+  thresholds on a tied distribution, the same quantile being a different number of bits
+  on each arm, and the top decile firing on nothing when an arm's highest-entropy case
+  is a development case. Each of the three is a place where a later section could
+  present a mechanical consequence of the grid as a result about the rule; stated here
+  they are unavailable for that.
+
+- **AE4 — the units constraint is made explicit.** "No quantity in bits is compared to
+  a quantity in cost points anywhere in this paper: the entropy selects which cases are
+  asked about, and the cost matrix scores what happens." The constraint has held in the
+  code since it was set; this is the first sentence in the paper that states it, which
+  is what makes it checkable by a reader rather than only by the tests.
+
+- **AE5 — the firing rule is defined by the rule, not by the policy.** The fallback is
+  "the cheapest action other than asking", with the coincidence — that on these beliefs
+  it is the policy's own action case for case — as a following clause rather than as the
+  definition. Defining it as "what the policy would have done" would make the baseline's
+  definition depend on the theorem that asking never wins, and the baseline exists to be
+  read independently of that.
+
+- **AE6 — τ's consumer is named in words and the `\ref` is owed.** R5's subsection does
+  not exist yet, so a `\ref` to it would dangle and break the resolve check run at every
+  paper commit. The paragraph says "the entropy-threshold baseline reported below"
+  instead. Wiring it is a debt of the next pass, the same debt AC3 carried for
+  `sec:calibration`.
+
+- **AE7 — `\subsection{Policies and baselines}` is untouched.** The entropy-threshold
+  baseline is not one of the five policies of Table~2 and listing it there would
+  misstate what the table reports. The price is that Method names a baseline the reader
+  has not met, which is the cost of defining before use and is smaller than the cost of
+  a table that says six things and reports five.
+
+- **AE8 — §Method's split subsection gains the fit-and-score assignment, and no
+  label.** The map is fitted on the 50 development cases and judged on the 50 test
+  cases, so calibrated beliefs on the development half are in-sample and are not
+  reported as a result. The existing matched-by-construction caveat is turned both ways:
+  it is why close agreement is not generalization, and it is why the halves are an
+  acceptable place to fit and score, since the fit cannot be flattered by an easier
+  half. No `\label` is added, because nothing points at it yet and an unwritten
+  referrer is not a reason to leave an unused label behind.
+
+- **AE9 — six definitional numbers registered in §4.2.** Definitions trace on the same
+  terms as results. The one number left unregistered is `[0, \log_2 6]`, which is
+  arithmetic on the six-state belief rather than a key path.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AE1 | τ defined in §Method's metrics rather than where it is used | (Kaps-decided) | **confirmed** |
+| AE2 | The S4 reason stated as a property of this distribution and grid; the internal name stays internal | (AI-proposed) | **confirmed** |
+| AE3 | All three definitional consequences — repeated τ, different bits per arm, top decile firing on nothing — stated in Method | (Kaps-decided) | **confirmed** |
+| AE4 | The bits-never-meet-cost-points constraint written into the paper for the first time | (Kaps-decided) | **confirmed** |
+| AE5 | The firing fallback defined as "the cheapest action other than asking", with the coincidence with the policy as a clause | (AI-proposed) | **confirmed** |
+| AE6 | τ's consumer named in words, no `\ref`; the wiring owed to R5's pass | (Kaps-decided) | **confirmed** |
+| AE7 | `\subsection{Policies and baselines}` untouched; the entropy baseline is not one of Table 2's five | (Kaps-decided) | **confirmed** |
+| AE8 | §Method's split gains the fit-and-score assignment and the two-way caveat; no `\label` until a referrer exists | (Kaps-decided) | **confirmed** |
+| AE9 | Six definitional numbers registered in §4.2; `[0, \log_2 6]` left as arithmetic | (AI-proposed) | **confirmed** |
+
+## The offline compile check, and the figure the README described wrongly
+
+- **AF1 — the preflight becomes a test module, not a scratch script.** It was written to
+  answer one question before one commit: does the source carry a defect a compile would
+  stop on. Keeping it as a script would mean the answer holds for the version it was run
+  against and nothing later. As `tests/paper_preflight.py` with a test module over it,
+  every future paper edit is checked before Overleaf sees it, in CI, for free.
+
+- **AF2 — findings split into failures and notes, and notes can never fail a run.**
+  Three of the nine checks report things that are not errors: a label nothing
+  references (the paper has two on purpose), a control sequence outside the whitelist,
+  a `\label` placed before its `\caption`. A module that failed on those would be
+  switched off after a handful of edits, and a check that is ignored is worse than no
+  check.
+
+- **AF3 — the two false-positive classes are pinned by positive-control tests, not just
+  fixed.** The first run reported eleven failures on source that compiles: four were
+  inline math legally spanning two lines, six came from a column-spec regex truncating
+  `lr p{3.2cm}` at the inner brace, one from not counting a `\multicolumn` span. The
+  fixes — parity per blank-line-separated block, a brace-matching spec parser, span
+  arithmetic — are each held in place by a test that must stay quiet, because a fix with
+  no test against it is one refactor away from coming back.
+
+- **AF4 — a dangling `\ref` is a failure even though it compiles.** LaTeX renders `??`
+  and warns. The warning scrolls past in a log nobody reads to the end of and the `??`
+  reaches a reader, which makes it exactly the class of defect this module is for. The
+  reverse case, a label with no reference, stays a note.
+
+- **AF5 — a check whose external input is absent reports a note and asserts nothing.**
+  No `references.bib` beside the source is not evidence that a `\cite` key is wrong, and
+  no directory to resolve graphics against is not evidence that a figure is missing. The
+  alternative — treating absence as failure — would make the module unusable on a
+  fragment and would put a false failure in front of the reader on a real one.
+
+- **AF6 — the module states what it cannot see, in its own docstring and in the
+  README.** It cannot see an overfull box, a font substitution, a float landing three
+  pages from its reference, or a bibliography style error. A pass means the source is
+  structurally sound. It does not mean the paper compiles, and the standing rule that
+  the compile is Kaps's falsifier is not softened by having a parser agree with it.
+
+- **AF7 — README step 5 is corrected to match `.gitignore`.** The README said the
+  rendered figure is deliberately not committed. `.gitignore` says the opposite in as
+  many words — it un-ignores `when-to-escalate/paper/figures/*.pdf` and records
+  "committing the rendered figure is the fix", because the figure needs matplotlib,
+  which nothing else here depends on, so a clone that had to render it first could not
+  compile at all. The README was the file that was wrong and it is the file that
+  changed.
+
+- **AF8 — the committed figure's bytes are declared unreproducible rather than claimed
+  reproducible, and the timestamp is deliberately not pinned.** `make_figures.py:586`
+  calls
+  `fig.savefig(out, dpi=300, bbox_inches="tight")` with no metadata argument, so
+  matplotlib writes its own version into `/Creator` and `/Producer` and the render time
+  into `/CreationDate`. This is measured, not argued: the render of 2026-08-20 is 39907
+  bytes and carries `Matplotlib v3.10.8` with `/CreationDate D:20260820194353Z`, and
+  Kaps's render of 2026-08-28 00:29 is 27151 bytes and carries `Matplotlib v3.11.1`.
+  Same data, same script, two files that share no useful prefix. Step 1 therefore
+  excludes this one file from the byte-for-byte comparison
+  and step 5 says why, and the values the figure plots are checked instead — by
+  `make_figures.py --check` and `tests/test_make_figures.py` against `results/run.json`.
+  Both were re-run against the 27151-byte render: `--check` passes, and every plotted
+  number still re-derives from `results/run.json`.
+  Passing `metadata={"CreationDate": None}` would stop the timestamp moving and leave
+  the version strings, and it is declined: the criterion V1 carries is that a clean
+  clone builds, which committing the binary satisfies, and byte-stability on a
+  renderer's output is not a property worth engineering for. The matplotlib-version
+  dependence is recorded as a noted limitation instead.
+
+- **AF10 — a target that names its own extension is only tried as written.** The
+  resolver first tried `.pdf` and `.png` for every target, which is right for
+  `\includegraphics{fig}` and wrong for `\includegraphics{fig.pdf}` — LaTeX loads what
+  the second one names and nothing else. The bug did not stay theoretical: a `.png` from
+  a render was sitting in `paper/figures/` while the `.pdf` the paper includes was
+  absent, and the check reported the figure present. `GRAPHICS_EXTENSIONS` is now tried
+  only for a target that names no extension, and the case has its own test.
+
+- **AF11 — the clean-clone criterion is asked of git, not of the filesystem.**
+  `check_graphics` resolves against the working tree, so an untracked file satisfies it,
+  and the criterion V1 actually carries is that a fresh clone can compile. That question
+  needs `git ls-files`, which the preflight module deliberately does not know about — it
+  has to run on a fragment with no repository. So it lives in the test module, as
+  `test_every_graphic_the_paper_needs_is_tracked_by_git`, and it fails right now on
+  purpose: the rendered figure is still untracked, and it goes green the moment the
+  figure is staged.
+
+- **AF9 — the test count in the README moves to 772; the build-log's 712 stays.** The
+  two README references are current-state claims and are updated. The `712 passing` in
+  the build-log entry of 2026-08-27 was true when that entry was written, and no
+  historical row is edited for wording (G9/G12).
+
+- **AF12 — the per-bin count labels are removed rather than repositioned.** The compile
+  was green and the figure still carried a visible defect: a stray `35` at
+  `(0.200, 0.171)` sitting inside the largest marker and across the curve. The cause is
+  in `render()`, not in the data. `ax.annotate` used a fixed `xytext=(0, -3.2)` points
+  with `va="center"`, while marker area is `s = 8 + 3.2n` — so the radius runs about
+  2.6pt at `n = 4` to about 6.2pt at `n = 35`. A 3.2pt drop clears a 2.6pt radius and
+  falls well inside a 6.2pt one, which is why seven bins looked acceptable and the
+  eighth looked broken. The rule is a numeric offset governing a quantity whose scale it
+  never consulted, and the scale is a function of the very number being printed, so the
+  bin that most needs its count legible is guaranteed the worst placement — the same S4
+  shape as the tie-break and the τ grid.
+  Repositioning is harder than it looks. Two things pass through every marker: the
+  Wilson bar, which is vertical and straddles the point (for this bin, `[0.081, 0.327]`
+  around an observed 0.171, so up and down are both occupied), and the segment joining
+  the bins. Offsetting sideways by the radius does not work here either: `r + pad` is
+  roughly 0.04 in data units on this axis, which puts the digits on the dashed
+  `3/13 = 0.2308` line. The count is already carried three other ways — marker area,
+  the legend entry that names it, and the caption, which states the 4-to-35 range and
+  `n = 35` for this bin explicitly — so the labels go and a comment records why, to stop
+  a later edit re-adding them with a nudged offset. It also removes the only text in the
+  figure that was set at 5.2pt.
+
+- **AF13 — the PNG under `paper/figures/` is ignored; only the PDF is committed.** One
+  `savefig` loop writes both extensions, `main.tex` includes the PDF, and nothing reads
+  the PNG, so it is an output with no consumer that kept surfacing as untracked work.
+  The ignore is written for the PNG alone; the `!…/*.pdf` un-ignore directly above it is
+  what a clean-clone compile depends on (AF7) and is untouched.
+
+- **AF14 — the render path has no automated check, and that is why this shipped.**
+  `--check` and `tests/test_make_figures.py` verify every plotted *number* against
+  `results/run.json` and neither imports matplotlib; nothing verifies *placement*. Both
+  were green with the stray label on the page. No test is added for the removal: the
+  assertion worth making is about pixels, matplotlib is absent from this environment,
+  and a test asserting that a particular `annotate` call is missing pins the fix rather
+  than the property. The gap is recorded rather than papered over — the figure's
+  appearance is checked by a human reading a compiled PDF, and this defect was found
+  that way.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AF1 | The offline preflight ported into `tests/` as its own module plus 60 tests | (Kaps-decided) | **confirmed** |
+| AF2 | Findings split failures / notes; notes never fail a run | (AI-proposed) | **confirmed** |
+| AF3 | Both false-positive classes held down by positive-control tests, not only fixed | (AI-proposed) | **confirmed** |
+| AF4 | A dangling `\ref` is a failure; an unreferenced label is a note | (AI-proposed) | **confirmed** |
+| AF5 | A check with no external input to read notes and asserts nothing | (AI-proposed) | **confirmed** |
+| AF6 | The module and the README both state that a pass is not "it compiles" | (Kaps-decided) | **confirmed** |
+| AF7 | README step 5 corrected to match `.gitignore`: the figure is committed so a clean clone builds | (Kaps-decided) | **confirmed** |
+| AF8 | The figure PDF excluded from byte-for-byte reproduction with the reason stated; committed as a binary artifact and `/CreationDate` deliberately not pinned | (Kaps-decided) | **confirmed** |
+| AF9 | README test count 712 → 772; the build-log's historical 712 untouched | (Kaps-decided) | **confirmed** |
+| AF10 | An `\includegraphics` target naming its own extension is resolved only as written | (AI-proposed) | **confirmed** |
+| AF11 | The clean-clone criterion asked of `git ls-files` in the test module, not of the filesystem in the check | (AI-proposed) | **confirmed** |
+| AF12 | The per-bin count labels removed from the reliability figure rather than repositioned; the count stays in marker area, legend and caption | (Kaps-decided) | **confirmed** |
+| AF13 | `paper/figures/*.png` ignored; the `*.pdf` un-ignore left alone | (Kaps-decided) | **confirmed** |
+| AF14 | No test added for the label removal; the untested render path recorded as the reason the defect shipped | (AI-proposed) | **noted** |

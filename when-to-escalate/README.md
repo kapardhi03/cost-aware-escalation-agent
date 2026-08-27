@@ -62,7 +62,7 @@ Supporting working files:
   (F1–F8). Rows are never edited after the fact; a reversal is added as a new row
   that supersedes the old one.
 - `PLAN.md` — the day-by-day working plan.
-- `tests/` — 712 tests; see step 6.
+- `tests/` — 772 tests; see step 6.
 
 ## How to reproduce the test
 
@@ -90,7 +90,13 @@ all state the same number.
 Reproduction of the two float-bearing artifacts — `results/entropy-baseline.json` and
 `results/voi-ceiling.json` — is checked to a tolerance of 1e-9 on float-versus-float
 leaves and exactly on everything else, including all `Fraction` values, which are
-rendered as strings. Every other committed artifact is still compared byte for byte.
+rendered as strings. Every other committed *data* artifact is still compared byte for
+byte. The one committed file excluded from that is
+`paper/figures/reliability-needs-human.pdf`, and step 5 says why: a PDF records the
+version of the renderer that drew it and the moment it was drawn, so its bytes move
+when neither the data nor the code has. Every number the figure plots is checked
+instead, by `make_figures.py --check` and by `tests/test_make_figures.py` against
+`results/run.json`.
 
 ```bash
 python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt
@@ -169,26 +175,34 @@ what licenses every other number. The script also reports the cost-matrix sweeps
 the bootstrap CI on ECE, the in-sample recalibration result, the action census,
 and the reweighting to the design's own readiness prior.
 
-### 5. Regenerate the figure
+### 5. Regenerate the figure (optional — it is committed)
 
 ```bash
 python3 paper/figures/make_figures.py
 ```
 
 Reads `results/run.json`; nothing is transcribed by hand. Writes
-`reliability-needs-human.pdf` and `.png` next to the script.
+`reliability-needs-human.pdf` and `.png` next to the script. Only the PDF matters:
+`main.tex` includes that one, nothing reads the `.png`, and the `.png` is ignored.
 
-**This has to be run before the paper will compile.** `main.tex` includes the PDF
-via `\includegraphics`, and the PDF is not in the repository by choice: it is listed
-in `.gitignore` because it is a build product of `results/run.json`, not a source
-file, and it needs `matplotlib`, which nothing else here depends on. So a fresh
-clone regenerates the figure rather than receiving it — this step is a prerequisite
-of the compile, not a repair. `results/run.json` is committed, so the figure it
-produces is fixed.
+**The rendered PDF is committed, so a fresh clone compiles the paper without
+running this step.** `main.tex` includes it via `\includegraphics`, and it is the one
+build product in the repository that is an *input* to another build rather than an
+output of the last one. The root `.gitignore` ignores `*.pdf` and then un-ignores
+`when-to-escalate/paper/figures/*.pdf` for exactly this reason: the figure needs
+`matplotlib`, which nothing else here depends on, so a clone that had to render it
+first could not compile at all. `results/run.json` is committed, so the figure the
+code produces is fixed by the data.
 
-Add `--check` to print every plotted value — bin counts, predicted and observed
-rates, gaps, and Wilson intervals — without needing matplotlib. That path is
-verified; the render is not, on a machine without matplotlib.
+What is not claimed is that the committed bytes are reproducible. Matplotlib writes
+its own version into `/Creator` and `/Producer` and the render time into
+`/CreationDate`, so re-running this step produces a different file from the same
+data, and the figure is therefore excluded from the byte-for-byte comparison of
+step 1. The check that does hold is on the values: `--check` prints every plotted
+number — bin counts, predicted and observed rates, gaps, and Wilson intervals —
+without needing matplotlib, and `tests/test_make_figures.py` asserts each of them
+against `results/run.json`. The render itself is unverified on a machine without
+matplotlib.
 
 ### 6. Tests (from the repository root)
 
@@ -196,10 +210,30 @@ verified; the render is not, on a machine without matplotlib.
 ./.venv/bin/python -m pytest when-to-escalate -q
 ```
 
-712 tests, all passing. They cover the cost matrix and the hard constraint
+772 tests, all passing. They cover the cost matrix and the hard constraint
 (including that no belief can buy past it), the tie-break, the cache's staleness
 and provenance behaviour, configuration validation, and the reproduction
 comparator and declared Python floor described in step 1.
+
+60 of them are the LaTeX preflight in `tests/test_paper_preflight.py`, which is the
+closest thing to a compile that runs offline. There is no TeX toolchain here, so
+`paper/main.tex` is checked instead for the defects a parser can name: an
+environment closed by the wrong `\end`, a `\ref` to a label nobody declared, a
+duplicate label, a package loaded twice or loaded by both the source and
+`ijcai26.sty`, a `\newtheorem` colliding with one the style file defines, a
+`tabular` row that does not match its column spec, an `\includegraphics` naming a
+file that is not there. It caught that last one. A pass means the source is
+structurally sound, not that the paper compiles — an overfull box, a font
+substitution, or a float that lands three pages from its reference is only visible
+once TeX has run.
+
+```bash
+./.venv/bin/python when-to-escalate/tests/paper_preflight.py when-to-escalate/paper/main.tex
+```
+
+Run alone, it prints the failures and the notes: labels nothing references,
+control sequences outside its whitelist, and how many citations, graphics and
+tables it checked. Notes are for a human's eye and never fail the check.
 
 ### What a reproduction cannot check
 

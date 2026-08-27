@@ -562,10 +562,16 @@ def render(data: dict) -> None:
                facecolor="white", edgecolor="black", lw=1.0, zorder=5,
                label="observed (area $\\propto$ bin count)")
 
-    for b in data["bins"]:
-        ax.annotate(f"{b['n']}", (b["predicted"], b["observed"]),
-                    textcoords="offset points", xytext=(0, -3.2),
-                    ha="center", va="center", fontsize=5.2, zorder=6)
+    # No per-bin count label is drawn, and re-adding one needs more than a
+    # nudged offset. Two things pass through every marker: the Wilson bar,
+    # which is vertical and straddles the point, and the segment joining the
+    # bins. A fixed point-offset cannot clear either, because the marker
+    # radius runs 2.6pt to 6.2pt with the count itself, so the largest bin
+    # gets the worst placement — the n=35 marker at (0.200, 0.171) had the
+    # digits inside its own fill. Offsetting sideways by the radius is no
+    # better there: r + pad is about 0.04 in data units, which lands on the
+    # dashed 3/13 line at 0.2308. The counts are carried by marker area, by
+    # the legend entry that says so, by the caption, and exactly by --check.
 
     ax.set_xlim(-0.04, 1.04)
     ax.set_ylim(-0.04, 1.04)

@@ -576,6 +576,16 @@ between development and test totals reflects that construction rather than
 out-of-sample generalization, and Section~\ref{sec:results} reads the split
 numbers with that in mind.
 
+The same split does double duty. The calibration map of
+Section~\ref{sec:calibration} is fitted on the 50 development cases and every
+number that map is judged by is scored on the 50 test cases, so the calibrated
+beliefs on the development half are in-sample and are not reported as a result.
+Matching the halves by construction cuts both ways here. It is why close agreement
+between the two is not evidence of generalization, and it is also why they are an
+acceptable place to fit a one-dimensional map and then score it: the fit cannot be
+flattered by an easier half to score on, because the archetypes and the
+needs-human count are balanced across the two.
+
 \subsection{Policies and baselines}
 Two policies are compared over the same beliefs. The \emph{cost-aware} policy is
 the minimum-expected-cost rule of Section~\ref{sec:model} under the full
@@ -605,6 +615,40 @@ human but did not get one), escalation precision and recall, the number of
 escalations, the number of hard-constraint violations, and the calibration of the
 belief. Calibration is measured as expected calibration error on the needs-human
 marginal, since that is the probability the escalation threshold acts on.
+
+\paragraph{Entropy thresholds.} One further quantity is measured in bits rather
+than in cost points, and it is defined here rather than where it is used, because a
+later section places a threshold on it. $H(b)$ is the entropy of the belief over
+the six hidden states, so it runs from 0 to $\log_2 6 \approx 2.585$ bits. The
+entropy-threshold baseline reported below asks whenever $H(b) > \tau$ and otherwise
+takes the cheapest action other than asking, which on these beliefs is the action
+the policy of Section~\ref{sec:model} takes case for case. That makes $\tau$ the
+only thing $H(b)$ is ever compared against. No quantity in bits is compared to a
+quantity in cost points anywhere in this paper: the entropy selects which cases are
+asked about, and the cost matrix scores what happens.
+
+$\tau$ is not set in absolute bits. It is a grid of eleven thresholds placed at the
+quantiles $0.0, 0.1, \ldots, 1.0$ of the observed $H(b)$ on the arm being scored,
+linearly interpolated. The reason is that the observed distribution is bunched: on
+the run's own beliefs $H(b)$ spans 0 to 2.456 bits with a median of 2.017, so an
+evenly spaced grid over the theoretical range would put most of its points in a
+region holding almost no cases, and would report the spacing of the grid rather
+than the behaviour of the rule. Deciles make the step commensurate with the
+observed spread by construction. $H(b)$ is rounded to twelve decimals before it
+meets $\tau$, a figure derived from the measured float-noise bound on each arm
+rather than chosen.
+
+Three things follow from that definition rather than from any result, and are
+stated here so that they are not read as findings later. A decile grid on a tied
+distribution repeats values: the eleven quantiles give eight distinct thresholds on
+the run's own beliefs and eleven on the re-elicited beliefs of
+Section~\ref{sec:calibration}, and two quantiles that yield the same $\tau$ yield
+the same set of asked cases and the same cost by construction rather than by
+coincidence. The same quantile is a different number of bits on each set of
+beliefs, because $H(b)$ moves when the belief moves, so the arms are compared at
+equal quantiles and never at equal bits. And the grid is taken over all 100 cases
+of an arm while the sweep is scored on the 50 test cases, so the top decile asks
+about nothing at all whenever an arm's highest-entropy case is a development case.
 
 \section{Results}
 \label{sec:results}
