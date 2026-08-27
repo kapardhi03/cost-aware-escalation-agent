@@ -33,6 +33,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}       % ADDED. Expectation and set symbols for the policy.
 \usepackage{amsthm}
+\newtheorem{theorem}{Theorem} % ADDED. amsthm declares no environment by itself.
 \usepackage{booktabs}
 \usepackage{algorithm}
 \usepackage{algorithmic}
@@ -674,20 +675,171 @@ the other. Tuning a threshold on the development half by realised cost selects
 $t = 0.00$ --- escalate everything --- at cost 1.740, which recovers the
 always-notify result rather than the cost-aware one.
 
-\subsection{Two actions that are never used}
+\subsection{Two actions that are never used, and why neither can be}
+\label{sec:unused}
 Of the five actions, the cost-aware policy selects only three across all 100
 cases: \emph{answer} 30 times, \emph{hold} 27, \emph{escalate-notify} 43.
-\emph{Ask} and \emph{escalate-pause} are selected zero times. This is a property of
-the matrix rather than of the cases. \emph{Ask} costs 2 when no human is needed
-against 0 for \emph{answer}, and 4 when one is needed against 0 for
-\emph{escalate-notify}, so it is dominated at both ends and can only win in a
-narrow middle band that the quantized beliefs never land in. \emph{Escalate-pause}
-is dominated by \emph{escalate-notify} in every column. The paper describes a
-five-action set, but every reported number comes from a three-action policy, and
-the two unused actions are untested by this experiment. The myopia limitation in
-Section~\ref{sec:limitations} compounds this: a one-step rule cannot price
-\emph{ask}'s payoff, so the action most obviously suited to an ambiguous inbound
-message is both unpriced and unused.
+\emph{Ask} and \emph{escalate-pause} are selected zero times, and the same census
+is reproduced independently by the value-of-information analysis below. This is a
+property of the matrix rather than of the cases, and this section proves it rather
+than observing it. Each of the two unused actions fails for a different reason,
+and neither reason mentions the data.
+
+\paragraph{Asking.} \emph{Ask} costs 2 when no human is needed against 0 for
+\emph{answer}, and 4 when one is needed against 0 for \emph{escalate-notify}, so
+it is dominated at both ends. That arithmetic does not settle the middle, and the
+middle is what has to be settled, because a question is not priced by its own row
+alone but by its row plus the cost of acting afterwards. Write
+\begin{equation}
+V_{\mathrm{act}}(b) = \min_{a \,\neq\, \textit{ask}} \mathbb{E}_b[C(a)]
+\end{equation}
+for the cost of acting now on the best non-\emph{ask} action, let $c_F = 2$ and
+$c_T = 4$ be the \emph{ask} row, and let $\alpha = 10$ and $\nu = 3$ be the cost
+of a false answer and of a needless notify. Asking question $q$ pays only if
+$\mathbb{E}_b[C(\textit{ask})] + \sum_u P_b(u) V_{\mathrm{act}}(b^u)$ falls below
+$V_{\mathrm{act}}(b)$, where $b^u$ is the posterior after answer $u$. Every cost
+in Table~\ref{tab:costs} is non-negative, so that continuation term is
+non-negative, and a necessary condition for a positive value of information is
+that $\mathbb{E}_b[C(\textit{ask})] < V_{\mathrm{act}}(b)$ at some belief. No
+belief satisfies it.
+
+\begin{theorem}
+\label{thm:ceiling}
+With the costs of Table~\ref{tab:costs}, at every belief $b$ in the readiness
+simplex crossed with $b_h \in [0, 1]$,
+\begin{equation*}
+V_{\mathrm{act}}(b) - \mathbb{E}_b[C(\textit{ask})]
+  \;\le\; -\tfrac{2}{13} \;\approx\; -0.1538 ,
+\end{equation*}
+and the bound is attained. The value of information of every question at every
+belief is therefore at most $-2/13$, and \emph{ask} is never the $\arg\min$ on
+the unconstrained action menu.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+$\mathbb{E}_b[C(\textit{ask})] = c_F + (c_T - c_F)\,b_h$ is affine in $b_h$ and
+free of readiness, and $V_{\mathrm{act}}(b) \le \min\{\alpha b_h,\, \nu(1 - b_h)\}$
+because the \emph{answer} and \emph{escalate-notify} rows are themselves flat
+across readiness. The difference is thus bounded by a piecewise linear function
+whose \emph{answer} branch has slope $\alpha - (c_T - c_F) > 0$ and whose
+\emph{escalate-notify} branch has slope $-(\nu + c_T - c_F) < 0$, both signs
+following from $-\nu < c_T - c_F < \alpha$, which the implementation asserts
+rather than assumes. Its maximum is at the crossing $b_h = b_h^{\star} = 3/13$
+and equals $[\alpha\nu - (\alpha c_F + \nu c_T)]/(\alpha + \nu) = (30 - 32)/13$.
+The bound is attained where $V_{\mathrm{act}}$ meets that envelope: at the
+all-hot vertex with $b_h = 3/13$, \emph{hold} costs $84/13$ and
+\emph{escalate-pause} $66/13$, so neither lowers the cap, and
+$V_{\mathrm{act}} = 30/13$ against $\mathbb{E}_b[C(\textit{ask})] = 32/13$. The
+computation is in exact rational arithmetic; a deliberately crude 60-step float
+grid over the same domain reaches $-0.166667$ and never exceeds the closed form.
+\end{proof}
+
+The maximum is taken over the whole belief space and not over the 100 elicited
+beliefs, which is what exposes the two errors in the claim this passage replaces.
+There is no narrow middle band on the unconstrained menu: the ceiling is negative
+at every belief in the simplex, and its largest value anywhere is $-2/13$. And
+quantization is not the cause. The elicited $b_h$ takes eight distinct values, but
+a re-elicited arm carrying 100 distinct values leaves the region exactly as empty:
+across four belief arms and 400 case--arm pairs, no case has a positive ceiling,
+and the per-case maximum on the published beliefs is $-0.4000$. A finer belief
+does not find the band, because there is no band to find.
+
+Attainment is not a second result but what makes the first one sharp. A negative
+ceiling could otherwise be an artefact of a loose bound, and the strongest form of
+that objection is answerable directly. On 16 of the 400 case--question pairs scored
+on the published beliefs the continuation term $\sum_u P_b(u) V_{\mathrm{act}}(b^u)$
+is exactly zero: the question resolves the state and the action taken afterwards is
+free. Asking still loses, and it loses by the full ceiling at that belief rather
+than by a residue, because the fee is paid before the answer arrives. The count is
+52 such pairs on the calibrated arm, 12 on the rebaselined arm and 0 on the raw
+arm. The theorem does not rest on those pairs; they are where its inequality stops
+being one.
+
+Nor does the result rest on the policy's one-step horizon. Define the cost of
+acting under a budget of $k$ remaining questions by $W_0 = V_{\mathrm{act}}$ and
+\begin{equation}
+W_k(b) = \min\Bigl\{ V_{\mathrm{act}}(b),\;
+  \mathbb{E}_b[C(\textit{ask})] + \sum_u P_b(u)\, W_{k-1}(b^u) \Bigr\} ,
+\end{equation}
+so that the policy reported here is $W_1$. Two facts already in hand close every
+$k$ at once. Theorem~\ref{thm:ceiling} is quantified over all beliefs, and
+posteriors are beliefs: $b^u$, and every deeper node of any lookahead tree, is a
+point of the same simplex, so the ceiling binds at every node and not only at the
+root. And $W_k \ge 0$ for every $k$, by induction from the non-negativity of
+Table~\ref{tab:costs}. Together, at every belief and every $k \ge 1$, the ask
+branch costs at least $\mathbb{E}_b[C(\textit{ask})] \ge V_{\mathrm{act}}(b) +
+2/13$, so $W_k = V_{\mathrm{act}}$ and the tree collapses to acting now. Every
+term dropped in that chain is non-negative, so deeper lookahead can only make the
+ask branch dearer: $2/13$ is a floor on the gap, not an estimate of it. The second
+fact is trivial, following from the cost matrix alone with no reference to the
+beliefs, the answer model or the question set, and that is exactly why it can be
+asserted at every node of a tree nobody enumerates.
+
+The theorem is a statement about four numbers, and the part that transfers is
+worth separating from the part that is ours. Rearranged, a question can be
+rational at some belief on the unconstrained menu only if
+\begin{equation}
+\frac{c_F}{\nu} + \frac{c_T}{\alpha} < 1 ,
+\end{equation}
+that is, only if the fee for asking when no human is needed, measured against the
+cost of a needless escalation, plus the fee for asking when one is needed, measured
+against the cost of a false answer, together come to less than the whole. Here the
+sum is $2/3 + 4/10 = 16/15 > 1$, so the condition fails, and it fails by 6.25\%:
+scaling the \emph{ask} row by $\lambda = 15/16$, to $(1.875, 3.75)$, puts the
+ceiling exactly at zero. That is the useful form of the result. A designer with a
+cheaper question --- a single-tap reply, an inference from metadata --- crosses the
+line, and the same inequality says where the line is. What this experiment shows is
+not that asking is useless in general, but that on this matrix asking is priced
+out, by a margin small enough that the pricing rather than the principle is what
+decides it.
+
+One qualification is load-bearing, and the theorem is stated with it: the menu is
+the unconstrained one. On \texttt{no\_direct\_answer} cases \emph{answer} is
+removed from the feasible set, and with the cheapest row gone the ceiling turns
+positive --- $+1$ at the all-hot vertex with $b_h = 0$. Along the ray through that
+maximum the positive region is $b_h < 1/5$, bounded there by
+\emph{escalate-notify} rather than by \emph{hold} or \emph{escalate-pause}. So a
+region in which asking is rational does exist, and it is not reached here: 8 of the
+100 cases carry the constraint, every one of them at $b_h \ge 0.40$, and none lies
+inside the region. The two ways of being empty are different, and they are not
+merged. On the calibrated arm the emptiness is structural: the fitted map's
+reachable range has a floor above $1/5$, so no input can produce a belief low
+enough to qualify --- the reachable-score floor reported with the calibration
+result below. On the published, rebaselined and raw arms it is contingent: 31 of
+the raw beliefs do fall below $1/5$, and the region stays empty only because none
+of those cases carries \texttt{no\_direct\_answer}. That is a fact about this
+dataset, not about the matrix.
+
+\paragraph{Pausing.} \emph{Escalate-pause} is dominated by \emph{escalate-notify}
+in every column of Table~\ref{tab:costs}, and dominance in the matrix is a
+stronger statement than absence from the census. The gap is 3 in the hot state
+where no human is needed, 2 in the warm and cold states where none is needed, and
+2, 1 and 1 in the three states where one is: strictly positive in all six, and
+between 1 and 3. Expected cost is a belief-weighted average over columns, so no
+belief can invert a strict column-wise ordering, and \emph{escalate-pause} cannot
+be the $\arg\min$ anywhere --- not merely at the 100 beliefs elicited here.
+
+That also bounds abstention as a design option. A rule that hands the conversation
+over rather than notifying converts \emph{escalate-notify} decisions into
+\emph{escalate-pause} decisions, so it raises realised cost by between 1 and 3 on
+every case it touches, and it cannot reduce the count of missed escalations at all,
+since a miss is a case needing a human on which the agent did not escalate and both
+escalate actions count as escalating. Only a rule that converts a non-escalation
+into a pause can move that count. Abstention is therefore priced rather than
+unexplored, and what remains empirical is how many cases such a rule touches and
+whether the misses it avoids are worth the penalty it pays.
+
+The census is unchanged: the paper describes a five-action set and every reported
+number comes from a three-action policy. What changes is the reason. The two unused
+actions are not untested by this experiment --- both are tested, and each fails for
+a different proven reason: \emph{ask} by a ceiling on the value of information that
+is negative at every belief on the unconstrained menu, \emph{escalate-pause} by
+column-wise dominance in the matrix. The one-step horizon is a real limitation of
+the policy and is stated as one in Section~\ref{sec:limitations}, but it is not the
+reason \emph{ask} goes unused and it does not compound this: the horizon was the
+candidate explanation, and Theorem~\ref{thm:ceiling} together with the collapse of
+$W_k$ removes it. The action most obviously suited to an ambiguous inbound message
+is unused because it is priced out, not because it is unpriced.
 
 \subsection{The comparison that is a tie, not a win}
 Against always-notify, which escalates every message, the cost result is close to

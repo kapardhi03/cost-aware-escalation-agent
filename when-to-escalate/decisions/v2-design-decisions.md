@@ -1216,3 +1216,58 @@ by after the fact.
 | AB6 | The floor is Python 3.12, declared once as `MIN_PYTHON` and asserted against the CI matrix, the README and the running interpreter, with a fourth test requiring the matrix to run the floor. An interpreter-dependent reproducibility claim is an L10-class gap | (Kaps-decided) | **confirmed** |
 | AB7 | Correction: the agreement count does not move — 29 published and 26 raw on both interpreters. The material new number is the tie count, 13 of 50 published and 12 of 50 raw, which qualifies the agreement figure and is reported beside it | (AI-proposed) | **changed** |
 
+## The paper edit — the theorem subsection
+
+The first prose written at Gate 7, and the only prose written before the
+pre-registration was read back. `main.tex:677` becomes 166 lines where it was 14,
+because that one subsection carries five of the eight results, three of the nine
+debts and seven sentence dispositions. Its shape is fixed by the pre-registration:
+the census and the `ask` arithmetic kept, `:681` upgraded from assertion to theorem,
+the band claim and the "untested" claim replaced, and the myopia sentence absorbed
+here rather than retracted twice.
+
+- **AC1 — the theorem is set in an `amsthm` environment, which the paper did not
+  have.** `main.tex` loads `amsthm` at `:35` but declares no `\newtheorem`, and
+  `ijcai26.sty` defines no theorem environment either, so `\begin{theorem}` would not
+  compile. One line was added to the preamble — `\newtheorem{theorem}{Theorem}` — and
+  it is the only edit outside the subsection. `\begin{proof}[Proof sketch]` needs no
+  declaration; `amsthm` supplies it. No TeX distribution exists in the working
+  environment, so a collision with the kit is unfalsified here rather than ruled out;
+  the grep over `ijcai26.sty` finds no `newtheorem`, `theorem` or `proof`, which is
+  evidence and not a compile. Kaps holds the compile as a separate verification item
+  and is compiling the subsection alone, ahead of the final build, because a broken
+  theorem environment blocks every section after it. The fallback if it collides:
+  drop the environment, set `\textbf{Theorem 1.}` as a bold run-in with the statement
+  in an `\itshape` group, write the sketch as ordinary prose, and hand-set the number
+  that `Theorem~\ref{thm:ceiling}` now resolves.
+
+- **AC2 — four trace rows were added to the pre-registration rather than four numbers
+  cut from the paper.** The subsection cites the four-arm zero-ceiling count, `raw`'s
+  100 distinct `b_h` against `published`'s 8, the 31 raw beliefs below `1/5` of which
+  none carries the constraint, and the census reproduced by the VoI analysis. All four
+  come from `results/voi-ceiling-arms.json`, which §4.1 did not list. Three of them are
+  the *second* half of V2's replacement — quantization is not the cause of `ask`'s
+  emptiness — so cutting them would have left the half a reader most wants to doubt
+  resting on prose. The §7 falsifier already reads "any number in the paper that cannot
+  be named by a key path in §4," so registering them is what puts them under it.
+
+- **AC3 — `6/23` and "two unused actions becomes three" stay out of this subsection.**
+  Both are consequences of the reachable-score floor, which D1 places in Results with
+  the calibration map and which the required adjacency forbids separating from R7. The
+  structural half of the emptiness argument therefore names the floor without its value
+  — "the fitted map's reachable range has a floor above `1/5`" — and points forward in
+  words. The `\ref` is wired when the Calibration subsection has a label.
+
+- **AC4 — the grid crosscheck is cited in one clause and no more.** It reaches
+  `−0.166667` and never exceeds the closed form. The 1185-point plateau and the 115351
+  points searched stay in the artifact: once no witness is claimed, the plateau count
+  is detail the paper does not need, and Z18 asks for the absence of a witness rather
+  than for the arithmetic of the plateau.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AC1 | The theorem is set in an `amsthm` environment; one `\newtheorem` line is added to the preamble, the compile is held as a separate verification item, and the bold run-in fallback is documented in case the kit collides | (AI-proposed) | **confirmed** |
+| AC2 | The four `voi-ceiling-arms.json` key paths are registered in §4.1 rather than the numbers being cut from the prose | (Kaps-decided) | **confirmed** |
+| AC3 | `6/23` and the three-action consequence stay with R7 in Results; the theorem subsection names the floor without its value and forward-references it | (Kaps-decided) | **confirmed** |
+| AC4 | The grid crosscheck appears as "reaches `−0.166667` and never exceeds the closed form", with no argmax point and no plateau count | (AI-proposed) | **confirmed** |
+

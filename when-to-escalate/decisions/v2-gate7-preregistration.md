@@ -207,6 +207,19 @@ cannot be named this way does not go in.
 | positive region `b_h < 1/5`, bound by `escalate_notify` | `constrained_regime.positive_region_on_the_argmax_ray` |
 | 8 constrained cases, all with `b_h ≥ 0.40`, none inside the region | `constrained_regime.n_cases_carrying_the_constraint`, `.min_b_h_among_those_cases`, `.any_such_case_inside_the_region` |
 
+Four more, registered when the subsection was written, from
+`results/voi-ceiling-arms.json` rather than `voi-ceiling.json`. The first three carry
+the *second* half of V2's replacement — quantization is not the cause — which is the
+half a reader is most likely to doubt, so they are registered rather than left as
+prose. The fourth is the census cross-check `:678-680`'s KEPT disposition promises.
+
+| Number | Key path in `results/voi-ceiling-arms.json` |
+|---|---|
+| no case has a positive ceiling on any of the four arms — 400 case-arm pairs | `per_arm.published.ceiling.all_100.n_positive_ceiling`, and the same path on `rebaselined`, `raw`, `calibrated` |
+| the `raw` arm carries 100 distinct `b_h` where `published` carries 8 | `per_arm.raw.b_h.n_distinct`, `per_arm.published.b_h.n_distinct` |
+| 31 raw beliefs fall below `1/5`, and 0 of those carry the constraint; the emptiness is structural on `calibrated` and contingent on the other three | `calibration_floor.consequences.no_calibrated_belief_reaches_the_positive_voi_region.n_raw_below_the_bound`, `.n_raw_below_the_bound_that_also_carry_the_constraint`, `.structural_for_the_calibrated_arm`, `.structural_for_the_other_arms` |
+| census `answer` 30, `hold` 27, `escalate-notify` 43, reproduced by the VoI analysis | `per_arm.published.v_act_argmin_census` |
+
 Attainment (R3) also cites the per-arm `V_q = 0` counts — 16 of 400 case-question
 pairs on `published`, 52 on `calibrated`, 12 on `rebaselined`, 0 on `raw` — from
 `results/voi-ceiling-arms.json` and the `entropy-baseline.json` arm blocks. Depth

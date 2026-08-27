@@ -1347,3 +1347,76 @@ declared tie-break both interpreters produce 29 on published and 26 on raw, matc
 committed artifact, so no paper line or decision file is touched by it.
 
 Recorded as AB1–AB7 in `decisions/v2-design-decisions.md`.
+
+### Gate 7 — the theorem subsection, written first and alone (2026-08-27)
+
+`main.tex:677` was v1's `\subsection{Two actions that are never used}`: 14 lines
+carrying two false claims and, between them, the impossibility theorem asserted a year
+before it was proved. It is now 166 lines, and it was written before any other v2 prose
+because the pre-registration puts five of the eight results, three of the nine debts
+and seven of the sentence dispositions inside it. Writing the three beats separately is
+how the theorem ends up stated three times at three strengths.
+
+What was kept: the census — `answer` 30, `hold` 27, `escalate-notify` 43 — now with the
+note that the value-of-information analysis reproduces it independently; the `ask`
+arithmetic, 2 against 0 and 4 against 0, which is true; and `:681`, "a property of the
+matrix rather than of the cases," which is the theorem in v1's own words and is upgraded
+in place rather than replaced.
+
+What was replaced. The band claim is false twice and the rewrite says both: there is no
+narrow middle band on the unconstrained menu, because the ceiling is negative at every
+belief in the simplex with a maximum of `−2/13`; and quantization is not the cause,
+because the `raw` arm carries 100 distinct `b_h` where `published` carries 8 and leaves
+the region exactly as empty — no case with a positive ceiling on any of the four arms,
+400 case-arm pairs. Naming one error alone leaves a reader believing a finer belief
+would find the band. The "untested" claim is replaced by "tested, and each fails for a
+different proven reason," with the census unchanged. The myopia sentence is absorbed
+here rather than retracted a second time.
+
+Four beats. The theorem, with a proof sketch that carries the monotonicity conditions
+`−ν < c_T − c_F < α` the implementation asserts rather than assumes. Attainment, written
+as what makes the theorem sharp rather than as a second finding: on 16 of 400
+case-question pairs the continuation term is exactly zero — a free perfect oracle — and
+asking still loses the full ceiling, so the negativity cannot be read as slack in the
+bound. Depth-independence: `W_k = V_act` at every `k`, from the simplex-wide ceiling
+plus `W_k ≥ 0`, with `2/13` a floor on the gap and not an estimate of it. And the
+portable form, `c_F/ν + c_T/α < 1`, which fails here at `16/15` and fails by 6.25% —
+scaling the `ask` row by `15/16` to `(1.875, 3.75)` puts the ceiling at zero. That last
+beat is the one a reader can carry to another cost matrix.
+
+The binding wording holds throughout: the claim is asking is never rational **on the
+unconstrained action menu**. The constrained paragraph gives the positive region its
+own sentences — `+1` at the all-hot vertex with `b_h = 0`, the region `b_h < 1/5` on
+that ray bounded by `escalate_notify`, 8 cases carrying the constraint and every one at
+`b_h ≥ 0.40` — and keeps the two kinds of emptiness apart. Structural on `calibrated`,
+where the fitted map cannot emit a belief low enough to qualify. Contingent on the other
+three, where 31 raw beliefs do fall below `1/5` and none of them carries
+`no_direct_answer`. That is a fact about this dataset, not about the matrix.
+
+`escalate-pause` is the other half. Dominance in the matrix is stronger than absence
+from the census: the gap over `escalate-notify` is 3, 2, 2, 2, 1, 1 across the six
+states, strictly positive in all of them, and expected cost is a belief-weighted
+average over columns, so no belief can invert it. That also prices abstention: a
+notify-to-pause rewrite raises realised cost by 1 to 3 on every case it touches and
+cannot lower the missed-escalation count, since both escalate actions count as
+escalating.
+
+Every number in the subsection resolves against a committed key path; all 27 were
+re-checked after the prose was written, with no mismatch. Four of the paths were not in
+the pre-registration's §4.1 and were added to it rather than cut from the prose, since
+three of them carry the half of the band replacement a reader is most likely to doubt.
+
+Two things stayed out deliberately. `6/23` and the fact that the calibrated arm makes
+"two unused actions" three: both are consequences of the reachable-score floor, which
+belongs with the calibration result it cannot be separated from. The structural half of
+the emptiness argument therefore names that floor without its value and points forward.
+
+One edit landed outside the subsection. `amsthm` is loaded but declares no
+`\newtheorem`, and `ijcai26.sty` defines no theorem environment, so `\begin{theorem}`
+would not have compiled; one preamble line was added. No TeX distribution exists here,
+so that line is unfalsified rather than verified — Kaps holds the compile, on this
+subsection alone and ahead of the final build, because a broken theorem environment
+blocks every section after it. The bold run-in fallback is written down in case it
+collides.
+
+Recorded as AC1–AC4 in `decisions/v2-design-decisions.md`.
