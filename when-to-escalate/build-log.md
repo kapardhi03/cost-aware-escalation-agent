@@ -1654,3 +1654,367 @@ work. The ignore names the PNG only; the `!…/*.pdf` un-ignore above it is what
 clean-clone compile depends on and is untouched.
 
 Recorded as AF1–AF14 in `decisions/v2-design-decisions.md`.
+
+### Gate 7 — Limitations: v1's myopia claim withdrawn (2026-08-28)
+
+The section v1 got wrong. `:947` claimed the policy is myopic and therefore undervalues
+the ask action, that the honest handling would be to compute its one-step value of
+information, and that `ask`'s absence from the census was the consequence. The middle
+clause is now false — Gate 5 and Gate 6 computed it — and the other two are the wrong
+direction. Asking is not underpriced by the one-step rule; it is priced, and it loses at
+every belief and every depth. So the paragraph is a withdrawal, not a qualification,
+and it says so.
+
+What survives is smaller and it is the honest part. The policy is myopic and carries no
+machinery that prices a question's downstream value: true, and still a limitation. The
+collapse that makes this harmless is a property of this cost matrix — `c_F/ν + c_T/α <
+1` is the condition, this matrix gives `16/15`, the break-even multiplier on the ask row
+is `15/16` — and the policy never checks it. Being myopic is safe here for a reason the
+code does not verify, and on a matrix that satisfied the condition the myopia would cost
+exactly what v1 said it costs. Both misreadings are named in the text: `2/13` is a floor
+on the gap and not an estimate of it, and the theorem bounds one more question inside a
+deeper policy on this matrix and this menu, not interaction design in general.
+
+The retraction is written once. `:250` and `:347` state the result and point at
+`sec:unused`; neither carries retraction language, because five wordings of one
+withdrawal is how one of them overreaches. The Conclusion's passage is the fifth and is
+left for its own pass, where the map assigns it a replacement by the answer rather than
+a retraction.
+
+Three further entries. OQ3: the value-of-information machinery simulates replies from
+the design's own model of the lead, so running it and finding it consistent is a
+self-consistency check of the implementation and nothing more. That is written as a
+bounded result rather than a hedge, and what bounds it is the theorem's independence
+from the answer model — it needs only non-negativity of the cost matrix, so the
+unvalidated model touches the per-case ceilings and the count of resolving questions,
+not the result that `ask` is never selected. Abstention, new at this pass: priced out
+under this matrix by column-wise dominance of `escalate-pause` by `escalate-notify` in
+all six columns, by between 1 and 3, with the scope stated as the matrix rather than the
+design space, since the costs are expert-set and §4 already shows at least one magnitude
+is load-bearing. And L1's two carried caveats now have their own paragraph instead of
+living only in §6: the cost result is against the uniform baseline only,
+always-notify is a near-tie at 1.72 against 1.74 and the win is human load, and the
+dev/test totals agree
+because the split was matched by construction.
+
+AD3's debt is one line: 89 of 100 beliefs reproduce at temperature 0, 11 differ, none
+unparseable, cause not determinable from the record. The count comes from
+`results/rebaseline.md` and `reproduction_check.unparseable` in
+`results/logprob-elicitation.json`. It is not attributed to the calibration map, and
+L10's resolved-snapshot half stays out — v1 stored the alias, so "no dated snapshot is
+recorded" is the true statement about the beliefs this paper reports.
+
+AF8's debt is a paragraph: Python 3.12 named as the floor with the compensated-summation
+reason, the two float-bearing artifacts compared to 1e-9 rather than exactly, the figure
+excluded from the byte comparison because a PDF records its renderer's version and its
+render time, and every plotted value checked against `results/run.json` instead. A
+reproducibility claim in the paper without the interpreter floor is a named falsifier.
+
+Nothing was computed. Every number in the section resolves to `main.tex` §4 or §6, to
+`results/rebaseline.md`, to `results/logprob-elicitation.json`, or to the README's
+reproduction floor. Checks: preflight PASS on `main.tex` (19 labels, 17 distinct refs,
+5/5 citations, 1 graphic, 4 tabulars), 772 tests passing, no new line over 84
+characters, and the six that are over are the same six as before this edit.
+
+Recorded as AG1–AG11 in `decisions/v2-design-decisions.md`.
+
+One more defect, found by reading the abstract against the section just written. The
+abstract said recalibration "halves the misses, from 16 to 8" and moved straight on to
+the residual 8. §7.3 states the same change two-sidedly — escalations 43 to 60,
+precision 0.605 to 0.567, 9 of the 16 fixed and 1 new miss created — so the body was
+never one-sided; the summary was. That is the failure this whole gate is meant to catch,
+and it survived four sections because nobody reads the abstract again after writing it.
+Fixed at `paper/main.tex:116`, and registered as falsifier Z19 so it cannot drift back.
+
+The instruction that found it asked for "cost up". Cost falls: 1.650 to 1.250, in
+`results/robustness.json` and in §7.3. What rises is load. The abstract now says mean
+cost falls and names the load — escalations 43 of 100 to 60, precision 0.605 to 0.567 —
+with the composition, and every count carries its denominator. The pair 1.650/1.250 is
+left to §7.3 rather than printed eight lines under the abstract's 1.72, which is the
+legacy tie-break total against a different baseline.
+
+Recorded as AH1–AH4 in `decisions/v2-design-decisions.md`.
+
+The trade-off wording lasted one exchange. The next instruction removed the miss count
+from the abstract entirely: state the calibration result as a calibration-quality
+improvement scoped by the reachable-score floor, cite the held-out measures, carry no
+miss count. `paper/main.tex:116-129` now does that. The in-sample sentence keeps its
+scope claim — recalibrating on the same 100 cases is an in-sample ceiling and the body
+reports it as one — and loses its number. Next to it are §6.6's held-out figures on the
+50 test cases, ECE 0.1526 to 0.0696, cross-entropy 0.8546 to 0.8136 bits, Brier 0.2063
+to 0.1962, then the `6/23` reachable-score floor sitting above the `3/13` a belief must
+fall below for answering to be cheapest, then what that costs: `answer` gone from the
+census, precision 0.667 to 0.463, recall 0.667 to 0.905. R7 and R8 in one paragraph, as
+Z10 requires everywhere else. Zero miss counts remain in `:85-133`, checked numeral by
+numeral.
+
+Two premises came with that instruction and one of them is wrong. The abstract's
+"16 to 8" was not a train/test split artifact: `recalibration.before.misses` is 16 and
+`recalibration.after.misses` is 8 in `results/robustness.json`, both on the 100 cases,
+which is exactly what the abstract said. What is true is that restricting the same
+policy and beliefs from those 100 cases to the 50 test cases also prints 16 to 8
+(`paper/main.tex:1082`), so two unrelated operations render the same string within sight
+of each other — confusable, which is D4's shape and Z8's rule, not false. And "the floor
+sits above both thresholds so recalibration cannot improve the decision" holds for the
+held-out isotonic map, whose lowest pooled block puts `6/23` above both `3/13` and
+`1/5`, but not for the in-sample bin map, whose `recalibration.mapping` sends the
+`0.2-0.3` bin to `0.1714` — below the threshold — and which changes 8 decisions and 0.4
+of mean cost. In-sample recalibration does improve the decision. What it does not do is
+generalise.
+
+The reframing is still the right abstract, on the ground that survives: the abstract was
+carrying the weaker of the two calibration results. §7.3 fits and scores on the same 100
+cases; §6.6 fits on 50 and scores on the other 50. Held out is the stronger claim, and
+its ceiling is more interesting than the in-sample one, because the gain stops at the
+map's own range rather than at the data.
+
+Z19 is marked changed and superseded by Z20, which is the rule as now stated. Z11 wanted
+the in-sample sentence kept and extended; it is kept and shortened, and Z20 records that
+resolution. Recorded as AH5–AH12 in `decisions/v2-design-decisions.md`; AH1–AH4 stay as
+written because they record what was tried.
+
+### Gate 7 — Conclusion: the ask question closed, the two floors named (2026-08-28)
+
+Three sites, all in `paper/main.tex`, all assigned by the map.
+
+The ask entry at `:1474-1502` is the paper's last word on asking and the map files it as
+REPLACED by the answer rather than by a retraction, because v1 asked the exact question
+v2 settles — whether the action is genuinely useful or merely unpriced. The answer is
+neither: it was priced, and it lost. The replacement leads with the bound, at most
+`-2/13` at every belief in the simplex on the unconstrained menu, attained at the
+all-hot vertex, then closes the horizon question outright: posteriors are beliefs, the
+bound holds at every node of a lookahead tree, `W_k = V_act` for every `k >= 1`. Two
+short sentences carry it — asking does not fail here because the policy looks only one
+step ahead, it fails at every depth. What v1 had was the opposite shape, a myopic policy
+that "cannot price the value of asking, because that value is a better belief next
+turn," which reads as an admission. The one-step rule is still named as a rule that does
+not price downstream value; the inference that this is why *ask* is absent is gone. No
+retraction language anywhere in the Conclusion — that is written once, in Limitations,
+and Y5b's falsifier is exactly the claim being withdrawn in five wordings.
+
+Second paragraph carries R2 as the portable claim, which is where the map puts it:
+`c_F/ν + c_T/α < 1` in words and symbols, the `16/15` that fails it, the 6.25% margin,
+the `15/16` scaling that puts the ceiling at zero, and the designer with a cheaper
+question who is on the other side of the line. The constrained carve-out is referenced
+and not re-derived — a region of hot beliefs that no case in this set occupies — since a
+second thinner version of a committed passage is how two versions come to disagree.
+
+The calibration entry at `:1454-1472` discharges KEPT-AND-PROVEN. v1 claimed the
+residual-miss floor is set by the granularity of the elicitation and not by the
+calibration method, and named a finer belief plus a held-out fit as the next step.
+Gate 2 took that step and the claim held, so the entry reports it as tested rather
+than
+asserted and the "next step is" becomes a reference to §6.6. On the 50 test cases the
+misses go 7 of 50 to 2 of 50 — breakable, and it broke when the elicitation got finer,
+which is what the claim predicted. Not free: mean 1.40 to 1.50 and 41 of the 50
+escalated, with R8's mechanism in the same sentence per Z10, so the granularity
+claim survives and the bound moves out of the elicitation and into the calibration
+map.
+
+One number in the pre-registration is wrong and stays as written. D1 at
+`decisions/v2-gate7-preregistration.md:394` says Gate 2 moved misses "8 → 2 on the same
+50 test cases". `tab:calibration` gives the re-elicited uncalibrated arm 7 of 50 and the
+calibrated arm 2 of 50; the 8 is the written-belief arm on that half, a third row. The
+pre-reg pairs a before from one arm with an after from another. The Conclusion uses 7 to
+2 and no historical row is edited for wording.
+
+The bare-"floor" stragglers are four sites, not one, and the instruction misnamed the
+first. `:1220` closes §7.3, the in-sample bin map on 100 cases, and its antecedent is
+the 8 misses that recalibrating this marginal cannot remove — a count, which is Z9's
+residual-miss floor. `6/23` is §6.6's isotonic map and V3 keeps it in the Calibration
+subsection. Calling `:1220` the reachable-score floor would have put §6.6's probability
+onto §7.3's count, which is the two-maps collapse for the third time this pass. Fixed to
+residual-miss floor at `:1220`, `:1458` and `:1466`, and to reachable-score floor at
+`:870`.
+Left alone: `2/13` is a floor on the gap at `:837` and `:1311`, a third object and
+qualified there on purpose per AG3, and the declared Python floor at `:1385`.
+
+`:1451` stops calling all three questions open, since one closes here and one is mostly
+answered. Raised in the plan as an addition beyond the map rather than folded in
+quietly.
+
+Untouched: the turn-boundary entry, which `v2-policy-boundary.md` part 4 depends on; the
+summary paragraph; the AI-use statement. AG11's deferral is discharged.
+
+Checks: preflight PASS on `main.tex` (19 labels, 17 distinct refs, 5/5 citations, 1
+graphic, 4 tabulars), 772 tests passing, `main.tex` at 1548 lines with over-84 lines
+only at 2, 108, 209, 436, 1356 and 1422 — the same six as before this edit — no banned
+token,
+`cohort` still 4, and no number that is not already in §4, §6.6, §7.3 or
+`results/`. Nothing was computed. Recorded as AJ1–AJ11 in
+`decisions/v2-design-decisions.md`.
+
+The closing sentence the instruction asked to replace is not in the paper. `main.tex`
+has no future-work section and no promise of richer belief representations to make
+asking worthwhile: "richer", "belief representation", "worthwhile", "future work" and
+"further work" all return zero hits, in v1's text as much as v2's. The Conclusion's
+three questions are the nearest thing, the ask one is now the closed one, and the
+transferable open question — which cost matrices satisfy `c_F/ν + c_T/α < 1` — is
+already stated in its designer-facing form at the end of the ask entry. So there is
+nothing to replace. The rule is worth having anyway and is registered as Z21 with a
+§7 falsifier: no forward-looking sentence may name a richer belief, a longer horizon
+or a better question model as a route to making *ask* worthwhile on this matrix,
+because the theorem disproves that direction at every belief and every depth. It is
+satisfied vacuously today, which is the honest status to record rather than claiming
+a fix. Recorded as AJ12.
+
+### Gate 7 — the Introduction read back against the rewritten sections (2026-08-28)
+
+The section-by-section pass worked forward from the theorem section, which left
+everything before it in v1 prose. Reading `:1` through `:742` against the sections
+that had been rewritten found twelve inconsistencies: five contradictions, three
+under-qualifications, two places where the Introduction described a paper without a
+theorem in it, and two declaration gaps. The load-bearing ones were both in the
+Introduction. "This means the fix is recalibration, not a redesign of the state"
+promised the direction §6.6 disproves, and "under-confident in exactly the range that
+suppresses escalation" repeated a phrase §7 quotes in order to reject. All twelve are
+fixed in one pass, recorded as AK1–AK14.
+
+Two of the four items the instruction named could not be done as specified. There is
+no band claim about asking anywhere before the theorem section: the two sites named
+are the abstract's uniform-baseline sentence and a row of `tab:results`, and the one
+occurrence of "band" in that range is a true statement about thresholds — every
+threshold in (0.2, 0.3] decides these 100 cases identically, so `3/13` is one
+arbitrary point inside a band the measurement cannot resolve. That is a band of
+thresholds, not a region where a question wins, and overwriting it with the theorem's
+result would have deleted something true and replaced it with a claim about a
+different quantity. The defect behind the instruction is real and larger: the theorem,
+the ceiling, `2/13`, value of information, the condition and `1/5` all grep to zero
+hits before `:742`, so the Introduction never told the reader the paper contains a
+proof. It does now, as an addition rather than a replacement, and the addition is
+flagged as beyond the map. The other item, a last batch of bare-"floor" stragglers, is
+empty: "floor" occurs once in that range, in the abstract, already qualified as the
+reachable-score floor.
+
+Verified after the pass: `python3 tests/paper_preflight.py paper/main.tex` PASS, with
+19 labels, 17 distinct references, 5 of 5 citations, 1 graphic and 4 tabulars, all
+unchanged; 772 tests passing; no banned token, and the protected-token counts
+unchanged; over-84 lines in
+`main.tex` down from six to five, the sixth being a v1 line at 116 characters that
+this pass rewrapped. Every number written is already in the abstract, §4, §6.6, §7,
+§7.2 or Limitations. Nothing was computed.
+
+### Gate 7 — naming the baseline behind the cost win (2026-08-28)
+
+Three rulings in three turns proposed tearing out `2.58`: that it was a
+cross-population figure, that it was `always_notify` misattributed, and that the
+reduction of a third was an inflated near-tie. `results/run.json` refuted each one,
+and the refutation is the same three lines every time. Same population,
+`summaries.test`, n = 50: `policies.cost_aware.mean_cost` 1.72 on `total_cost` 86,
+`policies.always_notify.mean_cost` 1.74 on 87, `policies.uniform_baseline.mean_cost`
+2.58 on 129. The same three means appear at `summaries.dev` and `summaries.all`,
+because the halves were stratified by archetype and sub-variant and balanced on the
+needs-human count. `summaries` holds exactly `dev`, `test` and `all` — there is no
+`summaries.hard`. So no cost comparison in the paper was ever cross-population, and
+the locked always-notify caveat was confirmed against the artifact rather than
+revised: 172 against 174 over all 100, one cost point in eighty-seven on each half,
+which is a near-tie and not a loss.
+
+What survived the three rulings was a real defect, narrower than any of them. The
+paper stated the reduction of a third in four places without naming which baseline it
+was against, and §7.1 stated it four subsections upstream of the near-tie that
+qualifies it. A reader arriving at the abstract could carry `2.58` onto always-notify
+and read a third off the strong baseline. That is fixed by naming both baselines
+wherever the cost win appears — abstract, Introduction, §7.1, Conclusion — and by
+giving the near-tie subsection a label so §7.1 can point at it instead of restating
+it.
+
+The one genuine mixed-population site was §7.2's threshold sweep. The bracket it
+quotes — 29 escalations at `t = 0.35` with 23 misses at cost 2.600, 46 at `t = 0.25`
+with 13 misses at 1.810 — is `threshold_rule.matched_load` in
+`results/robustness.json`, computed over all 100 cases, and it sat five lines from a
+selection tuned on the 50 development cases with neither population named. Both are
+named now. Checking it surfaced something the paragraph had not said: the dev-tuned
+selection is dev-specific. On the test half `t = 0.05` and `t = 0.10` both cost 1.68
+against `t = 0.00`'s 1.740, from `threshold_rule.sweep`, so tuning there by the same
+criterion would not have chosen escalate-everything. That sentence is an addition
+beyond what the ruling asked for and is flagged as one.
+
+Human-load numbers now carry their population everywhere they appear. 43 escalations
+of 100 and an escalation precision of 0.605 against 0.420 are all-100 figures; the
+test half is 20 of 50 against 50 of 50, at 0.65 against 0.42. §7.5 states both pairs,
+§8.3's recalibration load figures are scoped to the same 100, and no sentence mixes
+the two populations. No interval is claimed on the always-notify cost difference
+because none exists: `results/robustness.json` bootstraps ECE and nothing else, so
+Limitations says the difference is reported as a near-tie and nothing stronger.
+
+One term was proposed and not written. The falsifier as dictated said "against
+uniform-random". The baseline is not random — `src/costs.py:109-112` derives
+`UNIFORM_COST` by replacing every non-zero cost with `1.0`, holding the belief, the
+feasible set and the expected-cost machinery fixed. Writing "uniform-random" would
+have put a false description of the control into the paper, so the falsifier says
+uniform-cost.
+
+Verified after the pass: `python3 tests/paper_preflight.py paper/main.tex` PASS, with
+20 labels, 18 distinct references, 5 of 5 citations, 1 graphic and 4 tabulars — one
+more label and one more reference than before, both the new `sec:tie`; 772 tests
+passing; over-84 lines in `main.tex` down from five to four, the abstract's
+188-character line rewrapped by this pass. Every number written traces to
+`results/run.json` or
+`results/robustness.json` by key. Nothing was computed.
+
+### Gate 7 — the entropy subsection, and S4 stated as a method (2026-08-28)
+
+The full read found the last promised-but-absent result. Method's
+`\paragraph{Entropy thresholds.}` defines the τ grid in full and says "the
+entropy-threshold baseline reported below", and Results never reported it. The
+paragraph named its consumer in words because the label did not exist, which is the
+same forward reference AD4 closed for `sec:calibration`. Either the subsection gets
+written or the paragraph gets deleted; the numbers are in
+`results/entropy-baseline.json`, pre-registered with key paths, so it was written.
+
+The framing is the part worth recording. The sweep is not a fifth policy competing on
+cost. Theorem 1 says asking is never rational on the unconstrained action menu, and
+"ask when uncertain" is the rule a reader reaches for instead — so if the ceiling
+holds, every setting of that rule has to lose, and the sweep says by how much. That
+makes the forty-four rows evidence for the proof rather than a hunt for a baseline to
+beat, and it is the honest reading: the rule differs from the shipped policy only on
+the cases where it fires, and it never fires for free.
+
+Two locked sentences needed work against the artifact. The pre-registration calls
+`+5.60` the best result "on the arm with the dearest baseline", but the four
+`v1_fallback_realised_total` values are 86, 86, 70 and 75 and the calibrated arm's is
+the cheapest, so the descriptor fits neither the v1 reference nor the arm's own
+realised total. The requirement behind it stands and is written in the artifact's own
+terms — each excess is against that arm's own reference, so the four columns are
+incomparable in magnitude, stated in the prose and again in the caption. The second is
+"no free threshold on any arm": `q = 1.0` has zero excess on all four arms because τ
+at the top of a grid taken over 100 cases sits above every one of the 50 scored, so it
+fires on nothing. The paper claims no *firing* threshold is free, and gives the count
+— ten of eleven rows fire on every arm, and all forty cost more than not asking.
+
+X7 moved off its registered landing site. The debt says "failure analysis or
+discussion", but the inversion is a fact about the sweep's realised column, and with
+the sweep tabulated the row is already visible: rebaselined, `q = 0.7` to `q = 0.8`,
+firing 12 to 11, excess `+23.60` to `+27.60`, the only inversion in forty-four rows.
+`a02-deep-017` leaves the firing set, the shipped policy answers it and realises 10
+where ask-then-act realises 6.0, and the case's expected excess is `+0.40` and still
+positive. Expected cost is what the ceiling bounds; one realised draw went the other
+way, which is why the bound is stated in expectation rather than per case.
+
+S4 is now a stated method rather than a recurring note in `decisions/`. Five
+occurrences earn it: Gate 2's collapse count, Gate 3's absolute sweep grid, the τ
+deciles, the `argmax_q VoI` tie-break, and the figure's annotation offset against a
+marker radius that grows with the count being printed. A numeric threshold, spacing or
+offset is expressed relative to the scale of what it acts on, or it reports the
+instrument. The tie-break instance carries both numbers the registered falsifier
+requires — the oracle and the information-gain rule agree on 29 of 50, and the oracle
+needed its tie-break on 13 — because on a tied case agreement is an artifact of the
+tie-break and not evidence the two rules select alike.
+
+Two smaller repairs in the same pass. The Ethics closing was flat and carried a curly
+apostrophe and a curly em-dash on one 213-character line; rewritten in the paper's
+register, `main.tex` now has no non-ASCII characters at all. And `:1195`'s hardcoded
+"§7.3" pointed at the theorem subsection where it meant Calibration — the insert would
+have made it wrong twice over — so it is a `\ref` now, the only hardcoded cross-
+reference in the file.
+
+Verified after the pass: `python3 tests/paper_preflight.py paper/main.tex` PASS, with
+22 labels, 20 distinct references, 5 of 5 citations, 1 graphic and 5 tabulars — two
+more labels and two more references, `sec:entropy` and `tab:entropy`; 772 tests
+passing; over-84 lines in `main.tex` down from four to three, all three pre-existing;
+zero non-ASCII characters. Every number written traces to
+`results/entropy-baseline.json` or `results/run.json` by key. Nothing was computed.
+The paper is not compiled here — no TeX exists in this sandbox — so the fit of a
+nine-column tabular in a two-column layout is an estimate and the build is Kaps's to
+confirm.

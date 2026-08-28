@@ -1568,3 +1568,571 @@ disappearing, so neither half can be quoted without the other.
 | AF12 | The per-bin count labels removed from the reliability figure rather than repositioned; the count stays in marker area, legend and caption | (Kaps-decided) | **confirmed** |
 | AF13 | `paper/figures/*.png` ignored; the `*.pdf` un-ignore left alone | (Kaps-decided) | **confirmed** |
 | AF14 | No test added for the label removal; the untested render path recorded as the reason the defect shipped | (AI-proposed) | **noted** |
+
+## The paper edit — Limitations
+
+- **AG1 — the myopia retraction is written once, in Limitations, and the other two
+  live passages get consistency edits that carry no retraction language.** Z6 fixed
+  the canonical site as the place v1 made the claim. The two edits at
+  `paper/main.tex:250` (Related work) and `:347` (Agent design) now state the result —
+  a one-step rule cannot price the belief a question buys, and on this matrix that
+  costs nothing — and point at `sec:unused`. Neither says anything is withdrawn. The
+  falsifier is five wordings of one retraction, and the way to fail it is to let each
+  site apologise for itself.
+
+- **AG2 — the retraction is decomposed rather than reversed wholesale.** Three parts,
+  and only one of them goes. Withdrawn: that `ask` is undervalued here, that computing
+  its value of information is the honest handling this design omits, and that its
+  absence from the census follows from the horizon. Kept: the policy is myopic and
+  carries no machinery that prices a question's downstream value — a true statement
+  about the implementation, and still a limitation of it. Residual scope, which is the
+  part that is new: the collapse is a property of this cost matrix, and the policy
+  never checks the property it depends on, so what is safe here is safe for a reason
+  the code does not verify.
+
+- **AG3 — both misreadings of the theorem are named in the Limitations text, not left
+  to the theorem section.** `2/13` is a floor on the gap and not an estimate of its
+  size; the theorem bounds one more question inside a deeper policy on this matrix and
+  this action menu, not the value of interaction design. Two §7 falsifiers point at
+  exactly these, and a retraction paragraph is where a reader most likely over-reads
+  the result in the paper's favour.
+
+- **AG4 — the reachable-range sentence is worded off the bare word "floor".** Z9
+  reserves that word: the residual-miss floor is a count and the reachable-score floor
+  is a probability, and neither may appear bare. The structural-emptiness clause now
+  reads "whose reachable range starts above $1/5$". The one remaining "floor" in the
+  section is "a floor on the gap", which is a third object and carries its noun.
+
+- **AG5 — L1's two carried caveats get their own Limitations paragraph rather than
+  being left in Results.** A reader who reads only the Limitations section would
+  otherwise meet neither. The paragraph states both at full strength with the numbers
+  §6 already reports — the cost result is against the uniform baseline only, the
+  always-notify comparison is a near-tie at 1.72 against 1.74, the win is human load
+  at 43 escalations of 100 against all 100 and precision 0.605 against 0.420; and the
+  dev/test totals agree because the split was matched by construction, so they are not
+  out-of-sample evidence. Nothing is hedged into a softer form on the way across.
+
+- **AG6 — OQ3 is written as a bounded result, and the bound is the theorem's
+  answer-model independence.** The check simulates replies from the design's own model
+  of the lead, so it is a self-consistency check of the implementation and is named
+  that; it is never called a validation and never described as out-of-sample. What
+  makes it a scope statement rather than a hedge is the next sentence:
+  `Theorem~\ref{thm:ceiling}` does not use the answer model at all, needing only
+  non-negativity of `Table~\ref{tab:costs}`, so what the missing external evidence
+  touches is the per-case ceilings and the count of resolving questions — not the
+  result that `ask` is never selected. S1's correction stays in this record and is not
+  folded back into OQ3's text.
+
+- **AG7 — abstention gets its own entry, framed as priced out under this matrix.** New
+  at this pass and not in the approved plan. The argument is column-wise dominance of
+  `escalate-pause` by `escalate-notify` in all six columns by between 1 and 3, which is
+  already in §6.3, so no number is computed here. The scope qualifier is the matrix:
+  the costs are expert-set rather than measured and §4 shows at least one magnitude is
+  load-bearing, so a matrix in which pausing is not dominated makes abstention
+  available again and this experiment says nothing about that case. The census fact
+  that `escalate-pause` is never selected moves here from the myopia sentence, which is
+  where it had been doing duty as evidence for the horizon claim.
+
+- **AG8 — the drift line gives the count and stops.** AD3 owed Limitations one line.
+  It reads 89 of 100 unchanged, 11 different, none unparseable, and says the record
+  does not determine the cause. The three numbers come from `results/rebaseline.md` and
+  `reproduction_check.unparseable` in `results/logprob-elicitation.json`. The cause is
+  not attributed to the calibration map, and the resolved-snapshot half of L10 is left
+  out: v1 stored the alias, so "no dated snapshot is recorded" is the true statement
+  about the beliefs this paper reports, and naming v2's snapshot beside it would read
+  as though the reported numbers had one.
+
+- **AG9 — the reproducibility paragraph carries the interpreter floor.** A §7 falsifier
+  is a reproducibility claim in the paper without it. The paragraph names Python 3.12,
+  the reason (compensated summation over floats), the two float-bearing artifacts
+  compared to $10^{-9}$ rather than exactly, and the figure's exclusion from the byte
+  comparison with the renderer-metadata reason. It closes on the boundary that matters
+  most: the belief cache is an input to the experiment, not an output of it.
+
+- **AG10 — the section's counted enumeration is dropped.** "Two limitations are
+  structural" became "Several", and "A third structural limitation" became "A further".
+  A fixed count in the lead sentence breaks silently every time an item is added, and
+  the count carried no information.
+
+- **AG11 — the Conclusion's myopia passage is not touched at this pass.** It is the
+  fifth of the five passages and the map assigns it a replacement by the answer rather
+  than a retraction. Editing it here would put two retraction-shaped paragraphs in the
+  same commit, which is how the "written more than once" falsifier gets tripped.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AG1 | The myopia retraction written once in Limitations; `:250` and `:347` get consistency edits with no retraction language | (Kaps-decided) | **confirmed** |
+| AG2 | The retraction decomposed into withdrawn, kept, and residual scope rather than reversed wholesale | (AI-proposed) | **confirmed** |
+| AG3 | Both misreadings of the theorem named in the Limitations text: `2/13` is a floor on the gap, and the scope is this matrix and this menu | (AI-proposed) | **confirmed** |
+| AG4 | The structural-emptiness clause reworded off the bare word "floor" per Z9 | (AI-proposed) | **confirmed** |
+| AG5 | L1's two carried caveats given their own Limitations paragraph, at full strength | (Kaps-decided) | **confirmed** |
+| AG6 | OQ3 written as a bounded result, scoped by the theorem's independence from the answer model; never called validation or out-of-sample | (Kaps-decided) | **confirmed** |
+| AG7 | Abstention added as its own entry, priced out under this matrix by column-wise dominance, with the expert-set-costs scope | (Kaps-decided) | **confirmed** |
+| AG8 | The drift line gives the count and the undetermined cause only; the resolved-snapshot half of L10 left out | (AI-proposed) | **confirmed** |
+| AG9 | The reproducibility paragraph carries the Python 3.12 floor | (Kaps-decided) | **confirmed** |
+| AG10 | The section's counted enumeration dropped: "Two limitations" → "Several", "A third" → "A further" | (AI-proposed) | **confirmed** |
+| AG11 | The Conclusion's myopia passage left for its own pass | (AI-proposed) | **noted** |
+
+## The paper edit — the abstract's calibration sentence
+
+- **AH1 — the abstract now carries the trade-off, not the halving alone.** Raised as
+  "AH6" in the instruction that found it; this record has no AH block before this row,
+  so it is AH1. The sentence at `paper/main.tex:116` said recalibration "halves the
+  misses, from 16 to 8" and then went straight to the residual 8. §7.3 states the same
+  change two-sidedly — escalations 43 to 60, precision 0.605 to 0.567, and a
+  composition of 9 fixed against 1 new miss created — so the defect was the summary
+  keeping the flattering half of a paragraph written not to have one. The abstract is
+  what is read, and a one-sided abstract over a two-sided body is a one-sided paper.
+
+- **AH2 — the correction runs the other way on cost.** The instruction asked for "cost
+  up". Cost falls: `recalibration.before.mean_cost` is 1.650 and
+  `recalibration.after.mean_cost` is 1.250 in `results/robustness.json`, and §7.3 says
+  so. What rises is load, and that is the whole trade-off — escalations and precision,
+  not cost. Writing "cost up" would have put a number in the abstract that contradicts
+  the body and the artifact.
+
+- **AH3 — the two cost figures are named directionally rather than numerically.** The
+  abstract already quotes 1.72, which is the legacy tie-break total; the recalibration
+  pair is 1.650 to 1.250 against the corrected baseline. Printing 1.650 eight lines
+  under 1.72 with no room to explain which baseline is which trades one confusion for
+  another, so the abstract says mean cost falls and §7.3 carries the pair.
+
+- **AH4 — every count in the new sentence carries its denominator.** Z8 applies inside
+  the abstract too: "16 to 8" became "on those 100 cases, 16 to 8", escalations read
+  "43 of 100 to 60", and the composition reads "9 of the 16". The in-sample label is
+  kept, which is what Z11 requires: the sentence is extended, not replaced.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AH1 | The abstract carries the calibration trade-off, not the miss halving alone; registered as falsifier Z19 | (Kaps-decided) | **confirmed** |
+| AH2 | "Cost up" corrected to cost down, 1.650 to 1.250; the trade-off is load, not cost | (Kaps-decided) | **confirmed** |
+| AH3 | The recalibration cost pair named directionally in the abstract, numerically in §7.3, to avoid two baselines in one paragraph | (AI-proposed) | **confirmed** |
+| AH4 | Every count in the new abstract sentence carries its denominator per Z8; the in-sample label kept per Z11 | (AI-proposed) | **confirmed** |
+
+## The paper edit — the abstract reframed off the miss count
+
+- **AH5 — AH1 to AH4 are superseded inside the same pass.** The trade-off framing
+  kept the halving in the abstract and made it two-sided by adding the load it is
+  bought with. The instruction that followed removes it instead: the abstract states
+  the calibration result as a calibration-quality improvement scoped by the
+  reachable-score floor, cites the held-out measures, and carries no miss count at
+  all. The four earlier rows stay as written because they record what was tried.
+
+- **AH6 — two premises were given for the reframing and one of them does not hold.**
+  Both are recorded because the conclusion is adopted and the reasoning is not.
+  - *"The abstract's 16 to 8 is the train/test split artifact, not recalibration's
+    effect."* Not what the artifact says. `recalibration.before.misses` is 16 and
+    `recalibration.after.misses` is 8 in `results/robustness.json`, both on the 100
+    cases, so the pair is recalibration's measured in-sample effect and the abstract
+    attributed it correctly. The real defect is that restricting the same policy and
+    the same beliefs from those 100 cases to the 50 test cases *also* prints 16 to 8
+    (`paper/main.tex:1082`), so two unrelated operations produce an identical string
+    within sight of each other. That is a confusability failure — D4's shape, which
+    Z8 names — not a false attribution.
+  - *"The floor sits above both thresholds so recalibration cannot improve the
+    decision on this matrix."* True of the held-out isotonic map and false of the
+    in-sample fit, which are different objects. The isotonic map's lowest pooled
+    block puts its reachable-score floor at `6/23`, above both `3/13` and `1/5`, so
+    `answer` is unreachable and §6.6's action census loses it. The in-sample
+    recalibration is a bin map, and `recalibration.mapping` in
+    `results/robustness.json` sends the `0.2-0.3` bin to `0.1714`, below `3/13`. It
+    can and does change decisions: misses 16 to 8, escalations 43 to 60, mean cost
+    1.650 to 1.250. Recalibration improves the decision in-sample. What it cannot do
+    is generalise, which is a different objection and the one that holds.
+
+- **AH7 — the reframing is adopted on the ground that survives AH6.** Not that the
+  in-sample result is unreal, but that the abstract had the weaker of the two
+  calibration results in it. §6.6 fits on 50 development cases and scores the other
+  50; §7.3 fits and scores on the same 100. Held out beats in-sample, and the
+  held-out result is also the more interesting one, because the gain stops at the
+  map's range rather than at the data. The abstract now carries that.
+
+- **AH8 — no miss count survives in the abstract.** Checked by reading every numeral
+  in `paper/main.tex:85-133`. What is left is 100 and 50 as set sizes, the cost
+  figures 1.72, 2.58, 1.74 and the gap 0.86 to 1.07, the escalation count 43 of 100,
+  the in-sample ECE 0.142 with its interval, the three held-out measures, the two
+  rationals, and the held-out precision and recall. No count of misses, fixes, or
+  survivors appears.
+
+- **AH9 — the in-sample sentence keeps its scope label and loses its count.** Z11
+  required that sentence to be kept and extended rather than replaced, on the ground
+  that it is true and v1 labelled its own scope. Half of that survives: the abstract
+  still says recalibrating the marginal on the same 100 cases is an in-sample ceiling
+  and that the body reports it as one, which is the scope claim. The number it was
+  extended with is gone. Z11 is resolved the other way and registered as Z20.
+
+- **AH10 — the abstract prints §6.6's own digits.** The instruction gave ECE as 0.153
+  to 0.070; §6.6 prints 0.1526 to 0.0696. The abstract uses the body's four decimals
+  so a reader comparing the two finds the same string rather than a rounding they have
+  to reconcile. Cross-entropy 0.8546 to 0.8136 bits and Brier 0.2063 to 0.1962 are
+  carried as well, because "all three measures named in advance" is the claim and one
+  of the three alone does not support it.
+
+- **AH11 — the paragraph now holds two ECE values, so both carry their population.**
+  0.142 is on all 100 cases with the published beliefs; 0.1526 and 0.0696 are on the
+  50 test cases with the re-elicited ones. The second pair is introduced as "on those
+  50 test cases" for that reason. Same rule as Z14's caption requirement, applied to
+  prose.
+
+- **AH12 — R7 and R8 travel together into the abstract.** Z10 requires them in the
+  same subsection; putting R7 in the abstract without R8 would break the rule at the
+  one place it matters most. The floor sentence is therefore not a caveat attached to
+  the result, it is half of the result, and the paragraph closes on the join: a
+  calibration-quality gain that the map's range prevents from becoming a decision
+  gain. "Reachable-score floor" keeps its qualifier, per Z9.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AH5 | AH1-AH4 superseded within the same pass: the abstract carries no miss count rather than a two-sided one | (Kaps-decided) | **changed** |
+| AH6 | Both premises recorded; the split-artifact claim does not hold and the floor claim holds only for the held-out isotonic map, not the in-sample bin map | (AI-proposed) | **noted** |
+| AH7 | The reframing adopted because the abstract held the weaker of the two calibration results, not because the in-sample one is unreal | (AI-proposed) | **confirmed** |
+| AH8 | Zero miss counts in the abstract, verified numeral by numeral over `:85-133` | (Kaps-decided) | **confirmed** |
+| AH9 | The in-sample sentence keeps its scope label and loses its count; Z11 resolved the other way as Z20 | (Kaps-decided) | **changed** |
+| AH10 | The abstract prints §6.6's four decimals, and all three measures rather than ECE alone | (AI-proposed) | **confirmed** |
+| AH11 | Both ECE values in the paragraph carry their population, 100 published against 50 test re-elicited | (AI-proposed) | **confirmed** |
+| AH12 | R7 and R8 enter the abstract together per Z10; the floor is half the result, not a caveat | (AI-proposed) | **confirmed** |
+
+
+## The paper edit — Conclusion
+
+- **AJ1 — the prefix skips AI.** The next letter pair after AH is AI, and every table
+  in this file carries "(AI-proposed)" in its provenance column. A row id that
+  collides with the provenance vocabulary is a search hazard, so this block is AJ.
+
+- **AJ2 — the ask paragraph is replaced by the answer, not by a retraction.** The map
+  files the Conclusion passage as REPLACED by the answer and says why: v1 asked
+  exactly the question v2 settles — "whether the action is genuinely useful or merely
+  unpriced" — and a question a paper poses and its successor answers is a result. So
+  the paragraph opens on the question being closed and gives the answer as neither: it
+  was priced, and it lost. No retraction language appears anywhere in the Conclusion.
+  Y5b's falsifier is the claim withdrawn in five wordings; it is withdrawn once, in
+  Limitations, and the Conclusion points at the theorem instead.
+
+- **AJ3 — the myopia passage lands as the proven claim, not as a hedge.** This is the
+  paper's last word on asking and the thing it must not say is that the horizon is
+  what excluded the action. v1's version said a myopic policy cannot price asking
+  "because that value is a better belief next turn," which reads as an admission. The
+  replacement states the bound first — at most $-2/13$ at every belief in the simplex
+  on the unconstrained menu, attained at the all-hot vertex — then closes the horizon
+  question with depth-independence: posteriors are beliefs, the bound holds at every
+  node of a lookahead tree, and $W_k = V_{\mathrm{act}}$ for every $k \ge 1$. Two
+  sentences carry the whole point and are deliberately short: "Asking does not fail
+  here because the policy looks only one step ahead. It fails at every depth." The
+  one-step rule is still named as a rule that does not price downstream value; what is
+  gone is the inference that its not doing so is why *ask* is absent.
+
+- **AJ4 — R2 is restated in the Conclusion as the portable claim.** The map assigns it
+  there and the second paragraph of the ask entry carries it: $c_F/\nu + c_T/\alpha <
+  1$ in words as well as symbols, the $16/15$ that fails it, the 6.25\% margin, the
+  $15/16$ scaling that puts the ceiling at zero, and the designer with a cheaper
+  question who is on the other side of the line. The transfer claim is the inequality,
+  not the $-2/13$.
+
+- **AJ5 — the binding wording rule holds and the carve-out is referenced, not
+  restated.** Every claim in the passage says "on the unconstrained action menu" or
+  "on this matrix, and on the unconstrained menu." The constrained-menu positive
+  region is named as existing and as unoccupied — "a region of hot beliefs that no
+  case in this set occupies" — with the derivation left in the theorem section.
+  Restating $b_h < 1/5$ and the $+1$ ceiling in the Conclusion would be a second,
+  thinner version of a committed passage, which is the duplication the map warns
+  about.
+
+- **AJ6 — the calibration entry discharges KEPT-AND-PROVEN.** v1's causal claim is
+  that the residual-miss floor is set by the granularity of the elicitation and not by
+  the calibration method. Gate 2 did what v1's own next sentence named as the next
+  step — a finer belief and a held-out fit — and the claim held, so the entry says it
+  can now be reported as tested rather than asserted. v1's "the next step is" becomes
+  a reference to Section~\ref{sec:calibration}, since the step was taken. This is the
+  one place in the paper where the earlier draft predicted correctly, and it is filed
+  as a result rather than left reading as an open plan.
+
+- **AJ7 — the held-out miss pair is 7 to 2 of 50, not 8 to 2.** The pre-registration's
+  D1 discussion says Gate 2 moved misses "8 → 2 on the same 50 test cases".
+  `tab:calibration` gives the re-elicited uncalibrated arm 7 misses of 50 and the
+  calibrated arm 2; the 8 is the *written-belief* arm on that half, a third row. So
+  the pre-reg states a before-and-after across two different arms. The Conclusion uses
+  the table's 7 to 2, both counts carrying the 50. The pre-reg row is left as written,
+  since no historical row is edited for wording, and this is the correction on the
+  record.
+
+- **AJ8 — Z10 is honoured inside the Conclusion.** R7 without R8 anywhere is a gate
+  failure, so the sentence reporting what breaking the floor cost — mean 1.40 to 1.50,
+  41 of the 50 escalated — carries the mechanism in the same breath: a PAVA-fitted map
+  cannot emit a score below its lowest pooled block's positive rate, and the threshold
+  for answering lies underneath. `6/23` itself is not re-derived here; the object is
+  named and Section~\ref{sec:calibration} holds the arithmetic.
+
+- **AJ9 — four bare-"floor" sites fixed, and the naming in the instruction
+  corrected.** The instruction identified `:1209`, now `:1220` after the abstract
+  grew, as the `6/23` object. It is not. That sentence closes §7.3, which is the
+  in-sample bin map on 100 cases, and its antecedent is the clause before it: 8 misses
+  that recalibrating this marginal cannot remove. A count, on 100 cases, which is Z9's
+  residual-miss floor, and V3 assigns that object to the Conclusion and to in-sample
+  Results while `6/23` stays in the Calibration subsection. Naming it "reachable-score
+  floor" would have moved §6.6's probability onto §7.3's count — the same two-maps
+  collapse twice corrected already this pass. Fixed: `:1220` and `:1458` and `:1466`
+  to "residual-miss floor", `:870` to "reachable-score floor". Left alone: `$2/13$ is
+  a floor on the gap` at `:837` and `:1311`, which is a third object and qualified by
+  AG3, and the Python floor at `:1385`, which is a different word.
+
+- **AJ10 — the three-questions sentence no longer calls all three open.** With one
+  closed and one mostly answered, "Three questions follow directly from these results"
+  alone overstated what is outstanding. It now names the split. Raised in the plan as
+  an addition beyond the map rather than folded in silently.
+
+- **AJ11 — what the pass did not touch.** The turn-boundary entry, which is
+  KEPT-AS-LIMITATION and which `v2-policy-boundary.md` part 4 depends on; the summary
+  paragraph; the AI-use statement. AG11 is discharged by this pass and its status
+  stays **noted** as the deferral it recorded.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AJ1 | Block prefixed AJ, skipping AI, which collides with the provenance column | (AI-proposed) | **confirmed** |
+| AJ2 | The ask paragraph replaced by the answer with no retraction language, per the map and Y5b | (Kaps-decided) | **confirmed** |
+| AJ3 | The myopia passage lands as the proven claim: the bound first, then depth-independence, never "we did not look far enough ahead" | (Kaps-decided) | **confirmed** |
+| AJ4 | R2 restated in the Conclusion as the portable condition, in words and symbols, with the 6.25% margin | (AI-proposed) | **confirmed** |
+| AJ5 | Binding wording rule everywhere; the constrained carve-out referenced and its emptiness named contingent, not re-derived | (Kaps-decided) | **confirmed** |
+| AJ6 | KEPT-AND-PROVEN discharged: v1's granularity claim reported as tested, and its "next step" turned into a reference | (AI-proposed) | **confirmed** |
+| AJ7 | The held-out pair is 7 to 2 of 50; the pre-reg's "8 → 2" crosses two arms and is left as written | (AI-proposed) | **noted** |
+| AJ8 | R8's mechanism travels with R7 inside the Conclusion per Z10; `6/23` not re-derived there | (AI-proposed) | **confirmed** |
+| AJ9 | Four bare-"floor" sites qualified; `:1220` is the residual-miss count, not `6/23`, against the instruction's naming | (AI-proposed) | **changed** |
+| AJ10 | The three-questions sentence names one closed, one mostly answered, one open | (Kaps-decided) | **confirmed** |
+| AJ11 | Turn boundary, summary paragraph and AI-use statement untouched; AG11 discharged | (AI-proposed) | **confirmed** |
+| AJ12 | Z21 registered against future-work prose promising what the theorem disproves; the sentence it was raised against does not exist in `main.tex`, so the rule is prospective | (Kaps-decided) | **noted** |
+
+## The paper edit — the Introduction and Related Work read against the rewrites
+
+The section-by-section pass worked forward from the theorem section, so everything
+before it was still v1 prose. Read end to end against the rewritten sections, `:1`
+through `:742` carried twelve inconsistencies: five contradictions, three
+under-qualifications, two mis-descriptions of the paper itself, and two declaration
+gaps. All twelve are fixed in one pass. Two of the four items the instruction named
+could not be done as specified, and the reason is recorded rather than worked around.
+
+- **AK1 — the block is prefixed AK, not AJ.** AJ1–AJ12 are committed against the
+  Conclusion, and the instruction's AJ1–AJ8 point at findings from this read instead.
+  Reusing the prefix would give two different decisions the same identifier in the
+  same document, which is the one thing an index cannot survive. AK continues the
+  sequence.
+
+- **AK2 — the band claim the instruction asked to replace is not in the Introduction,
+  and no sentence before the theorem section makes it.** The two sites named, `:104`
+  and `:683`, are the abstract's uniform-baseline sentence and a row of
+  `tab:results`; neither mentions asking. Across the whole file "band" appears once
+  before the theorem section, now `:565`, and it is a different and true claim: every
+  threshold in (0.2, 0.3] produces identical decisions on these cases, so `3/13` is
+  one arbitrary point inside a band the measurement cannot resolve. That is a band of
+  thresholds, not a region where a question wins, and the theorem does not touch it.
+  Replacing it with "no band, max −2/13" would have deleted a true statement and
+  substituted a claim about a different quantity. Left as written.
+
+- **AK3 — the instruction's content was written into the Introduction as an addition
+  instead.** The defect it was aimed at is real and larger than one sentence: nothing
+  in `:1`–`:742` mentioned the theorem, the ceiling, `2/13`, value of information,
+  `c_F/ν + c_T/α < 1` or `1/5`, all six of which grep to zero hits there. The reader
+  met the paper's one data-independent result with no preparation for it. The new
+  paragraph states the bound at every belief in the simplex, that there is no narrow
+  middle band in which asking wins, that the coarseness of the elicited belief is not
+  what hides one, horizon-independence, the portable condition with its 6.25% margin,
+  and the constrained carve-out at `b_h < 1/5` on the hot ray with its emptiness in
+  this set. An addition, not a replacement, and flagged as one because the map does
+  not carry it.
+
+- **AK4 — the scope overclaim.** "We report both comparisons rather than only the
+  favourable one" was true of v1 and false of v2, which has three. The uniform
+  baseline's equivalence to a plain 0.5 threshold on all 100 cases now appears in the
+  Introduction, where it weakens the 1.72-against-2.58 gap at the point the gap is
+  first claimed, and the threshold sweep that selects escalate-everything is named as
+  the third and least favourable comparison. The abstract already carried the first
+  qualifier; the Introduction did not.
+
+- **AK5 — "the fix is recalibration, not a redesign of the state" is withdrawn.** The
+  AI7 shape at the top of the paper: a direction the later sections disprove. It is
+  now "the first fix to try", which is what §7 says, and the held-out outcome travels
+  with it in the same paragraph — all three measures improve and the policy stops
+  choosing *answer* at all, because the map cannot emit a probability low enough.
+  Stated without the cost and miss numbers, because on that half misses do fall 7 to
+  2 while mean cost rises 1.40 to 1.50, and "changes no decision for the better" would
+  be false.
+
+- **AK6 — "under-confident in exactly the range that suppresses escalation" is
+  deleted.** §7 puts that phrase in quotation marks to reject it: the bin containing
+  `3/13` is the one that reads slightly over-confident, with a Wilson interval
+  covering its prediction, and the under-confidence is in its neighbours. The
+  Introduction had been half-patched — "in two of the bins nearest the threshold" is
+  right — and then re-asserted the rejected phrasing in the same sentence.
+
+- **AK7 — the sign collision on calibration, two sites.** Related Work and the Agent
+  design's Belief paragraph both said overconfidence is "exactly the failure the
+  results show", while §7 measures under-confidence on the marginal that decides.
+  Both words are used as measured predicted-against-observed directions throughout
+  §6.6 and §7, so a reader carried the wrong sign into the results. The `guo2017`
+  finding stays theirs and stays as they report it; what this
+  paper measures is now stated as its own direction — a needs-human probability read
+  too low, which is under-confidence against observed frequency. Pre-existing in v1,
+  not created by the rewrites.
+
+- **AK8 — the second Y5b site.** The Agent design's Policy paragraph said *ask*'s
+  value "is mostly the better belief it buys next turn, which a one-step rule cannot
+  see". Both halves are refuted by the sections that came after it: the necessary
+  condition for positive value of information fails at every belief, so asking loses
+  on its fee before any continuation is counted, and it still loses by the full
+  ceiling on the 16 published pairs where the continuation term is exactly zero. The
+  shipped policy is `W_1`, which does price the continuation. Replaced with the fee
+  mechanism. Y5b's falsifier is the claim withdrawn once, in Limitations; this was a
+  re-assertion of it 900 lines earlier.
+
+- **AK9 — there are no bare-"floor" stragglers before the theorem section.** The
+  instruction called this the last batch surfaced by the back-to-front read. It is
+  empty: "floor" occurs once in `:1`–`:742`, at `:123`, and it is the qualified
+  reachable-score floor in the abstract, written that way in the abstract pass. This
+  was reported at the end of the previous pass and is recorded here rather than
+  answered with an edit.
+
+- **AK10 — the roadmap named neither spine.** It listed six sections and skipped
+  `sec:unused` and `sec:calibration`, so the impossibility theorem and the held-out
+  fit were both unannounced. Both are subsections of Results, so they are named
+  inside that clause rather than given their own sentences.
+
+- **AK11 — Metrics declared one of three measures.** §6.6 reports "all three proper
+  scoring rules named in advance"; the subsection where the paper says what it
+  measures listed expected calibration error alone. Cross-entropy and Brier are now
+  declared there, scoped to the held-out fit and marked as fixed before it. The L10
+  shape: a claim whose conditions the artifact does not record.
+
+- **AK12 — the bare 0.142.** AH11 attached populations to both expected calibration
+  errors in the abstract because §6.6 reports 0.1526 on the re-elicited test half.
+  The Introduction's unqualified 0.142 is the same confusability, D4's shape rather
+  than falsity, and now carries "of those 100 cases".
+
+- **AK13 — "it has a known cost of its own".** Related Work sent the reader to
+  Limitations for a cost that Limitations withdraws: what survives there is that
+  being myopic is safe on this matrix, with the cost hypothetical on a matrix
+  satisfying the condition. The paragraph self-corrected two sentences later, so only
+  the framing was wrong. Rewritten to make the cost conditional from the start.
+
+- **AK14 — what the pass did not touch.** The threshold band at `:565`, which is true
+  and about a different object (AK2); the problem-statement seed and its note, which
+  are verbatim by rule; the abstract, which was rewritten in its own pass; and every
+  section from the theorem onward, all of which this read used as the reference.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AK1 | Block prefixed AK; the instruction's AJ1–AJ8 collide with the committed Conclusion rows | (AI-proposed) | **changed** |
+| AK2 | No band claim about asking exists before the theorem section; `:104` and `:683` are the abstract's baseline sentence and a table row; `:565`'s threshold band is true and left as written | (AI-proposed) | **changed** |
+| AK3 | The theorem written into the Introduction as an addition: no band, ≤ −2/13 everywhere, coarseness not the cause, horizon-independent, the condition, the carve-out at `b_h < 1/5` | (Kaps-decided) | **confirmed** |
+| AK4 | Three comparisons, not two; the 0.5-threshold equivalence moved to where the gap is first claimed | (Kaps-decided) | **confirmed** |
+| AK5 | "The fix is recalibration" → "the first fix to try", with the held-out outcome in the same paragraph and no cost or miss numbers | (AI-proposed) | **confirmed** |
+| AK6 | "Under-confident in exactly the range that suppresses escalation" deleted; §7 rejects that phrase by name | (AI-proposed) | **confirmed** |
+| AK7 | The overconfidence/under-confidence sign fixed at both sites; guo2017's finding left as theirs | (AI-proposed) | **confirmed** |
+| AK8 | *Ask*'s value is not mostly the next-turn belief and a one-step rule does price it; replaced by the fee mechanism | (AI-proposed) | **changed** |
+| AK9 | No bare-"floor" instances exist before the theorem section; the batch is empty | (AI-proposed) | **noted** |
+| AK10 | The roadmap now names `sec:unused` and `sec:calibration` | (AI-proposed) | **confirmed** |
+| AK11 | Metrics declares cross-entropy and Brier alongside ECE, scoped to the held-out fit | (AI-proposed) | **confirmed** |
+| AK12 | The Introduction's 0.142 carries its population, per AH11 | (AI-proposed) | **confirmed** |
+| AK13 | Related Work's "known cost of its own" made conditional, matching what Limitations leaves standing | (AI-proposed) | **confirmed** |
+| AK14 | `:565`, the problem-statement seed, the abstract and everything from the theorem onward untouched | (AI-proposed) | **confirmed** |
+
+## The paper edit — naming the baseline behind the cost win
+
+The cost result is a comparison against two baselines that answer in opposite
+directions: a reduction of a third against the uniform-cost baseline, and no
+reduction at all against always-notify. Every site stating the first is now
+required to name which baseline it is against, and every site stating a
+human-load number is required to name the population it is counted over. Both
+are the D4 discipline — a numeric claim whose scale or denominator the claim
+never states — applied to the two places the paper is easiest to misread.
+
+Three rulings arrived before this pass proposing that `2.58` be deleted, that it
+was `always_notify` misattributed, and that it was a cross-population figure
+compared against a test-split number. `results/run.json` refuted each. The
+recorded ground truth, same population, `summaries.test`, n = 50:
+`policies.cost_aware.mean_cost = 1.72` (`total_cost` 86),
+`policies.always_notify.mean_cost = 1.74` (87), and
+`policies.uniform_baseline.mean_cost = 2.58` (129). The same three means hold at
+`summaries.dev` and `summaries.all`, because the halves were stratified by
+archetype and sub-variant and balanced on the needs-human count. There is no
+`summaries.hard` key; `summaries` holds exactly `dev`, `test`, `all`. So no cost
+comparison in the paper was cross-population, and the locked always-notify caveat
+matched the artifact on a single population and was confirmed rather than revised.
+
+The uniform baseline is not random. `src/costs.py:109-112` derives `UNIFORM_COST`
+by replacing every non-zero cost with `1.0`, holding the belief, the feasible set
+and the expected-cost machinery fixed. "Uniform-random" was proposed for the
+falsifier and is not written anywhere, because it would misdescribe the control.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AL1 | Block prefixed AL; AK1–AK14 are the Introduction read-back and this is a separate pass | (AI-proposed) | **confirmed** |
+| AL2 | `2.58` kept at every site: it is `uniform_baseline`, same population as every other headline cost, and the design's only control for the asymmetry | (Kaps-decided) | **changed** |
+| AL3 | The paper is not re-led on the theorem and the reachable-score floor; the uniform-baseline cost win is real and stays a reported result | (Kaps-decided) | **changed** |
+| AL4 | The locked always-notify caveat confirmed against `summaries.test`, not revised: 172 against 174 over 100, one point in 87 on each half | (Kaps-decided) | **confirmed** |
+| AL5 | Both baselines named wherever the cost win appears — abstract, Introduction, §7.1, Conclusion — so `2.58` cannot read onto always-notify | (Kaps-decided) | **confirmed** |
+| AL6 | "A reduction of a third" never stated without naming the uniform-cost baseline in the same sentence or the next | (Kaps-decided) | **confirmed** |
+| AL7 | §7.2's threshold sweep labels its populations: the `t = 0.35`/`t = 0.25` bracket is all 100, the tuning is the 50 development cases | (AI-proposed) | **confirmed** |
+| AL8 | The dev-tuned selection disclosed as dev-specific — on the test half `t = 0.05` and `t = 0.10` cost 1.68 against `t = 0.00`'s 1.740 | (AI-proposed) | **noted** |
+| AL9 | Human-load numbers carry their population: 43 of 100 and 0.605 against 0.420 are all-100; the test half is 20 of 50 at 0.65 against 0.42 | (Kaps-decided) | **confirmed** |
+| AL10 | No interval is claimed on the always-notify cost difference, because none was computed; `robustness.json` bootstraps ECE only | (AI-proposed) | **confirmed** |
+| AL11 | `\label{sec:tie}` added so §7.1 can point at the near-tie subsection rather than restating it | (AI-proposed) | **confirmed** |
+| AL12 | "Uniform-random" not written anywhere; the baseline replaces every non-zero cost with one and is not random | (AI-proposed) | **changed** |
+
+
+---
+
+## The paper edit — the entropy subsection, and S4 stated as a method
+
+AE6 was the last promised-but-absent result. Method's `\paragraph{Entropy
+thresholds.}` defined the grid and named its consumer in words, because the label did
+not exist; Results never reported the sweep. Two repairs were available — write the
+subsection or delete the paragraph — and the numbers exist, pre-registered with key
+paths, so the subsection was written.
+
+The framing changed on the way in. The sweep is not a fifth policy competing on cost;
+it is the empirical face of Theorem 1. The theorem says asking is never rational on
+the unconstrained action menu, and the entropy rule is what a reader reaches for
+instead — ask when uncertain, on the intuition that uncertainty is what a question is
+for. If the ceiling holds, every setting of that rule has to lose, and the sweep says
+by how much. Reported as a demonstration, the forty-four rows are evidence for the
+proof. Reported as a baseline comparison, they would be a search for something to
+beat.
+
+Two numbers in the pre-registration did not survive contact with the artifact. The
+locked sentence describes `+5.60` as "the best result on the arm with the dearest
+baseline"; the calibrated arm's own reference is 75, the cheapest of the four (86, 86,
+70, 75), so the descriptor fits under neither reading of "baseline" — not the v1
+reference and not the arm's own realised total. The requirement behind it is real and
+is discharged in the artifact's own terms: the four columns are incomparable in
+magnitude because each excess is against that arm's own reference, and the paper says
+so twice, in prose and in the caption. The locked "no free threshold on any arm" also
+needed qualifying, because `q = 1.0` has zero excess on all four arms — it fires on
+nothing, so the paper claims no *firing* threshold is free, and states that ten of
+eleven rows fire on every arm and all forty cost more than not asking.
+
+X7 moved. The debt registered "failure analysis or discussion" as its landing site,
+but the inversion lives in the sweep's realised column, and once the sweep is a table
+the row is already on the page: rebaselined, `q = 0.7` to `q = 0.8`, firing 12 to 11,
+excess `+23.60` to `+27.60`, the only inversion in forty-four rows. It costs three
+sentences there against a paragraph of setup in §8.
+
+S4 is named as a method rather than left as a recurring observation. Five occurrences
+is enough to state the rule: the Gate 2 collapse count, the Gate 3 absolute sweep
+grid, the τ deciles, the `argmax_q VoI` tie-break, and the figure's annotation offset
+against a marker radius that grows with the number being printed. The tie-break
+instance carries both numbers the falsifier requires — agreement on 29 of 50, tie-break
+needed on 13 — because agreement on a tied case is an artifact of the tie-break.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AM1 | Block prefixed AM; AL1–AL12 closed with the baseline-naming pass | (AI-proposed) | **confirmed** |
+| AM2 | AE6 discharged by writing the subsection, not by deleting Method's paragraph | (Kaps-decided) | **confirmed** |
+| AM3 | The entropy sweep is framed as the empirical face of Theorem 1, not as a fifth baseline to beat | (Kaps-decided) | **changed** |
+| AM4 | Placed between the theorem subsection and the near-tie subsection, so the proof and its measurement are adjacent; Results renumbers | (AI-proposed) | **confirmed** |
+| AM5 | `\label{sec:entropy}` declared and Method's forward reference wired to it, discharging the same debt AD4 discharged for `sec:calibration` | (Kaps-decided) | **confirmed** |
+| AM6 | The sweep goes in as a fifth `tabular`, quantile-indexed with four arm columns; preflight's tabular count moves 4 to 5 | (AI-proposed) | **confirmed** |
+| AM7 | The pre-registration's "arm with the dearest baseline" contradicts `v1_fallback_realised_total`; the incomparability is written in the artifact's terms instead | (AI-proposed) | **changed** |
+| AM8 | "No free threshold" qualified to no *firing* threshold, because `q = 1.0` fires on nothing on all four arms | (AI-proposed) | **changed** |
+| AM9 | X7 lands in the entropy subsection rather than the registered "failure analysis or discussion"; the failure analysis is untouched | (AI-proposed) | **changed** |
+| AM10 | The always-ask anchor carries both pricing conventions — 199.62 ask-then-act against the committed terminal 142 on the same 50 cases | (AI-proposed) | **confirmed** |
+| AM11 | S4 stated as a transferable method with all five occurrences named; the tie-break instance never without its tie count | (Kaps-decided) | **confirmed** |
+| AM12 | Ethics closing rewritten in the paper's register; the last three non-ASCII characters removed and `main.tex` is now ASCII throughout | (Kaps-decided) | **confirmed** |
+| AM13 | `:1195`'s hardcoded "§7.3" pointed at the theorem subsection where it meant Calibration; replaced with a `\ref` | (AI-proposed) | **changed** |
