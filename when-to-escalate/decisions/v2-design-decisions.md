@@ -2076,3 +2076,63 @@ falsifier and is not written anywhere, because it would misdescribe the control.
 | AL11 | `\label{sec:tie}` added so §7.1 can point at the near-tie subsection rather than restating it | (AI-proposed) | **confirmed** |
 | AL12 | "Uniform-random" not written anywhere; the baseline replaces every non-zero cost with one and is not random | (AI-proposed) | **changed** |
 
+
+---
+
+## The paper edit — the entropy subsection, and S4 stated as a method
+
+AE6 was the last promised-but-absent result. Method's `\paragraph{Entropy
+thresholds.}` defined the grid and named its consumer in words, because the label did
+not exist; Results never reported the sweep. Two repairs were available — write the
+subsection or delete the paragraph — and the numbers exist, pre-registered with key
+paths, so the subsection was written.
+
+The framing changed on the way in. The sweep is not a fifth policy competing on cost;
+it is the empirical face of Theorem 1. The theorem says asking is never rational on
+the unconstrained action menu, and the entropy rule is what a reader reaches for
+instead — ask when uncertain, on the intuition that uncertainty is what a question is
+for. If the ceiling holds, every setting of that rule has to lose, and the sweep says
+by how much. Reported as a demonstration, the forty-four rows are evidence for the
+proof. Reported as a baseline comparison, they would be a search for something to
+beat.
+
+Two numbers in the pre-registration did not survive contact with the artifact. The
+locked sentence describes `+5.60` as "the best result on the arm with the dearest
+baseline"; the calibrated arm's own reference is 75, the cheapest of the four (86, 86,
+70, 75), so the descriptor fits under neither reading of "baseline" — not the v1
+reference and not the arm's own realised total. The requirement behind it is real and
+is discharged in the artifact's own terms: the four columns are incomparable in
+magnitude because each excess is against that arm's own reference, and the paper says
+so twice, in prose and in the caption. The locked "no free threshold on any arm" also
+needed qualifying, because `q = 1.0` has zero excess on all four arms — it fires on
+nothing, so the paper claims no *firing* threshold is free, and states that ten of
+eleven rows fire on every arm and all forty cost more than not asking.
+
+X7 moved. The debt registered "failure analysis or discussion" as its landing site,
+but the inversion lives in the sweep's realised column, and once the sweep is a table
+the row is already on the page: rebaselined, `q = 0.7` to `q = 0.8`, firing 12 to 11,
+excess `+23.60` to `+27.60`, the only inversion in forty-four rows. It costs three
+sentences there against a paragraph of setup in §8.
+
+S4 is named as a method rather than left as a recurring observation. Five occurrences
+is enough to state the rule: the Gate 2 collapse count, the Gate 3 absolute sweep
+grid, the τ deciles, the `argmax_q VoI` tie-break, and the figure's annotation offset
+against a marker radius that grows with the number being printed. The tie-break
+instance carries both numbers the falsifier requires — agreement on 29 of 50, tie-break
+needed on 13 — because agreement on a tied case is an artifact of the tie-break.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AM1 | Block prefixed AM; AL1–AL12 closed with the baseline-naming pass | (AI-proposed) | **confirmed** |
+| AM2 | AE6 discharged by writing the subsection, not by deleting Method's paragraph | (Kaps-decided) | **confirmed** |
+| AM3 | The entropy sweep is framed as the empirical face of Theorem 1, not as a fifth baseline to beat | (Kaps-decided) | **changed** |
+| AM4 | Placed between the theorem subsection and the near-tie subsection, so the proof and its measurement are adjacent; Results renumbers | (AI-proposed) | **confirmed** |
+| AM5 | `\label{sec:entropy}` declared and Method's forward reference wired to it, discharging the same debt AD4 discharged for `sec:calibration` | (Kaps-decided) | **confirmed** |
+| AM6 | The sweep goes in as a fifth `tabular`, quantile-indexed with four arm columns; preflight's tabular count moves 4 to 5 | (AI-proposed) | **confirmed** |
+| AM7 | The pre-registration's "arm with the dearest baseline" contradicts `v1_fallback_realised_total`; the incomparability is written in the artifact's terms instead | (AI-proposed) | **changed** |
+| AM8 | "No free threshold" qualified to no *firing* threshold, because `q = 1.0` fires on nothing on all four arms | (AI-proposed) | **changed** |
+| AM9 | X7 lands in the entropy subsection rather than the registered "failure analysis or discussion"; the failure analysis is untouched | (AI-proposed) | **changed** |
+| AM10 | The always-ask anchor carries both pricing conventions — 199.62 ask-then-act against the committed terminal 142 on the same 50 cases | (AI-proposed) | **confirmed** |
+| AM11 | S4 stated as a transferable method with all five occurrences named; the tie-break instance never without its tie count | (Kaps-decided) | **confirmed** |
+| AM12 | Ethics closing rewritten in the paper's register; the last three non-ASCII characters removed and `main.tex` is now ASCII throughout | (Kaps-decided) | **confirmed** |
+| AM13 | `:1195`'s hardcoded "§7.3" pointed at the theorem subsection where it meant Calibration; replaced with a `\ref` | (AI-proposed) | **changed** |

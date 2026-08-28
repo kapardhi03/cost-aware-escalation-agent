@@ -1952,3 +1952,69 @@ passing; over-84 lines in `main.tex` down from five to four, the abstract's
 188-character line rewrapped by this pass. Every number written traces to
 `results/run.json` or
 `results/robustness.json` by key. Nothing was computed.
+
+### Gate 7 — the entropy subsection, and S4 stated as a method (2026-08-28)
+
+The full read found the last promised-but-absent result. Method's
+`\paragraph{Entropy thresholds.}` defines the τ grid in full and says "the
+entropy-threshold baseline reported below", and Results never reported it. The
+paragraph named its consumer in words because the label did not exist, which is the
+same forward reference AD4 closed for `sec:calibration`. Either the subsection gets
+written or the paragraph gets deleted; the numbers are in
+`results/entropy-baseline.json`, pre-registered with key paths, so it was written.
+
+The framing is the part worth recording. The sweep is not a fifth policy competing on
+cost. Theorem 1 says asking is never rational on the unconstrained action menu, and
+"ask when uncertain" is the rule a reader reaches for instead — so if the ceiling
+holds, every setting of that rule has to lose, and the sweep says by how much. That
+makes the forty-four rows evidence for the proof rather than a hunt for a baseline to
+beat, and it is the honest reading: the rule differs from the shipped policy only on
+the cases where it fires, and it never fires for free.
+
+Two locked sentences needed work against the artifact. The pre-registration calls
+`+5.60` the best result "on the arm with the dearest baseline", but the four
+`v1_fallback_realised_total` values are 86, 86, 70 and 75 and the calibrated arm's is
+the cheapest, so the descriptor fits neither the v1 reference nor the arm's own
+realised total. The requirement behind it stands and is written in the artifact's own
+terms — each excess is against that arm's own reference, so the four columns are
+incomparable in magnitude, stated in the prose and again in the caption. The second is
+"no free threshold on any arm": `q = 1.0` has zero excess on all four arms because τ
+at the top of a grid taken over 100 cases sits above every one of the 50 scored, so it
+fires on nothing. The paper claims no *firing* threshold is free, and gives the count
+— ten of eleven rows fire on every arm, and all forty cost more than not asking.
+
+X7 moved off its registered landing site. The debt says "failure analysis or
+discussion", but the inversion is a fact about the sweep's realised column, and with
+the sweep tabulated the row is already visible: rebaselined, `q = 0.7` to `q = 0.8`,
+firing 12 to 11, excess `+23.60` to `+27.60`, the only inversion in forty-four rows.
+`a02-deep-017` leaves the firing set, the shipped policy answers it and realises 10
+where ask-then-act realises 6.0, and the case's expected excess is `+0.40` and still
+positive. Expected cost is what the ceiling bounds; one realised draw went the other
+way, which is why the bound is stated in expectation rather than per case.
+
+S4 is now a stated method rather than a recurring note in `decisions/`. Five
+occurrences earn it: Gate 2's collapse count, Gate 3's absolute sweep grid, the τ
+deciles, the `argmax_q VoI` tie-break, and the figure's annotation offset against a
+marker radius that grows with the count being printed. A numeric threshold, spacing or
+offset is expressed relative to the scale of what it acts on, or it reports the
+instrument. The tie-break instance carries both numbers the registered falsifier
+requires — the oracle and the information-gain rule agree on 29 of 50, and the oracle
+needed its tie-break on 13 — because on a tied case agreement is an artifact of the
+tie-break and not evidence the two rules select alike.
+
+Two smaller repairs in the same pass. The Ethics closing was flat and carried a curly
+apostrophe and a curly em-dash on one 213-character line; rewritten in the paper's
+register, `main.tex` now has no non-ASCII characters at all. And `:1195`'s hardcoded
+"§7.3" pointed at the theorem subsection where it meant Calibration — the insert would
+have made it wrong twice over — so it is a `\ref` now, the only hardcoded cross-
+reference in the file.
+
+Verified after the pass: `python3 tests/paper_preflight.py paper/main.tex` PASS, with
+22 labels, 20 distinct references, 5 of 5 citations, 1 graphic and 5 tabulars — two
+more labels and two more references, `sec:entropy` and `tab:entropy`; 772 tests
+passing; over-84 lines in `main.tex` down from four to three, all three pre-existing;
+zero non-ASCII characters. Every number written traces to
+`results/entropy-baseline.json` or `results/run.json` by key. Nothing was computed.
+The paper is not compiled here — no TeX exists in this sandbox — so the fit of a
+nine-column tabular in a two-column layout is an estimate and the build is Kaps's to
+confirm.

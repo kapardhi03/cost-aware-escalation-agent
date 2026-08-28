@@ -697,9 +697,10 @@ cross-entropy and Brier score.
 than in cost points, and it is defined here rather than where it is used, because a
 later section places a threshold on it. $H(b)$ is the entropy of the belief over
 the six hidden states, so it runs from 0 to $\log_2 6 \approx 2.585$ bits. The
-entropy-threshold baseline reported below asks whenever $H(b) > \tau$ and otherwise
-takes the cheapest action other than asking, which on these beliefs is the action
-the policy of Section~\ref{sec:model} takes case for case. That makes $\tau$ the
+entropy-threshold rule swept in Section~\ref{sec:entropy} asks whenever
+$H(b) > \tau$ and otherwise takes the cheapest action other than asking, which on
+these beliefs is the action the policy of Section~\ref{sec:model} takes case for
+case. That makes $\tau$ the
 only thing $H(b)$ is ever compared against. No quantity in bits is compared to a
 quantity in cost points anywhere in this paper: the entropy selects which cases are
 asked about, and the cost matrix scores what happens.
@@ -975,6 +976,123 @@ candidate explanation, and Theorem~\ref{thm:ceiling} together with the collapse 
 $W_k$ removes it. The action most obviously suited to an ambiguous inbound message
 is unused because it is priced out, not because it is unpriced.
 
+\subsection{Asking when uncertain, priced}
+\label{sec:entropy}
+Theorem~\ref{thm:ceiling} says asking is never rational on the unconstrained action
+menu. It does not say what the rule a reader reaches for instead would cost, and
+that rule is not a cost rule at all: ask whenever the belief is uncertain, on the
+intuition that uncertainty is what a question is for. Pricing it is not a search for
+a better baseline to beat. It is the same result measured instead of proved --- if
+the ceiling holds, every setting of the rule has to lose, and the only open question
+is by how much.
+
+The rule asks whenever $H(b) > \tau$ and otherwise takes the $V_{\text{act}}$
+argmin, which reproduces the shipped policy's action case for case, so it differs
+from the shipped policy on exactly the cases where it fires. It is scored on the 50
+test cases over the eleven-point decile grid of Section~\ref{sec:method}, on four
+sets of beliefs: the beliefs this paper reports, those beliefs re-derived through
+the rebuilt elicitation path, the re-elicited raw beliefs, and the calibrated
+beliefs of Section~\ref{sec:calibration}. Every number in this subsection is on
+those 50 cases.
+
+Each arm's excess is measured against that arm's own realised total for the shipped
+policy, not against one number for all four. The shipped policy scores 86 on the
+first two arms, 70 on the raw beliefs and 75 on the calibrated ones, so charging the
+last two an excess against 86 would compare them to a total they never had. That
+makes the four columns of Table~\ref{tab:entropy} incomparable in magnitude: the
+smallest entry in the table, $+5.60$, is the calibrated arm's excess over its own
+75, and it is not a better outcome than the reported arm's $+13.80$ over 86. The
+arms are read down their own columns, at equal quantiles and never at equal bits,
+because $H(b)$ moves when the belief moves.
+
+\begin{table}[t]
+\centering
+\setlength{\tabcolsep}{3pt}
+\small
+\begin{tabular}{lrrrrrrrr}
+\toprule
+& \multicolumn{2}{c}{reported} & \multicolumn{2}{c}{rebaselined}
+& \multicolumn{2}{c}{raw} & \multicolumn{2}{c}{calibrated} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
+$q$ & ask & $+$cost & ask & $+$cost & ask & $+$cost & ask & $+$cost \\
+\midrule
+0.0 & 50 & 113.62 & 50 & 109.64 & 50 & 128.02 & 50 & 118.98 \\
+0.1 & 37 & 83.12  & 39 & 73.12  & 47 & 118.02 & 44 & 94.98  \\
+0.2 & 37 & 83.12  & 39 & 73.12  & 40 & 89.50  & 42 & 86.50  \\
+0.3 & 33 & 73.20  & 34 & 67.20  & 36 & 84.54  & 35 & 70.90  \\
+0.4 & 14 & 40.60  & 15 & 34.60  & 31 & 70.98  & 31 & 55.60  \\
+0.5 & 14 & 40.60  & 15 & 34.60  & 25 & 54.74  & 26 & 51.00  \\
+0.6 & 14 & 40.60  & 15 & 34.60  & 19 & 52.84  & 19 & 34.50  \\
+0.7 & 11 & 29.60  & 12 & 23.60  & 16 & 41.88  & 16 & 31.80  \\
+0.8 & 11 & 29.60  & 11 & 27.60  & 12 & 31.50  & 10 & 17.30  \\
+0.9 & 6  & 13.80  & 5  & 11.80  & 5  & 7.70   & 5  & 5.60   \\
+1.0 & 0  & 0.00   & 0  & 0.00   & 0  & 0.00   & 0  & 0.00   \\
+\bottomrule
+\end{tabular}
+\caption{The entropy-threshold rule on the 50 test cases, at the eleven deciles of
+each arm's own $H(b)$ distribution. \emph{ask} is the number of those 50 cases the
+rule asks about; $+$cost is the realised cost above the shipped policy's total on
+the same arm, in cost points, where that total is 86, 86, 70 and 75 across the four
+columns. Excesses are not comparable across columns for that reason. $q$ is a
+quantile, so the same $q$ is a different number of bits on each arm; repeated rows
+within a column are repeated thresholds, not a coincidence.}
+\label{tab:entropy}
+\end{table}
+
+No firing threshold is free on any arm. The cheapest is the top decile in every
+column, at $+13.80$ on the reported beliefs, $+11.80$ rebaselined, $+7.70$ raw and
+$+5.60$ calibrated, each against its own reference and each asking about five or six
+of the 50 cases. The dearest is $+128.02$, on the raw beliefs at $\tau = 0$, where
+the rule asks about all 50. The single row at zero excess is $q = 1.0$, and it is
+zero on all four arms for one reason: the top of the grid is taken over all 100
+cases while the scoring is on 50, so $\tau$ there sits above every test case, the
+rule fires on nothing, and what the row prices is the shipped policy under another
+name. The claim is therefore about firing thresholds specifically. Ten of the eleven
+rows fire on every arm, and all forty of those cost more than not asking.
+
+The $\tau = 0$ row is the always-ask anchor, and it is priced differently from the
+always-ask row of Table~\ref{tab:results}. Asking about all 50 test cases and then
+taking the action the answer selects costs 199.62, a mean of 3.9924. The committed
+always-ask total on those same 50 cases is 142, a mean of 2.84 with 21 missed
+escalations, and it is terminal: it charges the ask and stops. Ask-then-act charges
+the ask and then the follow-up, so it has to be dearer, and equality on every case
+would mean the follow-up is free everywhere, which would be a defect and not a
+result.
+
+One row breaks the pattern that asking less costs less. On the rebaselined arm the
+excess rises from $+23.60$ at $q = 0.7$ to $+27.60$ at $q = 0.8$ while the firing
+count falls from 12 to 11, and it is the only inversion in the forty-four rows of
+Table~\ref{tab:entropy}. The case that left the firing set is
+\texttt{a02-deep-017}: the shipped policy answers it and realises 10, where asking
+and then acting realises 6.0, so dropping it from the firing set moved 4.0 the wrong
+way. That case's expected excess is $+0.40$, still positive. What
+Theorem~\ref{thm:ceiling} bounds is expected cost, and a single realised draw can
+land on either side of an expectation; here one does. The inversion is a property of
+the realised column, not a counterexample to the bound, and it is the reason the
+bound is stated in expectation rather than per case.
+
+\paragraph{Numeric rules and the scale they act on.} The decile grid is one of five
+places in this work where a numeric rule had to be re-expressed relative to the
+quantity it governs, and the recurrence is the transferable part. A collapse
+diagnostic written as ``fewer than $N$ distinct values'' is a raw count, and pooling
+two halves of the data doubled the count it was compared against while nothing about
+the distribution changed. A sensitivity sweep written as $\pm 0.05$ and $\pm 0.10$
+on a table entry is an absolute probability, and an absolute $0.10$ is 14\% of a
+$0.70$ entry and all of a $0.10$ one. A threshold on $H(b)$ in absolute bits would
+have put most of its grid where almost no cases are, which is why $\tau$ is deciles
+here. A tie-break resolved by the last bit of a float sum is a rule selecting on a
+quantity whose tie structure it never consulted: on the 50 test cases the oracle's
+$\arg\max_q \mathrm{VoI}$ and the information-gain rule agree on 29, but the oracle
+needed its tie-break on 13 of them, so the agreement count means nothing without
+the tie count beside it and is not reported without it. And an annotation offset
+fixed in
+points, against a marker radius that grows with the count being printed, gives the
+worst placement to the bin whose count most needs reading. The five share one shape:
+a comparison or a placement expressed in units the quantity's own scale was never
+consulted for, which measures the grid rather than the phenomenon. Stated as a rule,
+a numeric threshold, spacing or offset is expressed relative to the scale of what it
+acts on, or it is reporting the instrument.
+
 \subsection{The comparison that is a tie, not a win}
 \label{sec:tie}
 Against always-notify, which escalates every message, the cost result is close to
@@ -1192,7 +1310,8 @@ under-estimated needs-human probability is a statement about this labelling
 scheme, not a proof of the underlying causal mechanism: the experiment does not
 independently exclude cost-model misspecification, the coarse three-state
 readiness space, or the one-decimal quantization of the belief as contributing
-causes, and the recalibration in §7.3 is an in-sample ceiling rather than a
+causes, and the recalibration in Section~\ref{sec:calibration} is an in-sample
+ceiling rather than a
 held-out test.
 \subsection{Five cases}
 Table~\ref{tab:failures} lists five misses and the mode each one represents.
@@ -1498,7 +1617,11 @@ answers are treated as a line the agent may not cross at any belief, rather than
 cost to be traded off, because the harm of a confident false claim on a
 consequential matter is not the kind of thing a cheaper action elsewhere should be
 able to outweigh.
-The experiment only measures the cost of choosing to escalate. It doesn’t account for what happens afterward—such as human mistakes, limited capacity, or unclear accountability. Those are left for future research.
+The experiment prices the decision to escalate and nothing after it. A notification
+that reaches someone who misreads it, or who is already holding more than they can
+clear, costs the same $\nu$ here as one that lands well, and the cost table has no
+term at all for who is accountable when the answer was wrong. Those are costs a
+deployment would have to measure, and this design does not.
 A deeper point raised in the live discussion is worth recording as a direction the
 current design does not yet meet. The turn-boundary failure is not only a scanning
 problem; the underlying issue is that a message was droppable at all. A more robust
