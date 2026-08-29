@@ -46,3 +46,7 @@ when-to-escalate/paper/figures/*.png
 # repository root, so it does NOT reach when-to-escalate/paper/figures/ — do not
 # "fix" it to **/figures/*, which would re-ignore the figure the paper needs.
 figures/*
+
+# Local authoring aids that live in the tree but are not part of the research
+# record. Ignored as a directory so anything added beside them is covered too.
+when-to-escalate/skill/
