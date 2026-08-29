@@ -1,5 +1,5 @@
 {
-    "generated_at": "2026-08-29T05:18:45.686632+00:00",
+    "generated_at": "2026-08-29T06:05:18.374525+00:00",
     "source": "results/run.json",
     "n_cases": 100,
     "arm": "modal_plugin",
@@ -101,11 +101,356 @@
         },
         "all_match": true
     },
+    "attribution_preregistration": {
+        "legacy_mean_cost": 2.62,
+        "legacy_action_counts": {
+            "answer": 76,
+            "ask": 1,
+            "escalate_notify": 23
+        },
+        "legacy_missed_escalations": 25,
+        "corrected_mean_cost": 2.18,
+        "disagreements_vs_baseline": 20,
+        "disagreement_pairs": {
+            "hold->answer": 19,
+            "ask->escalate_notify": 1
+        },
+        "points_saved_by_the_hold_swaps": 44,
+        "points_lost_by_the_single_ask": -4,
+        "net_points_vs_baseline": 40,
+        "disagreements_on_an_indifferent_column": 19
+    },
+    "attribution_comparison": {
+        "status": "post-hoc, not a validated prediction",
+        "checks": {
+            "legacy_mean_cost": {
+                "predicted": 2.62,
+                "measured": 2.62,
+                "match": true
+            },
+            "legacy_action_counts": {
+                "predicted": {
+                    "answer": 76,
+                    "ask": 1,
+                    "escalate_notify": 23
+                },
+                "measured": {
+                    "answer": 76,
+                    "ask": 1,
+                    "escalate_notify": 23
+                },
+                "match": true
+            },
+            "legacy_missed_escalations": {
+                "predicted": 25,
+                "measured": 25,
+                "match": true
+            },
+            "corrected_mean_cost": {
+                "predicted": 2.18,
+                "measured": 2.18,
+                "match": true
+            },
+            "disagreements_vs_baseline": {
+                "predicted": 20,
+                "measured": 20,
+                "match": true
+            },
+            "disagreement_pairs": {
+                "predicted": {
+                    "hold->answer": 19,
+                    "ask->escalate_notify": 1
+                },
+                "measured": {
+                    "ask->escalate_notify": 1,
+                    "hold->answer": 19
+                },
+                "match": true
+            },
+            "points_saved_by_the_hold_swaps": {
+                "predicted": 44,
+                "measured": 44,
+                "match": true
+            },
+            "points_lost_by_the_single_ask": {
+                "predicted": -4,
+                "measured": -4,
+                "match": true
+            },
+            "net_points_vs_baseline": {
+                "predicted": 40,
+                "measured": 40,
+                "match": true
+            },
+            "disagreements_on_an_indifferent_column": {
+                "predicted": 19,
+                "measured": 19,
+                "match": true
+            }
+        },
+        "all_match": true
+    },
+    "margin_attribution": {
+        "status": "FOUND POST-HOC \u2014 see module docstring item 3. Not a pre-registered prediction of the arm.",
+        "corrected": {
+            "n": 100,
+            "total_cost": 218,
+            "mean_cost": 2.18,
+            "action_counts": {
+                "answer": 57,
+                "ask": 1,
+                "escalate_notify": 23,
+                "hold": 19
+            },
+            "escalations": 23,
+            "missed_escalations": 25,
+            "escalation_precision": 0.7391,
+            "escalation_recall": 0.4048,
+            "constraint_violations": 0
+        },
+        "legacy": {
+            "n": 100,
+            "total_cost": 262,
+            "mean_cost": 2.62,
+            "action_counts": {
+                "answer": 76,
+                "ask": 1,
+                "escalate_notify": 23
+            },
+            "escalations": 23,
+            "missed_escalations": 25,
+            "escalation_precision": 0.7391,
+            "escalation_recall": 0.4048,
+            "constraint_violations": 0
+        },
+        "legacy_map": {
+            "hot|False": "answer",
+            "hot|True": "escalate_notify",
+            "warm|False": "answer",
+            "warm|True": "escalate_notify",
+            "cold|False": "answer",
+            "cold|True": "escalate_notify"
+        },
+        "baseline_agrees_with_committed": true,
+        "baseline_recomputation_mismatches": [],
+        "disagreements_vs_baseline": 20,
+        "disagreement_pairs": {
+            "ask->escalate_notify": 1,
+            "hold->answer": 19
+        },
+        "disagreements_on_an_indifferent_column": 19,
+        "indifferent_swaps_that_moved_realised_cost": 9,
+        "points_saved_by_the_hold_swaps": 44,
+        "points_lost_by_the_single_ask": -4,
+        "net_points_vs_baseline": 40,
+        "disagreements": [{
+                "case_id": "a01-blast-007",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 0
+            },
+            {
+                "case_id": "a01-blast-008",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 0
+            },
+            {
+                "case_id": "a01-blast-009",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 0
+            },
+            {
+                "case_id": "a01-blast-010",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 0
+            },
+            {
+                "case_id": "a03-first-021",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 0
+            },
+            {
+                "case_id": "a03-followup-023",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 6
+            },
+            {
+                "case_id": "a03-followup-024",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 6
+            },
+            {
+                "case_id": "a03-followup-026",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 6
+            },
+            {
+                "case_id": "a05-restricted-043",
+                "modal_state": "hot|False",
+                "plugin_action": "ask",
+                "baseline_action": "escalate_notify",
+                "plugin_cost_in_modal_column": 2,
+                "baseline_cost_in_modal_column": 3,
+                "matrix_is_indifferent_here": false,
+                "realised_points_saved": -4
+            },
+            {
+                "case_id": "a06-mild-062",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": -1
+            },
+            {
+                "case_id": "a08-reaction-075",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 0
+            },
+            {
+                "case_id": "a08-reaction-076",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 0
+            },
+            {
+                "case_id": "a08-reaction-077",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 0
+            },
+            {
+                "case_id": "a08-reaction-078",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 0
+            },
+            {
+                "case_id": "a10-early-089",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": -1
+            },
+            {
+                "case_id": "a10-persistent-094",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 7
+            },
+            {
+                "case_id": "a11-first-095",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 0
+            },
+            {
+                "case_id": "a11-repeated-097",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 7
+            },
+            {
+                "case_id": "a11-repeated-098",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 7
+            },
+            {
+                "case_id": "a11-repeated-100",
+                "modal_state": "cold|False",
+                "plugin_action": "hold",
+                "baseline_action": "answer",
+                "plugin_cost_in_modal_column": 0,
+                "baseline_cost_in_modal_column": 0,
+                "matrix_is_indifferent_here": true,
+                "realised_points_saved": 7
+            }
+        ]
+    },
     "uniform_identity": {
         "closed_form_max_residual": 2.220446049250313e-16,
         "hold_minus_answer_min_slack": 0.0,
         "cases_where_hold_strictly_beats_answer": 0,
         "cases_on_the_mode_boundary": [],
+        "restricted_cases_at_the_ask_corner": [],
         "agreement_count_source": "results/robustness.json threshold_rule.uniform_baseline_vs_half_threshold"
     },
     "summaries": {
@@ -162,6 +507,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -171,6 +517,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -180,6 +527,7 @@
             "split": "test",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -189,6 +537,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -198,6 +547,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -207,6 +557,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -216,6 +567,7 @@
             "split": "dev",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -225,6 +577,7 @@
             "split": "dev",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -234,6 +587,7 @@
             "split": "test",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -243,6 +597,7 @@
             "split": "test",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -252,6 +607,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -261,6 +617,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -270,6 +627,7 @@
             "split": "test",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -279,6 +637,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -288,6 +647,7 @@
             "split": "test",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -297,6 +657,7 @@
             "split": "dev",
             "modal_state": "cold|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -306,6 +667,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -315,6 +677,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -324,6 +687,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -333,6 +697,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -342,6 +707,7 @@
             "split": "test",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -351,6 +717,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -360,6 +727,7 @@
             "split": "test",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 4,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -369,6 +737,7 @@
             "split": "dev",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 4,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -378,6 +747,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -387,6 +757,7 @@
             "split": "test",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 4,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -396,6 +767,7 @@
             "split": "dev",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -405,6 +777,7 @@
             "split": "test",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -414,6 +787,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -423,6 +797,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -432,6 +807,7 @@
             "split": "test",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -441,6 +817,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -450,6 +827,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -459,6 +837,7 @@
             "split": "dev",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -468,6 +847,7 @@
             "split": "test",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -477,6 +857,7 @@
             "split": "dev",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -486,6 +867,7 @@
             "split": "dev",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -495,6 +877,7 @@
             "split": "test",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -504,6 +887,7 @@
             "split": "dev",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -513,6 +897,7 @@
             "split": "test",
             "modal_state": "hot|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -522,6 +907,7 @@
             "split": "test",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -531,6 +917,7 @@
             "split": "dev",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -540,6 +927,7 @@
             "split": "test",
             "modal_state": "hot|False",
             "action": "ask",
+            "legacy_tie_break_action": "ask",
             "realised_cost": 4,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -549,6 +937,7 @@
             "split": "test",
             "modal_state": "hot|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -558,6 +947,7 @@
             "split": "dev",
             "modal_state": "hot|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -567,6 +957,7 @@
             "split": "test",
             "modal_state": "hot|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -576,6 +967,7 @@
             "split": "dev",
             "modal_state": "cold|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -585,6 +977,7 @@
             "split": "dev",
             "modal_state": "cold|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -594,6 +987,7 @@
             "split": "test",
             "modal_state": "cold|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -603,6 +997,7 @@
             "split": "dev",
             "modal_state": "cold|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -612,6 +1007,7 @@
             "split": "dev",
             "modal_state": "warm|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 3,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -621,6 +1017,7 @@
             "split": "test",
             "modal_state": "warm|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 3,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -630,6 +1027,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -639,6 +1037,7 @@
             "split": "test",
             "modal_state": "warm|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 3,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -648,6 +1047,7 @@
             "split": "test",
             "modal_state": "cold|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -657,6 +1057,7 @@
             "split": "dev",
             "modal_state": "warm|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -666,6 +1067,7 @@
             "split": "dev",
             "modal_state": "cold|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -675,6 +1077,7 @@
             "split": "dev",
             "modal_state": "cold|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -684,6 +1087,7 @@
             "split": "test",
             "modal_state": "cold|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -693,6 +1097,7 @@
             "split": "test",
             "modal_state": "cold|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -702,6 +1107,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -711,6 +1117,7 @@
             "split": "dev",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 1,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -720,6 +1127,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -729,6 +1137,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -738,6 +1147,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -747,6 +1157,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -756,6 +1167,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -765,6 +1177,7 @@
             "split": "test",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -774,6 +1187,7 @@
             "split": "dev",
             "modal_state": "hot|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -783,6 +1197,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -792,6 +1207,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -801,6 +1217,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -810,6 +1227,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -819,6 +1237,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -828,6 +1247,7 @@
             "split": "test",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -837,6 +1257,7 @@
             "split": "test",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -846,6 +1267,7 @@
             "split": "dev",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -855,6 +1277,7 @@
             "split": "dev",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -864,6 +1287,7 @@
             "split": "dev",
             "modal_state": "hot|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 3,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -873,6 +1297,7 @@
             "split": "dev",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -882,6 +1307,7 @@
             "split": "dev",
             "modal_state": "warm|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 3,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -891,6 +1317,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -900,6 +1327,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -909,6 +1337,7 @@
             "split": "test",
             "modal_state": "hot|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 3,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -918,6 +1347,7 @@
             "split": "test",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -927,6 +1357,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -936,6 +1367,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -945,6 +1377,7 @@
             "split": "dev",
             "modal_state": "hot|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "answer"
@@ -954,6 +1387,7 @@
             "split": "test",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 1,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -963,6 +1397,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -972,6 +1407,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -981,6 +1417,7 @@
             "split": "test",
             "modal_state": "hot|True",
             "action": "escalate_notify",
+            "legacy_tie_break_action": "escalate_notify",
             "realised_cost": 0,
             "cost_aware_action": "escalate_notify",
             "uniform_baseline_action": "escalate_notify"
@@ -990,6 +1427,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -999,6 +1437,7 @@
             "split": "dev",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 3,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -1008,6 +1447,7 @@
             "split": "dev",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -1017,6 +1457,7 @@
             "split": "test",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 0,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -1026,6 +1467,7 @@
             "split": "dev",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 3,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -1035,6 +1477,7 @@
             "split": "test",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 3,
             "cost_aware_action": "hold",
             "uniform_baseline_action": "answer"
@@ -1044,6 +1487,7 @@
             "split": "dev",
             "modal_state": "warm|False",
             "action": "answer",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 10,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"
@@ -1053,6 +1497,7 @@
             "split": "test",
             "modal_state": "cold|False",
             "action": "hold",
+            "legacy_tie_break_action": "answer",
             "realised_cost": 3,
             "cost_aware_action": "answer",
             "uniform_baseline_action": "answer"

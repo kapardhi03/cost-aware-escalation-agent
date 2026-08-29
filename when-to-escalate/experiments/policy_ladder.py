@@ -7,7 +7,7 @@ This file adds that one arm and nothing else. It reads `results/run.json`, touch
 no provider, and writes its own artifact, so the committed run and every claim that
 rests on it are untouched.
 
-Two things live here.
+Three things live here.
 
 1. THE ARM. `modal_plugin` collapses the belief to its most likely joint state and
    plays the cheapest action for that state under the real matrix. It is
@@ -33,6 +33,22 @@ Two things live here.
    and is not restated here. What this file adds is the residual between those
    closed forms and `expected_cost`, which is what makes the algebra an executed
    assertion rather than a remark.
+
+3. WHERE THE ARM'S MARGIN COMES FROM, which is not where the arm was built to look.
+   FOUND POST-HOC. The arm was specified, pre-registered and run before this
+   section existed; the attribution below was computed afterwards, while checking
+   whether the arm was comparable to a committed table generated under the other
+   tie-break order. It is therefore an observation about the belief set and the
+   matrix, not a confirmed prediction, and the artifact labels it as such. Nothing
+   in it lends any credibility to the pre-registered check in item 1, or takes any
+   away.
+
+   What it measures: the arm under both tie-break orders, its disagreements with
+   the uniform baseline split by action pair, whether the matrix expresses any
+   preference at all in the column each disagreement turns on, and the realised
+   points each group of swaps moves. The reason to measure it is that a rung whose
+   advantage rests on a convention rather than on a cost is not the rung it appears
+   to be.
 
 Why the run cannot discover anything, stated up front. Every belief is committed
 and the arm is a deterministic function of them, so the measured numbers are fixed
@@ -82,12 +98,43 @@ PREREGISTRATION = {
     },
 }
 
+#: Pre-registered for the attribution section before it was implemented, in the same
+#: way and with the same status: a target to be compared against, never a result.
+#: Note the asymmetry with PREREGISTRATION above. The arm itself was predicted before
+#: anyone had looked; these values were predicted before the section was written but
+#: AFTER the effect had been noticed by hand, so a match here is worth strictly less.
+#: Stating them anyway is what keeps the implementation honest about the arithmetic.
+ATTRIBUTION_PREREGISTRATION = {
+    "legacy_mean_cost": 2.62,
+    "legacy_action_counts": {"answer": 76, "ask": 1, "escalate_notify": 23},
+    "legacy_missed_escalations": 25,
+    "corrected_mean_cost": 2.18,
+    "disagreements_vs_baseline": 20,
+    "disagreement_pairs": {"hold->answer": 19, "ask->escalate_notify": 1},
+    "points_saved_by_the_hold_swaps": 44,
+    "points_lost_by_the_single_ask": -4,
+    "net_points_vs_baseline": 40,
+    "disagreements_on_an_indifferent_column": 19,
+}
+
 
 # --------------------------------------------------------------------------- #
 # The arm
 # --------------------------------------------------------------------------- #
 
-def modal_state_map(matrix: dict | None = None) -> dict[str, str]:
+def _rank(matrix: dict, legacy_tie_break: bool) -> dict[str, int]:
+    """Tie-break ranks, mirroring `choose_action`'s two configurations exactly.
+
+    Kept as one helper so the arm cannot drift from the policy it is compared to.
+    `legacy_tie_break=True` restores ACTIONS order, which resolves indifference
+    toward `answer`; it is the configuration `results/run.json` was generated in.
+    """
+    order = ACTIONS if legacy_tie_break else tie_break_order(matrix)
+    return {a: i for i, a in enumerate(order)}
+
+
+def modal_state_map(matrix: dict | None = None,
+                    legacy_tie_break: bool = False) -> dict[str, str]:
     """The cheapest action in each state's column, by argmin over the matrix.
 
     Derived rather than written: this is the whole content of the plug-in policy,
@@ -95,9 +142,13 @@ def modal_state_map(matrix: dict | None = None) -> dict[str, str]:
     a consequence of the practitioner's costs. Ties resolve safest-first, the same
     rule the expected-cost policy uses, so `(cold, False)` — where answering and
     holding both cost nothing — resolves to `hold` rather than to `answer`.
+
+    That tie is not a detail. Under `legacy_tie_break=True` the same column resolves
+    to `answer`, and the whole `hold` column of the arm disappears — which is what
+    `attribute_margin` measures.
     """
     matrix = matrix if matrix is not None else COST
-    rank = {a: i for i, a in enumerate(tie_break_order(matrix))}
+    rank = _rank(matrix, legacy_tie_break)
     return {
         f"{readiness}|{needs_human}": min(
             ACTIONS, key=lambda a: (matrix[a][(readiness, needs_human)], rank[a]))
@@ -118,12 +169,8 @@ def modal_state(row: dict) -> tuple[str, bool]:
     return readiness, row["belief"]["needs_human"] > 0.5
 
 
-<<<<<<< HEAD
 def modal_plugin_action(row: dict, matrix: dict | None = None,
                         legacy_tie_break: bool = False) -> str:
-=======
-def modal_plugin_action(row: dict, matrix: dict | None = None) -> str:
->>>>>>> 93acc2c (Add the modal-state plug-in arm and execute the uniform-baseline identity)
     """Cheapest feasible action for the modal state.
 
     The hard constraint is applied by removing actions before the argmin, exactly
@@ -132,7 +179,7 @@ def modal_plugin_action(row: dict, matrix: dict | None = None) -> str:
     """
     matrix = matrix if matrix is not None else COST
     readiness, needs_human = modal_state(row)
-    rank = {a: i for i, a in enumerate(tie_break_order(matrix))}
+    rank = _rank(matrix, legacy_tie_break)
     available = feasible_actions(row.get("constraints", ()))
     return min(available,
                key=lambda a: (matrix[a][(readiness, needs_human)], rank[a]))
@@ -202,6 +249,7 @@ def check_uniform_identity(rows: list[dict]) -> dict:
     hold_slack_min = None
     hold_strictly_wins = 0
     on_boundary = []
+    ask_corner = []
 
     for row in rows:
         b = _Belief(row["belief"]["readiness"], row["belief"]["needs_human"])
@@ -223,16 +271,130 @@ def check_uniform_identity(rows: list[dict]) -> dict:
             hold_strictly_wins += 1
         if b_h == 0.5:
             on_boundary.append(row["case_id"])
+        # The one corner where `ask` is not ruled out: remove `answer`, and at
+        # b_h = 0 with P(cold) = 0 the four remaining actions all cost 1. Every
+        # UNIFORM_COST row has worst case 1, so the derived tie-break order
+        # degenerates to declaration order and would resolve that tie to `ask`.
+        if row.get("constraints") and b_h == 0.0 and cold == 0.0:
+            ask_corner.append(row["case_id"])
 
     return {
         "closed_form_max_residual": residual,
         "hold_minus_answer_min_slack": hold_slack_min,
         "cases_where_hold_strictly_beats_answer": hold_strictly_wins,
         "cases_on_the_mode_boundary": on_boundary,
+        "restricted_cases_at_the_ask_corner": ask_corner,
         "agreement_count_source":
             "results/robustness.json threshold_rule."
             "uniform_baseline_vs_half_threshold",
     }
+
+
+# --------------------------------------------------------------------------- #
+# Where the margin comes from — FOUND POST-HOC, see docstring item 3
+# --------------------------------------------------------------------------- #
+
+def attribute_margin(rows: list[dict], corrected: list[str],
+                     legacy: list[str]) -> dict:
+    """Split the arm's margin over the baseline into what caused each part.
+
+    The question this answers: when the plug-in arm departs from the uniform
+    baseline, does the practitioner's matrix express a PREFERENCE in the column the
+    departure turns on, or is it indifferent there? An indifferent column means the
+    decision came from the tie-break convention and not from any cost. That
+    distinction is invisible in the mean and is the whole finding.
+
+    The baseline's own realised costs are READ from `results/run.json` rather than
+    recomputed, so this function cannot become a second authoritative copy of a
+    committed number; `baseline_agrees_with_committed` asserts the recomputation
+    matches, which is a check rather than a restatement.
+    """
+    disagreements, saved, lost, indifferent = [], 0, 0, 0
+    mismatched_baseline = []
+
+    for action, row in zip(corrected, rows):
+        base = row["decisions"]["uniform_baseline"]["action"]
+        committed = row["decisions"]["uniform_baseline"]["realised_cost"]
+        if realised_cost(base, row["labels"]) != committed:
+            mismatched_baseline.append(row["case_id"])
+        if action == base:
+            continue
+
+        state = modal_state(row)
+        mine, theirs = COST[action][state], COST[base][state]
+        delta = committed - realised_cost(action, row["labels"])
+        if mine == theirs:
+            indifferent += 1
+        if action == "ask":
+            lost += delta
+        else:
+            saved += delta
+
+        disagreements.append({
+            "case_id": row["case_id"], "modal_state": "|".join(map(str, state)),
+            "plugin_action": action, "baseline_action": base,
+            "plugin_cost_in_modal_column": mine,
+            "baseline_cost_in_modal_column": theirs,
+            "matrix_is_indifferent_here": mine == theirs,
+            "realised_points_saved": delta,
+        })
+
+    pairs = Counter(f"{d['plugin_action']}->{d['baseline_action']}"
+                    for d in disagreements)
+    moved = [d for d in disagreements
+             if d["matrix_is_indifferent_here"] and d["realised_points_saved"]]
+    return {
+        "status": "FOUND POST-HOC — see module docstring item 3. Not a "
+                  "pre-registered prediction of the arm.",
+        "corrected": score(corrected, rows),
+        "legacy": score(legacy, rows),
+        "legacy_map": modal_state_map(legacy_tie_break=True),
+        "baseline_agrees_with_committed": not mismatched_baseline,
+        "baseline_recomputation_mismatches": mismatched_baseline,
+        "disagreements_vs_baseline": len(disagreements),
+        "disagreement_pairs": dict(sorted(pairs.items())),
+        "disagreements_on_an_indifferent_column": indifferent,
+        "indifferent_swaps_that_moved_realised_cost": len(moved),
+        "points_saved_by_the_hold_swaps": saved,
+        "points_lost_by_the_single_ask": lost,
+        "net_points_vs_baseline": saved + lost,
+        "disagreements": disagreements,
+    }
+
+
+def compare_attribution(measured: dict) -> dict:
+    """Attribution against its pre-registration, same shape as the arm's.
+
+    A match here is worth less than a match on the arm, because the effect was
+    noticed by hand before these values were written down. The comparison is kept
+    so the arithmetic is checked, not so the finding is credited.
+    """
+    got = {
+        "legacy_mean_cost": measured["legacy"]["mean_cost"],
+        "legacy_action_counts": measured["legacy"]["action_counts"],
+        "legacy_missed_escalations": measured["legacy"]["missed_escalations"],
+        "corrected_mean_cost": measured["corrected"]["mean_cost"],
+        "disagreements_vs_baseline": measured["disagreements_vs_baseline"],
+        "disagreement_pairs": measured["disagreement_pairs"],
+        "points_saved_by_the_hold_swaps": measured["points_saved_by_the_hold_swaps"],
+        "points_lost_by_the_single_ask": measured["points_lost_by_the_single_ask"],
+        "net_points_vs_baseline": measured["net_points_vs_baseline"],
+        "disagreements_on_an_indifferent_column":
+            measured["disagreements_on_an_indifferent_column"],
+    }
+    checks = {}
+    for key, want in ATTRIBUTION_PREREGISTRATION.items():
+        have = got[key]
+        if isinstance(want, dict):
+            match = dict(sorted(want.items())) == dict(sorted(have.items()))
+        elif isinstance(want, float):
+            match = abs(have - want) <= 5e-4
+        else:
+            match = have == want
+        checks[key] = {"predicted": want, "measured": have, "match": match}
+    return {"status": "post-hoc, not a validated prediction",
+            "checks": checks,
+            "all_match": all(c["match"] for c in checks.values())}
 
 
 # --------------------------------------------------------------------------- #
@@ -272,6 +434,80 @@ def compare_to_preregistration(measured: dict, derived_map: dict) -> dict:
 # --------------------------------------------------------------------------- #
 # Report
 # --------------------------------------------------------------------------- #
+
+def render_attribution(f: dict) -> list[str]:
+    """The margin-attribution section. Marked post-hoc at the top, not in a footnote."""
+    a = f["margin_attribution"]
+    c = f["attribution_comparison"]
+    esc = lambda s: s.replace("|", chr(92) + "|")          # noqa: E731
+
+    L = ["## Where the arm's margin actually comes from", "",
+         "**FOUND POST-HOC.** The arm above was specified, pre-registered and run",
+         "before this section existed. This attribution was computed afterwards,",
+         "while checking whether the arm was comparable to a committed table",
+         "generated under the other tie-break order. It is an observation, not a",
+         "confirmed prediction, and it neither supports nor undermines the",
+         "pre-registered check above.", "",
+         "| configuration | mean | missed | action counts |",
+         "| --- | ---: | ---: | --- |",
+         f"| safest-first (default) | {a['corrected']['mean_cost']} | "
+         f"{a['corrected']['missed_escalations']} | "
+         f"`{a['corrected']['action_counts']}` |",
+         f"| legacy, ties toward `answer` | {a['legacy']['mean_cost']} | "
+         f"{a['legacy']['missed_escalations']} | "
+         f"`{a['legacy']['action_counts']}` |", "",
+         "The `hold` column does not shrink under the legacy order; it disappears.",
+         "Every one of those decisions was a tie, so every one of them moves.", ""]
+
+    L += [f"The arm departs from the uniform baseline on "
+          f"{a['disagreements_vs_baseline']} cases:", ""]
+    L += [f"- `{k}` on {v} cases" for k, v in a["disagreement_pairs"].items()]
+    L += ["", "| case | modal state | plug-in | baseline | cost of each, in that "
+          "column | matrix indifferent? | points saved |",
+          "| --- | --- | --- | --- | ---: | --- | ---: |"]
+    for d in a["disagreements"]:
+        L.append(f"| `{d['case_id']}` | `{esc(d['modal_state'])}` | "
+                 f"`{d['plugin_action']}` | `{d['baseline_action']}` | "
+                 f"{d['plugin_cost_in_modal_column']} vs "
+                 f"{d['baseline_cost_in_modal_column']} | "
+                 f"{'yes' if d['matrix_is_indifferent_here'] else '**no**'} | "
+                 f"{d['realised_points_saved']} |")
+
+    L += ["", f"On {a['disagreements_on_an_indifferent_column']} of the "
+              f"{a['disagreements_vs_baseline']}, the two actions cost the SAME in "
+              f"the column the decision turns on, so the practitioner's magnitudes "
+              f"express no preference there and the tie-break convention decides. "
+              f"Those swaps save {a['points_saved_by_the_hold_swaps']} realised "
+              f"points. The remaining case is the one where the matrix does prefer "
+              f"the arm's action at the mode, and there the arm is wrong: it costs "
+              f"{-a['points_lost_by_the_single_ask']} points. Net: "
+              f"{a['net_points_vs_baseline']}.", "",
+          "So the rung's advantage is a convention applied to an indifference. Strip",
+          "the convention and certainty-equivalence with the full matrix is worse",
+          "than with the flattened one, by exactly the cost of the single decision",
+          "the magnitudes genuinely drive.", "",
+          f"Sharper still: only "
+          f"{a['indifferent_swaps_that_moved_realised_cost']} of the "
+          f"{a['disagreements_on_an_indifferent_column']} indifferent swaps change "
+          f"realised cost at all. The rest hold a case that answering would also "
+          f"have got right, at no gain and no loss. The whole margin therefore rests "
+          f"on a handful of cases decided by a convention on a column where the "
+          f"matrix says nothing.", "",
+          f"Baseline realised costs are read from `results/run.json`, not recomputed "
+          f"as a second copy; the recomputation was checked against the committed "
+          f"field on every case and agrees: "
+          f"`{a['baseline_agrees_with_committed']}`.", "",
+          "| field | pre-registered | measured | match |",
+          "| --- | ---: | ---: | --- |"]
+    for key, k in c["checks"].items():
+        pre = k["predicted"] if not isinstance(k["predicted"], dict) else "(as listed)"
+        got = k["measured"] if not isinstance(k["measured"], dict) else "(as listed)"
+        L.append(f"| {key} | {pre} | {got} | {'yes' if k['match'] else '**NO**'} |")
+    L += ["", "These were written down before the section was implemented but after",
+          "the effect had been noticed by hand, so agreement checks the arithmetic",
+          "and nothing more. It is not the pre-registration the arm has.", ""]
+    return L
+
 
 def render(f: dict) -> str:
     L = ["# The modal-state plug-in arm", "",
@@ -330,6 +566,8 @@ def render(f: dict) -> str:
           "before the arm was implemented. It is not a result and is not cited as",
           "one anywhere.", ""]
 
+    L += render_attribution(f)
+
     i = f["uniform_identity"]
     L += ["## Why the no-cost rung was already occupied", "",
           "Flattening every non-zero cost to one does not produce a weaker cost",
@@ -341,7 +579,12 @@ def render(f: dict) -> str:
           "the mode of the needs-human marginal, not a threshold anyone selected ---",
           "and `hold` cannot strictly win, since",
           "`EC(hold) - EC(answer) = (1 - b_h)(1 - P(cold))`, which is never",
-          "negative. `ask` and `pause` sit at 1 and are unreachable.", "",
+          "negative. `ask` and `pause` both sit at 1, which the smaller of the first",
+          "two is always strictly below, so on the UNCONSTRAINED menu neither is ever",
+          "selected. Remove `answer` and one corner survives: at `b_h = 0` with",
+          "`P(cold) = 0` the four remaining actions all cost 1, and since every",
+          "`UNIFORM_COST` row has worst case 1 the derived order degenerates to",
+          "declaration order and resolves that tie to `ask`.", "",
           f"- Largest disagreement between those closed forms and",
           f"  `costs.expected_cost` over every committed belief and all five",
           f"  actions: `{i['closed_form_max_residual']}`.",
@@ -350,7 +593,10 @@ def render(f: dict) -> str:
           f"{i['cases_where_hold_strictly_beats_answer']}.",
           f"- Beliefs sitting exactly on the mode boundary, where the rule's",
           f"  behaviour would be a convention rather than a consequence: "
-          f"{len(i['cases_on_the_mode_boundary'])}.", "",
+          f"{len(i['cases_on_the_mode_boundary'])}.",
+          f"- Restricted cases sitting in the `ask` corner, where the conclusion",
+          f"  above would not hold: "
+          f"{len(i['restricted_cases_at_the_ask_corner'])}.", "",
           "The agreement count against a plain threshold is already committed, in",
           f"`{i['agreement_count_source']}`, and is not repeated here. What is new",
           "is that the agreement is not a property of these cases: the algebra holds",
@@ -375,6 +621,8 @@ def main() -> int:
 
     derived_map = modal_state_map()
     actions = [modal_plugin_action(r) for r in rows]
+    legacy_actions = [modal_plugin_action(r, legacy_tie_break=True) for r in rows]
+    attribution = attribute_margin(rows, actions, legacy_actions)
 
     summaries = {
         "all": score(actions, rows),
@@ -393,16 +641,20 @@ def main() -> int:
         "preregistration": PREREGISTRATION,
         "preregistration_comparison": compare_to_preregistration(
             summaries["all"], derived_map),
+        "attribution_preregistration": ATTRIBUTION_PREREGISTRATION,
+        "attribution_comparison": compare_attribution(attribution),
+        "margin_attribution": attribution,
         "uniform_identity": check_uniform_identity(rows),
         "summaries": summaries,
         "decisions": [
             {"case_id": r["case_id"], "split": r["split"],
              "modal_state": "|".join(map(str, modal_state(r))),
              "action": a,
+             "legacy_tie_break_action": la,
              "realised_cost": realised_cost(a, r["labels"]),
              "cost_aware_action": r["decisions"]["cost_aware"]["action"],
              "uniform_baseline_action": r["decisions"]["uniform_baseline"]["action"]}
-            for a, r in zip(actions, rows)
+            for a, la, r in zip(actions, legacy_actions, rows)
         ],
     }
 
@@ -413,12 +665,22 @@ def main() -> int:
     print(f"wrote {args.json}")
     print(f"wrote {args.md}")
 
+    status = 0
     if not findings["preregistration_comparison"]["all_match"]:
         print("\nSTOP: measured output diverges from the pre-registration. The "
               "specification is what to re-examine, not the numbers.",
               file=sys.stderr)
-        return 1
-    return 0
+        status = 1
+    if not findings["attribution_comparison"]["all_match"]:
+        print("\nSTOP: the margin attribution diverges from what was written down "
+              "for it. Divergence here is a finding about the belief set and the "
+              "matrix, not a number to nudge.", file=sys.stderr)
+        status = 1
+    if not findings["margin_attribution"]["baseline_agrees_with_committed"]:
+        print("\nSTOP: recomputed baseline costs disagree with the committed "
+              "realised_cost field in results/run.json.", file=sys.stderr)
+        status = 1
+    return status
 
 
 if __name__ == "__main__":
