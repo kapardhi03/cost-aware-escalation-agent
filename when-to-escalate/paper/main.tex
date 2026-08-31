@@ -687,11 +687,23 @@ Accuracy alone would hide the thing the design is about, so the run reports mean
 realised cost per case, the number of missed escalations (a case that needed a
 human but did not get one), escalation precision and recall, the number of
 escalations, the number of hard-constraint violations, and the calibration of the
-belief. Calibration is measured as expected calibration error on the needs-human
-marginal, since that is the probability the escalation threshold acts on. Two
-further measures are reported for the held-out fit of
-Section~\ref{sec:calibration}, both fixed before it and both on the same marginal:
-cross-entropy and Brier score.
+belief. Accuracy is reported too, in Table~\ref{tab:results}, precisely so that a
+reader can watch it hide that thing rather than take the claim on trust: it is a
+count of decisions that match a label, it is blind to which mistake was made, and
+under the asymmetric matrix the two are not the same question. Calibration is
+measured as expected calibration error on the needs-human marginal, since that is the
+probability the escalation threshold acts on. Two further measures are reported for
+the held-out fit of Section~\ref{sec:calibration}, both fixed before it and both on
+the same marginal: cross-entropy and Brier score.
+
+\paragraph{Cost, split two ways.} Mean realised cost is reported as two columns
+rather than one, because exactly one of the five actions in Table~\ref{tab:costs}
+buys information and the other four do not. What \emph{ask} costs is the price of a
+question, and it leaves the case where it found it; what the other four cost is the
+price of having acted. Splitting them keeps a policy that pays only for questions
+from looking like a policy that acted cheaply, which is what a single total does to
+the always-ask row. The split is zero for every policy that never asks, which in
+Table~\ref{tab:results} is every policy but that one.
 
 \paragraph{Entropy thresholds.} One further quantity is measured in bits rather
 than in cost points, and it is defined here rather than where it is used, because a
@@ -734,29 +746,45 @@ about nothing at all whenever an arm's highest-entropy case is a development cas
 Table~\ref{tab:results} reports all five policies over the 100 cases, on the
 shared cached beliefs.
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lrrrrrrr}
 \toprule
-Policy & Cost & Miss & Prec. & Rec. & Esc. \\
+Policy & Accuracy & Precision & Recall & Missed & Decision cost & Info cost
+& Human \% \\
 \midrule
-cost-aware        & 1.72 & 16 & 0.605 & 0.619 & 43 \\
-uniform baseline  & 2.58 & 24 & 0.750 & 0.429 & 24 \\
-always-notify     & 1.74 & 0  & 0.420 & 1.000 & 100 \\
-always-ask        & 2.84 & 42 & --    & 0.000 & 0 \\
-always-answer     & 3.40 & 34 & 1.000 & 0.190 & 8 \\
+cost-aware        & 0.670 & 0.605 & 0.619 & 16 & 1.72 & 0.00 & 43 \\
+uniform baseline  & 0.700 & 0.750 & 0.429 & 24 & 2.58 & 0.00 & 24 \\
+always-notify     & 0.420 & 0.420 & 1.000 & 0  & 1.74 & 0.00 & 100 \\
+always-ask        & 0.580 & --    & 0.000 & 42 & 0.00 & 2.84 & 0 \\
+always-answer     & 0.660 & 1.000 & 0.190 & 34 & 3.40 & 0.00 & 8 \\
 \bottomrule
 \end{tabular}
-\caption{Mean cost per case, missed escalations, escalation precision and recall,
-and number of escalations, over 100 cases. Lower cost and fewer misses are
-better. The cost-aware row is the legacy tie-break configuration described in
-Section~\ref{sec:method}; under the corrected default its cost is 1.65 and every
-other entry in the row is unchanged. No policy records a hard-constraint
-violation, including the fixed-action
-baselines --- the constraint forbids only \emph{answer}, and on all 8 restricted
-cases the cost-aware policy escalates on cost grounds before feasibility is
-consulted, so the constraint never changed a decision. Zero violations here is
-therefore not evidence that the constraint mechanism works; it is untested.
+\caption{All five policies over the 100 cases. \emph{Accuracy} is the fraction of
+cases where the escalate / do-not-escalate decision matches the needs-human label;
+precision and recall are of escalation; \emph{Missed} counts cases that needed a
+human and did not get one. \emph{Info cost} is the part of mean realised cost paid by
+\emph{ask} and \emph{Decision cost} is the rest, so the two sum to the single mean
+cost reported before and the table carries the split rather than the total.
+\emph{Human \%} is the percentage of cases routed to a person, which over 100 cases
+is numerically the escalation count; \texttt{experiments/table\_metrics.py} asserts
+that equality per policy rather than assuming it, recomputes the four pre-existing
+columns against \texttt{results/run.json} and finds no disagreement, and writes
+\texttt{results/table-metrics.json}. Lower cost and fewer misses are better;
+accuracy is reported as the foil the Metrics subsection above says it is, not as an
+objective. Two of its entries are forced rather than measured. \emph{always-notify}
+escalates on every case, so its accuracy is its own precision and both are the base
+rate of the label, 0.420; \emph{always-ask} escalates on none, so its accuracy is one
+minus that base rate, which is the majority-class score --- the table therefore
+contains its own trivial-classifier reference point, and no policy in it beats that
+score by more than 0.120. The cost-aware row is the legacy tie-break configuration
+described in Section~\ref{sec:method}; under the corrected default its decision cost
+is 1.65 and every one of the other six entries is unchanged, which is checked column
+by column rather than asserted. No policy records a hard-constraint violation,
+including the fixed-action baselines --- the constraint forbids only \emph{answer},
+and on all 8 restricted cases the cost-aware policy escalates on cost grounds before
+feasibility is consulted, so the constraint never changed a decision. Zero violations
+here is therefore not evidence that the constraint mechanism works; it is untested.
 \emph{always-answer} shows precision 1.000 on 8 escalations, which is an artifact:
 the policy never escalates, and those 8 are the restricted cases where the
 constraint removed \emph{answer}, leaving the fixed-action policy to fall back to
@@ -764,7 +792,7 @@ escalate-notify by construction rather than by any comparison of costs. All
 8 happen to need a human, so the precision is 8/8 on a denominator the policy did
 not choose. It should not be read as the baseline discriminating well.}
 \label{tab:results}
-\end{table}
+\end{table*}
 
 \subsection{What cost-awareness buys}
 The cost-aware policy reaches a mean cost of 1.72 against 2.58 for the uniform
@@ -781,6 +809,19 @@ hold or answer to escalate-notify, trading many small costs of two or three for 
 few avoided false assertions of ten. The point of the design is not to be right
 more often but to be wrong more cheaply.
 
+The accuracy column is where that stops being a slogan. The baseline is the more
+accurate of the two policies, 0.700 against 0.670, while costing 2.58 against 1.72:
+the ordering by accuracy is the reverse of the ordering by cost, on the same 100
+beliefs, with the same notion of which action is correct in each state. Nor is the
+inversion confined to the two. \emph{always-answer} reaches 0.660, within 0.010 of the
+shipped policy, at roughly double its decision cost --- and every one of its 34
+errors is a false assertion at the matrix's top price, so its entire cost is 34
+mistakes of one kind. Accuracy cannot see that, because it counts decisions and the
+matrix prices them. Ranked by the accuracy column, the baseline sits above the shipped
+policy and a policy that never escalates sits third; the row that column ranks last,
+\emph{always-notify}, is the second cheapest in the table. So the column does not
+order these five policies the way the objective does, at either end of it.
+
 \subsection{What the baseline actually is}
 One further check weakens how much that gap can be attributed to the machinery.
 The uniform baseline selects the same action as a plain threshold of $0.5$ on
@@ -791,6 +832,56 @@ number. The cost-aware policy is not reducible in the same way, because
 comparison in Table~\ref{tab:results} is between a readiness-sensitive rule and a
 $0.5$ threshold, and part of the reported gap is the distance from $0.5$ to
 $3/13$ rather than the asymmetry as such.
+
+That agreement is not a property of these cases, and the reason is worth setting
+out, because it changes what the baseline is a baseline for. Flattening every
+non-zero entry to one --- which is how the uniform matrix $C_u$ is defined, at
+\texttt{src/costs.py:109--112}, derived from Table~\ref{tab:costs} rather than
+written by hand --- does not produce a weaker cost model. It produces no cost model
+at all, and what the expected-cost rule then computes has a closed form:
+\begin{equation}
+\label{eq:uniform-closed}
+\begin{aligned}
+\mathbb{E}_b[C_u(\textit{answer})] &= b_h, \\
+\mathbb{E}_b[C_u(\textit{escalate-notify})] &= 1 - b_h, \\
+\mathbb{E}_b[C_u(\textit{ask})] &= 1, \\
+\mathbb{E}_b[C_u(\textit{escalate-pause})] &= 1, \\
+\mathbb{E}_b[C_u(\textit{hold})] &= 1 - P(\text{cold})\,(1 - b_h).
+\end{aligned}
+\end{equation}
+Three consequences follow, and none of them mentions the data. \emph{Answer} is
+preferred to \emph{escalate-notify} exactly where $b_h$ falls below the threshold
+named above, so that threshold is the argmax of the needs-human marginal and not a
+value anyone selected. \emph{Hold} can never strictly win, since the first and last
+lines of~(\ref{eq:uniform-closed}) differ by $(1 - b_h)(1 - P(\text{cold}))$, which
+is never negative --- so readiness, which the full matrix consults to choose
+\emph{hold} on the cases counted above, has no purchase here even though $C_u$ still
+contains it. And the two middle lines sit at the flattened maximum, which the
+smaller of the first two is always strictly below, so on the unconstrained menu
+neither \emph{ask} nor \emph{escalate-pause} is ever selected. That last conclusion
+is reached without Theorem~\ref{thm:ceiling} or any part of its argument: the
+baseline's silence about asking is arithmetic in a matrix with one magnitude,
+whereas the theorem is a statement about the practitioner's magnitudes. Removing
+\emph{answer} leaves one corner where it would not hold --- at $b_h = 0$ with
+$P(\text{cold}) = 0$ the four remaining actions all cost the same, and the
+degenerate ordering described in Section~\ref{sec:failure} would resolve that tie to
+\emph{ask} --- but no restricted case in the reported set sits there.
+
+So the agreement above measures something that could not have come out otherwise.
+The identity holds at every belief in the readiness simplex crossed with
+$b_h \in [0, 1]$, so no case set could have contradicted it, and the check is
+executed rather than asserted: \texttt{experiments/policy\_ladder.py} compares all
+five closed forms against the implementation on every committed belief and all five
+actions, and \texttt{results/policy-ladder.json} records the largest disagreement,
+which is at floating-point rounding. What this settles is the shape of the
+comparison in Table~\ref{tab:results}. Those two policies are not a cost model
+beside a blunter cost model; they are a rule that prices the belief's spread
+asymmetrically beside a rule that reads nothing but the mode of the belief's
+needs-human half. Flattening removes the asymmetry and the use of the spread
+together, which is why the reported gap cannot be split between them by this
+comparison alone --- and why the rung between the two, a rule that holds the
+practitioner's magnitudes but reads only the mode, has to be built separately rather
+than recovered from Table~\ref{tab:results}.
 
 A threshold sweep separates the two contributions, and it does not go cleanly. No
 threshold on $b_h$ reproduces the cost-aware policy's 43 escalations: because the
@@ -975,6 +1066,186 @@ reason \emph{ask} goes unused and it does not compound this: the horizon was the
 candidate explanation, and Theorem~\ref{thm:ceiling} together with the collapse of
 $W_k$ removes it. The action most obviously suited to an ambiguous inbound message
 is unused because it is priced out, not because it is unpriced.
+
+\subsection{Running the lookahead that the theorem collapses}
+\label{sec:boundary}
+Theorem~\ref{thm:ceiling} and the collapse of $W_k$ are proofs about a matrix, and
+neither was ever executed. $W_1$ appears above as an inequality that a policy would
+have to satisfy; no policy in Table~\ref{tab:results} evaluates it, because the
+shipped rule compares the \emph{ask} row against the other rows and stops there. So
+$W_1$ is built here and run: it prices a question as the fee plus the expected cost
+of acting on the actual posterior, answer by answer, over the four questions of the
+committed answer model. Alongside it runs a second arm that takes the continuation
+term to be zero everywhere --- not a policy anyone would ship, but exactly the
+necessary condition stated before the theorem, and therefore the largest $\lambda$ at
+which any question whatsoever could be worth its price. Both arms decide on the same
+committed beliefs, in exact rational arithmetic; they live in
+\texttt{experiments/voi\_boundary.py} and every number here is recorded in
+\texttt{results/voi-boundary.json}.
+
+At the practitioner's prices both arms ask on zero of the 100 cases, and $W_1$ plays
+the shipped policy's action on all 100 under the corrected ordering of
+Section~\ref{sec:failure} --- the single disagreement with the committed decisions is
+that section's one tie-break case and nothing else, which the arm checks rather than
+assumes. The collapse is therefore measured and not only proved, and the census in
+this section is reproduced by a policy that had the option of contradicting it.
+
+\paragraph{Where the switch actually lands.} Scaling the \emph{ask} row by $\lambda$
+turns the census into a boundary question, and the boundary can be solved for rather
+than searched: under $W_1$ a case asks exactly when $\lambda$ falls below
+$[V_{\mathrm{act}}(b) - \sum_u P_b(u) V_{\mathrm{act}}(b^u)] /
+\mathbb{E}_b[C(\textit{ask})]$, and under the other arm below the same expression with
+the continuation term struck out --- one rational per case and question either way, so
+each switch is the largest of those and not a grid artifact.
+A crude sweep in twentieths is run anyway and agrees with the closed form at every
+step, which is the pattern the proof above already uses. The necessary-condition arm
+switches at $5/6$. $W_1$ switches at $11/30$, on \texttt{a01-first-003}, with the
+question aimed at $b_h$.
+
+Neither is the repricing derived above. The necessary-condition arm falls $5/48$
+short of it, and that gap is the belief set rather than the algebra. The ratio it
+maximises rises into the crossing $b_h^{\star}$ and falls out of it, so the best
+available belief is whichever elicited value sits nearest; the two that bracket
+$b_h^{\star}$ give $5/6$ and $21/26$. Pushing the theorem's own witness belief
+through this arm's expected-cost code returns the repriced $\lambda$ exactly, so the
+arithmetic is not where the shortfall comes from. This does not soften the claim
+above that quantization is not the cause: that claim is about the sign of the ceiling,
+and it stands --- a finer belief grid finds no positive region because there is none
+to find. What quantization sets is the margin, how close the best elicited belief gets
+to a break-even the whole simplex attains. A result about a sign and a result about a
+distance are not the same result, and the second does not qualify the first.
+
+\paragraph{What the answer model adds, and what it costs.} The distance from $11/30$
+to $5/6$ is the distance between the theorem's bound and the questions that exist,
+and separating them separates what rests on the answer model from what does not. The
+necessary-condition arm never consults it, so the limitation recorded in
+Section~\ref{sec:limitations} does not reach $5/6$; $11/30$ is inside that
+limitation's scope and is reported as a property of this question set rather than of
+questions in general. Two features of the measurement say the machinery is not
+manufacturing value. The control question, whose answer cannot depend on the state,
+returns a break-even of exactly zero on every case --- it is never worth buying at any
+price above free. And the question that attains $11/30$ is the one aimed at $b_h$,
+which is the quantity the act comparison turns on, while the one aimed at readiness
+and the one aimed at both halves come in lower; the ordering is the one the matrix
+implies, not one the implementation chose.
+
+One methodological point is load-bearing rather than incidental. The question aimed at
+both halves of the state couples them, so its posterior is not a
+product of its own marginals --- on 96 of the 100 cases it is not --- and the
+belief representation of Section~\ref{sec:model}, a readiness marginal plus a scalar,
+cannot express it. Expected cost is therefore computed against the full six-state
+distribution in this arm, and checked against the paper's own expected-cost function
+on the 100 priors, where both apply and must agree. Projecting those posteriors onto
+their marginals instead would have understated what an answer is worth, in the arm
+whose whole purpose is to find the price at which it becomes worth something.
+
+\paragraph{Asking that the belief endorses and the outcome does not.} Noticed after
+the sweep ran, not predicted, and it is an observation about 100 labelled cases rather
+than about the rule. Below $11/30$, $W_1$ begins to ask, and for a stretch its
+realised mean cost is \emph{above} what it pays by never asking --- the figure
+Table~\ref{tab:results}'s footnote reports for the corrected tie-break --- peaking at
+1.828 around $\lambda = 1/4$ before falling below it somewhere between $3/20$ and
+$1/10$, which the sweep brackets rather than locates. The lookahead is an expectation
+under the belief;
+where the belief is wrong the question is worth buying and wasted in outcome, and the
+two facts are consistent. What it warns against is reading the first $\lambda$ at
+which a policy asks as the first $\lambda$ at which asking helps.
+
+\paragraph{What was predicted, and one miss.} This arm's pre-registration was a
+prediction rather than a restatement: the switch points were not known when it was
+written. Nine of its ten fields matched, including $5/6$, the $5/48$ shortfall, its
+attribution to the belief grid, the control question's zero and which question would
+attain the real switch. One did not. $W_1$'s switch was predicted below $1/4$, on the
+reasoning that a single answer rarely moves the act decision, and it landed at
+$11/30$: the question aimed at $b_h$ flips the decision on two of its three answers at
+the maximising case, which is more than one question was expected to buy. That field
+is recorded as a miss in \texttt{results/voi-boundary.json} rather than adjusted, and
+the arm's exit status treats a divergence there as a result to report and not a
+condition to fail.
+
+\subsection{What the magnitudes buy at a point estimate}
+\label{sec:plugin}
+Between a fixed action and the policy of Section~\ref{sec:method} sits a rung that
+keeps the practitioner's magnitudes and throws away the belief's spread: collapse the
+belief to its single most likely joint state and play the cheapest action for that
+state under Table~\ref{tab:costs}. Because the two halves of the belief are
+independent by construction, the joint mode is just the pair of marginal modes, so
+nothing has to be enumerated to find it. This is certainty equivalence, and the
+state-to-action map it induces is not written down anywhere --- it is the column-wise
+$\arg\min$ of the matrix, so changing any cost moves the map with it. The arm decides
+on the same committed beliefs as Table~\ref{tab:results} and has its mistakes priced
+by the same matrix; it lives in \texttt{experiments/policy\_ladder.py}, and every
+number in this subsection is recorded in \texttt{results/policy-ladder.json}.
+
+What it shows is that at a point estimate the practitioner's magnitudes buy almost
+nothing over the flattened ones. The arm departs from the uniform baseline on 20
+cases, and on 19 of them the two candidate actions cost \emph{the same} in the column
+the decision turns on: \emph{answer} and \emph{hold} are both 0 against
+$(\text{cold}, \text{F})$. The matrix expresses no preference there, so what selects
+\emph{hold} on those 19 is the tie-break convention and not any number the
+practitioner set. Those 19 swaps save 44 realised points. The twentieth case is the
+only one where the magnitudes do prefer the arm's action at the mode, and there the
+arm is wrong and pays 4. The net margin is 40 points, and it belongs to a convention
+rather than to a cost model.
+
+Removing the convention removes the margin. Under the ordering that
+Section~\ref{sec:failure} describes as the original --- indifference resolved toward
+\emph{answer} --- the arm's \emph{hold} column does not shrink but disappears, all 19
+decisions becoming \emph{answer}, and the mean rises from 2.18 to 2.62. That is worse
+than the uniform baseline in Table~\ref{tab:results}, and it has to be: in that
+configuration the two policies choose identically everywhere except the one case the
+magnitudes genuinely drive, so the arm's total is the baseline's total plus that
+case's 4 points. Sharper still, only 9 of the 19 indifferent swaps move realised cost
+at all --- for the other 10, answering would have been just as right. A rung whose
+whole advantage is nine cases decided by a convention, in a column where the matrix
+says nothing, is not the rung it looks like.
+
+The mechanism is that collapsing the belief manufactures the ties it then has to
+break. Under the full belief an exact tie in expected cost requires a coincidence
+across six weighted entries, and it happens on one case out of the hundred, as
+Section~\ref{sec:failure} reports. At a point estimate the comparison is between two
+raw entries of a single column, and Table~\ref{tab:costs} contains an exact tie in
+the $(\text{cold}, \text{F})$ column, so every case whose mode lands there inherits
+it --- nineteen of them. Certainty equivalence promotes an implementation detail into
+the arm's dominant mechanism, and it does so by discarding exactly the information
+that would have broken the tie. This is also why the gap reported in
+Section~\ref{sec:results} cannot be decomposed by inserting this rung between its two
+ends. The asymmetry only ever acts through the spread, so collapsing to the mode does
+not weaken the asymmetry's contribution while leaving it measurable; it removes the
+asymmetry's purchase altogether. There is no stable midpoint here to read a split off
+of, and the arm's position between the two reported means is an artifact of which
+tie-break it runs under.
+
+\paragraph{The one \emph{ask}, against the ceiling.} This arm selects \emph{ask}
+once, on \texttt{a05-restricted-043}, and it is the only place in this paper where a
+comparison of costs selects that action --- the fixed rule in
+Table~\ref{tab:results} asks by construction, and the rule in
+Section~\ref{sec:entropy} asks on an uncertainty trigger that consults no cost at
+all. It does not bear on Theorem~\ref{thm:ceiling}, because the two are
+statements about different objects. The theorem compares the price of a question
+against acting now \emph{and} against acting once the answer is in, and it holds at
+every belief. This arm computes neither term. It reads one column of
+Table~\ref{tab:costs} at a state it has chosen to treat as certain, finds
+\emph{ask} at 2 below \emph{escalate-notify} at 3 once the constraint has removed
+\emph{answer}, and plays it. A cost-column $\arg\min$ at a belief that has already
+thrown away its own uncertainty is a degenerate table lookup, not a
+value-of-information claim, and the realised cost marks the difference: the case did
+need a human, and the action that the theorem's own accounting would have taken was
+free.
+
+\paragraph{What was checked, and what was noticed.} The two halves of this subsection
+have different standing, and neither lends any to the other. The arm's own numbers
+were pre-registered --- the state-to-action map, the mean, the miss count, the
+escalation count, precision and recall, all written down before the code existed ---
+and the measured output matched every field. That match confirms an implementation
+and establishes nothing about the world: the arm is a deterministic function of
+beliefs that were already committed, so it could not have discovered anything, and a
+divergence would have indicted the specification rather than the data. The
+attribution is the opposite case. It was found post-hoc, while checking whether the
+arm was comparable to a table generated under the other tie-break order, and
+\texttt{results/policy-ladder.json} labels it as such at the site. Its arithmetic was
+written down before it was implemented and matched too, which is a check on the
+arithmetic and credits nothing further.
 
 \subsection{Asking when uncertain, priced}
 \label{sec:entropy}
@@ -1389,6 +1660,103 @@ the hold row is not flat across readiness their thresholds are readiness-depende
 rather than the clean 3/13 of the answer cases. Reporting them at their true cost,
 rather than rounding every miss up to 10, is what keeps the miss total honest.
 
+\subsection{What each failure is tagged as}
+Table~\ref{tab:categories} gives each of the five a primary cause and, where the
+failure is genuinely two-cause, a secondary. The scheme is a fixed ten-name list:
+missing hidden state, bad prior, bad evidence, misleading evidence, poor
+calibration, wrong threshold, wrong cost assumption, distribution shift,
+insufficient information, and wrong action policy. Two rows carry no secondary, and
+the blank is deliberate: filling it would assert a second mechanism the artifact
+does not show.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+Case & Primary & Secondary \\
+\midrule
+\texttt{a11-repeated-097}   & wrong action policy & poor calibration \\
+\texttt{a04-booking-042}    & poor calibration    & --- \\
+\texttt{a02-deep-015}       & poor calibration    & --- \\
+\texttt{a03-followup-024}   & poor calibration    & wrong threshold \\
+\texttt{a10-persistent-091} & poor calibration    & wrong threshold \\
+\bottomrule
+\end{tabular}
+\caption{Primary and secondary cause for each of the five failures of
+Table~\ref{tab:failures}. A dash marks a single-cause failure, not a missing entry.
+Two mechanisms discussed below carry no label at all: the quantization step behind
+\texttt{a02-deep-015}, for which the scheme has no entry, and the turn-boundary
+failure of the last subsection, which is not one of these five and cannot occur in
+this case set.}
+\label{tab:categories}
+\end{table}
+
+\emph{Poor calibration} is primary on four of the five, and on
+\texttt{a04-booking-042} it is the whole account: readiness was right and
+confident, so no second cause is available and none is asserted.
+\texttt{a11-repeated-097} is the one row where calibration is not primary. Its
+calibration error is real and is the largest in the set, but it is non-binding,
+because the decision was not reached by comparing expected costs at all --- two
+actions tied and the declaration order of the action list resolved it, and the
+repair described above acts on that order rather than on the belief. What decided
+the case is what the primary tag names.
+
+Quantization appears in neither column, and it is the mechanism behind
+\texttt{a02-deep-015}. The ten names have no entry for a representation limit ---
+a belief whose granularity is coarser than the threshold it is compared against ---
+and filing it under one of them would itself be the failure the numeric-rules
+paragraph of Section~\ref{sec:entropy} names: a comparison expressed in units the
+quantity's own scale was never consulted for. The gap has that same shape, which is
+why it is carried in prose here rather than as a label. The recalibration below
+shows why it is not a small shortfall: the bin this case sits in has an observed
+frequency that is itself below the line, so refitting the marginal moves the case
+away from the threshold rather than across it.
+
+The secondary on \texttt{a03-followup-024} and \texttt{a10-persistent-091} is
+\emph{wrong threshold} and not \emph{wrong cost assumption}. The cost matrix is not
+in question on either case; what moves is the flip point, because for these two the
+binding comparison is \emph{hold} against \emph{escalate-notify} and the
+\emph{hold} row is not flat across readiness, so mass placed on the wrong readiness
+state raises the bar the needs-human estimate has to clear. On
+\texttt{a03-followup-024} the readiness estimate is also wrong, and that is what
+raises the bar; it does not produce the miss on its own, since the estimate falls
+short of the raised flip point as well as of the clean one.
+
+One of those two is not stably a failure. The re-elicitation recorded in
+Section~\ref{sec:limitations} moves \texttt{a10-persistent-091} out of the miss
+set, so whether this case is a miss at all depends on which elicitation is read. It
+is the cheapest miss the matrix allows and is retained for that reason, and the
+instability is stated here because a tag on this row is a tag on one of two
+readings.
+
+Read down the table, the five do not scatter across ten independent causes. Primary
+is \emph{poor calibration} on four and \emph{wrong action policy} on one, which
+restates the shared cause above rather than adding to it. The diagnostic content is
+in the secondaries and in the prose, where three distinct mechanisms --- the
+tie-break, the quantization step, and the readiness-dependent threshold --- are what
+turn one under-estimated marginal into a realised cost. The primary column says what
+failed; it does not say why the failure was expensive.
+
+Two of the ten names are absent by argument rather than by accident.
+\emph{Distribution shift} is not tagged anywhere: the two halves of the split are
+matched by construction, as Section~\ref{sec:split} records, and the only
+cross-population evidence in this work is the per-case re-elicitation drift of
+Section~\ref{sec:limitations}, which does not appear in any aggregate. Tagging
+distribution shift would name a cause the artifacts exclude.
+\emph{Insufficient information} is not tagged either, and there the reason is the
+central result: on this action menu asking is never rational, by
+Theorem~\ref{thm:ceiling}, so a question the agent did not ask is correct policy and
+not a missed opportunity. A failure analysis reaching for ``it should have gathered
+more'' would be contradicting the paper's own theorem.
+
+The caveat that opens this section governs the whole table. That every miss traces
+to an under-estimated needs-human probability is a statement about this labelling
+scheme and not a proof of mechanism, and the tags inherit exactly that status: they
+describe what the labels attribute, and they do not exclude cost-model
+misspecification, the coarse readiness space, or the quantization of the belief as
+contributing causes.
+
 \subsection{What recalibration actually recovers}
 Since the diagnosis above points at the needs-human marginal, it can be tested
 directly rather than left as a prediction. Replacing each elicited $b_h$ with the
@@ -1574,6 +1942,17 @@ the paper is conditional on that one draw. A re-elicitation at temperature 0
 returns the same belief for 89 of the 100 cases and a different one for 11, with
 none unparseable. What the record contains does not determine the cause, and the
 count is reported here rather than explained.
+
+The eleven are reported case by case rather than as a divergence between the two
+dates' beliefs, and the reason is what a divergence cannot see rather than how large
+one would be. A divergence is a function of the distribution of the values and is
+invariant to which case each value belongs to; case identity is where this drift's
+whole effect sits. On the test half the decisions that changed moved in both
+directions and their realised costs cancel to zero, so the totals are the one view
+in which the drift is not visible and the per-case comparison is the one in which it
+is. Table~\ref{tab:calibration} draws the same line for the same arm --- aggregate
+agreement, not a case-for-case replay --- and any summary that discards case identity
+discards exactly what that line preserves.
 
 Reproducibility has a boundary inside the artifact and another outside it. Inside:
 every number reported here is regenerated from the committed beliefs by the

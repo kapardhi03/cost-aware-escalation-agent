@@ -1,0 +1,1508 @@
+{
+  "generated_at": "2026-08-29T06:05:18.374525+00:00",
+  "source": "results/run.json",
+  "n_cases": 100,
+  "arm": "modal_plugin",
+  "map": {
+    "hot|False": "answer",
+    "hot|True": "escalate_notify",
+    "warm|False": "answer",
+    "warm|True": "escalate_notify",
+    "cold|False": "hold",
+    "cold|True": "escalate_notify"
+  },
+  "preregistration": {
+    "mean_cost": 2.18,
+    "missed_escalations": 25,
+    "escalation_precision": 0.739,
+    "escalation_recall": 0.405,
+    "escalations": 23,
+    "action_counts": {
+      "answer": 57,
+      "hold": 19,
+      "escalate_notify": 23,
+      "ask": 1
+    },
+    "map": {
+      "hot|False": "answer",
+      "warm|False": "answer",
+      "cold|False": "hold",
+      "hot|True": "escalate_notify",
+      "warm|True": "escalate_notify",
+      "cold|True": "escalate_notify"
+    }
+  },
+  "preregistration_comparison": {
+    "checks": {
+      "mean_cost": {
+        "predicted": 2.18,
+        "measured": 2.18,
+        "delta": 0.0,
+        "match": true
+      },
+      "missed_escalations": {
+        "predicted": 25,
+        "measured": 25,
+        "delta": 0,
+        "match": true
+      },
+      "escalations": {
+        "predicted": 23,
+        "measured": 23,
+        "delta": 0,
+        "match": true
+      },
+      "escalation_precision": {
+        "predicted": 0.739,
+        "measured": 0.7391,
+        "delta": 0.0001,
+        "match": true
+      },
+      "escalation_recall": {
+        "predicted": 0.405,
+        "measured": 0.4048,
+        "delta": -0.0002,
+        "match": true
+      },
+      "action_counts": {
+        "predicted": {
+          "answer": 57,
+          "hold": 19,
+          "escalate_notify": 23,
+          "ask": 1
+        },
+        "measured": {
+          "answer": 57,
+          "ask": 1,
+          "escalate_notify": 23,
+          "hold": 19
+        },
+        "match": true
+      },
+      "map": {
+        "predicted": {
+          "hot|False": "answer",
+          "warm|False": "answer",
+          "cold|False": "hold",
+          "hot|True": "escalate_notify",
+          "warm|True": "escalate_notify",
+          "cold|True": "escalate_notify"
+        },
+        "measured": {
+          "hot|False": "answer",
+          "hot|True": "escalate_notify",
+          "warm|False": "answer",
+          "warm|True": "escalate_notify",
+          "cold|False": "hold",
+          "cold|True": "escalate_notify"
+        },
+        "match": true
+      }
+    },
+    "all_match": true
+  },
+  "attribution_preregistration": {
+    "legacy_mean_cost": 2.62,
+    "legacy_action_counts": {
+      "answer": 76,
+      "ask": 1,
+      "escalate_notify": 23
+    },
+    "legacy_missed_escalations": 25,
+    "corrected_mean_cost": 2.18,
+    "disagreements_vs_baseline": 20,
+    "disagreement_pairs": {
+      "hold->answer": 19,
+      "ask->escalate_notify": 1
+    },
+    "points_saved_by_the_hold_swaps": 44,
+    "points_lost_by_the_single_ask": -4,
+    "net_points_vs_baseline": 40,
+    "disagreements_on_an_indifferent_column": 19
+  },
+  "attribution_comparison": {
+    "status": "post-hoc, not a validated prediction",
+    "checks": {
+      "legacy_mean_cost": {
+        "predicted": 2.62,
+        "measured": 2.62,
+        "match": true
+      },
+      "legacy_action_counts": {
+        "predicted": {
+          "answer": 76,
+          "ask": 1,
+          "escalate_notify": 23
+        },
+        "measured": {
+          "answer": 76,
+          "ask": 1,
+          "escalate_notify": 23
+        },
+        "match": true
+      },
+      "legacy_missed_escalations": {
+        "predicted": 25,
+        "measured": 25,
+        "match": true
+      },
+      "corrected_mean_cost": {
+        "predicted": 2.18,
+        "measured": 2.18,
+        "match": true
+      },
+      "disagreements_vs_baseline": {
+        "predicted": 20,
+        "measured": 20,
+        "match": true
+      },
+      "disagreement_pairs": {
+        "predicted": {
+          "hold->answer": 19,
+          "ask->escalate_notify": 1
+        },
+        "measured": {
+          "ask->escalate_notify": 1,
+          "hold->answer": 19
+        },
+        "match": true
+      },
+      "points_saved_by_the_hold_swaps": {
+        "predicted": 44,
+        "measured": 44,
+        "match": true
+      },
+      "points_lost_by_the_single_ask": {
+        "predicted": -4,
+        "measured": -4,
+        "match": true
+      },
+      "net_points_vs_baseline": {
+        "predicted": 40,
+        "measured": 40,
+        "match": true
+      },
+      "disagreements_on_an_indifferent_column": {
+        "predicted": 19,
+        "measured": 19,
+        "match": true
+      }
+    },
+    "all_match": true
+  },
+  "margin_attribution": {
+    "status": "FOUND POST-HOC \u2014 see module docstring item 3. Not a pre-registered prediction of the arm.",
+    "corrected": {
+      "n": 100,
+      "total_cost": 218,
+      "mean_cost": 2.18,
+      "action_counts": {
+        "answer": 57,
+        "ask": 1,
+        "escalate_notify": 23,
+        "hold": 19
+      },
+      "escalations": 23,
+      "missed_escalations": 25,
+      "escalation_precision": 0.7391,
+      "escalation_recall": 0.4048,
+      "constraint_violations": 0
+    },
+    "legacy": {
+      "n": 100,
+      "total_cost": 262,
+      "mean_cost": 2.62,
+      "action_counts": {
+        "answer": 76,
+        "ask": 1,
+        "escalate_notify": 23
+      },
+      "escalations": 23,
+      "missed_escalations": 25,
+      "escalation_precision": 0.7391,
+      "escalation_recall": 0.4048,
+      "constraint_violations": 0
+    },
+    "legacy_map": {
+      "hot|False": "answer",
+      "hot|True": "escalate_notify",
+      "warm|False": "answer",
+      "warm|True": "escalate_notify",
+      "cold|False": "answer",
+      "cold|True": "escalate_notify"
+    },
+    "baseline_agrees_with_committed": true,
+    "baseline_recomputation_mismatches": [],
+    "disagreements_vs_baseline": 20,
+    "disagreement_pairs": {
+      "ask->escalate_notify": 1,
+      "hold->answer": 19
+    },
+    "disagreements_on_an_indifferent_column": 19,
+    "indifferent_swaps_that_moved_realised_cost": 9,
+    "points_saved_by_the_hold_swaps": 44,
+    "points_lost_by_the_single_ask": -4,
+    "net_points_vs_baseline": 40,
+    "disagreements": [
+      {
+        "case_id": "a01-blast-007",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 0
+      },
+      {
+        "case_id": "a01-blast-008",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 0
+      },
+      {
+        "case_id": "a01-blast-009",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 0
+      },
+      {
+        "case_id": "a01-blast-010",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 0
+      },
+      {
+        "case_id": "a03-first-021",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 0
+      },
+      {
+        "case_id": "a03-followup-023",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 6
+      },
+      {
+        "case_id": "a03-followup-024",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 6
+      },
+      {
+        "case_id": "a03-followup-026",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 6
+      },
+      {
+        "case_id": "a05-restricted-043",
+        "modal_state": "hot|False",
+        "plugin_action": "ask",
+        "baseline_action": "escalate_notify",
+        "plugin_cost_in_modal_column": 2,
+        "baseline_cost_in_modal_column": 3,
+        "matrix_is_indifferent_here": false,
+        "realised_points_saved": -4
+      },
+      {
+        "case_id": "a06-mild-062",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": -1
+      },
+      {
+        "case_id": "a08-reaction-075",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 0
+      },
+      {
+        "case_id": "a08-reaction-076",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 0
+      },
+      {
+        "case_id": "a08-reaction-077",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 0
+      },
+      {
+        "case_id": "a08-reaction-078",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 0
+      },
+      {
+        "case_id": "a10-early-089",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": -1
+      },
+      {
+        "case_id": "a10-persistent-094",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 7
+      },
+      {
+        "case_id": "a11-first-095",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 0
+      },
+      {
+        "case_id": "a11-repeated-097",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 7
+      },
+      {
+        "case_id": "a11-repeated-098",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 7
+      },
+      {
+        "case_id": "a11-repeated-100",
+        "modal_state": "cold|False",
+        "plugin_action": "hold",
+        "baseline_action": "answer",
+        "plugin_cost_in_modal_column": 0,
+        "baseline_cost_in_modal_column": 0,
+        "matrix_is_indifferent_here": true,
+        "realised_points_saved": 7
+      }
+    ]
+  },
+  "uniform_identity": {
+    "closed_form_max_residual": 2.220446049250313e-16,
+    "hold_minus_answer_min_slack": 0.0,
+    "cases_where_hold_strictly_beats_answer": 0,
+    "cases_on_the_mode_boundary": [],
+    "restricted_cases_at_the_ask_corner": [],
+    "agreement_count_source": "results/robustness.json threshold_rule.uniform_baseline_vs_half_threshold"
+  },
+  "summaries": {
+    "all": {
+      "n": 100,
+      "total_cost": 218,
+      "mean_cost": 2.18,
+      "action_counts": {
+        "answer": 57,
+        "ask": 1,
+        "escalate_notify": 23,
+        "hold": 19
+      },
+      "escalations": 23,
+      "missed_escalations": 25,
+      "escalation_precision": 0.7391,
+      "escalation_recall": 0.4048,
+      "constraint_violations": 0
+    },
+    "dev": {
+      "n": 50,
+      "total_cost": 110,
+      "mean_cost": 2.2,
+      "action_counts": {
+        "answer": 29,
+        "escalate_notify": 12,
+        "hold": 9
+      },
+      "escalations": 12,
+      "missed_escalations": 12,
+      "escalation_precision": 0.75,
+      "escalation_recall": 0.4286,
+      "constraint_violations": 0
+    },
+    "test": {
+      "n": 50,
+      "total_cost": 108,
+      "mean_cost": 2.16,
+      "action_counts": {
+        "answer": 28,
+        "ask": 1,
+        "escalate_notify": 11,
+        "hold": 10
+      },
+      "escalations": 11,
+      "missed_escalations": 13,
+      "escalation_precision": 0.7273,
+      "escalation_recall": 0.381,
+      "constraint_violations": 0
+    }
+  },
+  "decisions": [
+    {
+      "case_id": "a01-first-001",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a01-first-002",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a01-first-003",
+      "split": "test",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a01-first-004",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a01-first-005",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a01-first-006",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a01-blast-007",
+      "split": "dev",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a01-blast-008",
+      "split": "dev",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a01-blast-009",
+      "split": "test",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a01-blast-010",
+      "split": "test",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a02-early-011",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a02-early-012",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a02-early-013",
+      "split": "test",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a02-early-014",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a02-deep-015",
+      "split": "test",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a02-deep-016",
+      "split": "dev",
+      "modal_state": "cold|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a02-deep-017",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a02-deep-018",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a03-first-019",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a03-first-020",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a03-first-021",
+      "split": "test",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a03-first-022",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a03-followup-023",
+      "split": "test",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 4,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a03-followup-024",
+      "split": "dev",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 4,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a03-followup-025",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a03-followup-026",
+      "split": "test",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 4,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-answerable-027",
+      "split": "dev",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-answerable-028",
+      "split": "test",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-answerable-029",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-answerable-030",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-answerable-031",
+      "split": "test",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-answerable-032",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-answerable-033",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-answerable-034",
+      "split": "dev",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-booking-035",
+      "split": "test",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-booking-036",
+      "split": "dev",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-booking-037",
+      "split": "dev",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-booking-038",
+      "split": "test",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-booking-039",
+      "split": "dev",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-booking-040",
+      "split": "test",
+      "modal_state": "hot|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a04-booking-041",
+      "split": "test",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a04-booking-042",
+      "split": "dev",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a05-restricted-043",
+      "split": "test",
+      "modal_state": "hot|False",
+      "action": "ask",
+      "legacy_tie_break_action": "ask",
+      "realised_cost": 4,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a05-restricted-044",
+      "split": "test",
+      "modal_state": "hot|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a05-restricted-045",
+      "split": "dev",
+      "modal_state": "hot|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a05-restricted-046",
+      "split": "test",
+      "modal_state": "hot|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a05-restricted-047",
+      "split": "dev",
+      "modal_state": "cold|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a05-restricted-048",
+      "split": "dev",
+      "modal_state": "cold|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a05-restricted-049",
+      "split": "test",
+      "modal_state": "cold|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a05-restricted-050",
+      "split": "dev",
+      "modal_state": "cold|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a05-public-051",
+      "split": "dev",
+      "modal_state": "warm|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 3,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a05-public-052",
+      "split": "test",
+      "modal_state": "warm|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 3,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a05-public-053",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a05-public-054",
+      "split": "test",
+      "modal_state": "warm|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 3,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a06-frustrated-055",
+      "split": "test",
+      "modal_state": "cold|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a06-frustrated-056",
+      "split": "dev",
+      "modal_state": "warm|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a06-frustrated-057",
+      "split": "dev",
+      "modal_state": "cold|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a06-frustrated-058",
+      "split": "dev",
+      "modal_state": "cold|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a06-frustrated-059",
+      "split": "test",
+      "modal_state": "cold|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a06-frustrated-060",
+      "split": "test",
+      "modal_state": "cold|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a06-mild-061",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a06-mild-062",
+      "split": "dev",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 1,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a07-price-063",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a07-price-064",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a07-price-065",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a07-price-066",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a07-internals-067",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a07-internals-068",
+      "split": "test",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a07-internals-069",
+      "split": "dev",
+      "modal_state": "hot|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a07-internals-070",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a08-voice-071",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a08-voice-072",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a08-voice-073",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a08-voice-074",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a08-reaction-075",
+      "split": "test",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a08-reaction-076",
+      "split": "test",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a08-reaction-077",
+      "split": "dev",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a08-reaction-078",
+      "split": "dev",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a09-oversharer-079",
+      "split": "dev",
+      "modal_state": "hot|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 3,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a09-oversharer-080",
+      "split": "dev",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a09-oversharer-081",
+      "split": "dev",
+      "modal_state": "warm|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 3,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a09-oversharer-082",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a09-oversharer-083",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a09-oversharer-084",
+      "split": "test",
+      "modal_state": "hot|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 3,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a10-early-085",
+      "split": "test",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a10-early-086",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a10-early-087",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a10-early-088",
+      "split": "dev",
+      "modal_state": "hot|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a10-early-089",
+      "split": "test",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 1,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a10-early-090",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a10-persistent-091",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a10-persistent-092",
+      "split": "test",
+      "modal_state": "hot|True",
+      "action": "escalate_notify",
+      "legacy_tie_break_action": "escalate_notify",
+      "realised_cost": 0,
+      "cost_aware_action": "escalate_notify",
+      "uniform_baseline_action": "escalate_notify"
+    },
+    {
+      "case_id": "a10-persistent-093",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a10-persistent-094",
+      "split": "dev",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 3,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a11-first-095",
+      "split": "dev",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a11-first-096",
+      "split": "test",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 0,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a11-repeated-097",
+      "split": "dev",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 3,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a11-repeated-098",
+      "split": "test",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 3,
+      "cost_aware_action": "hold",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a11-repeated-099",
+      "split": "dev",
+      "modal_state": "warm|False",
+      "action": "answer",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 10,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    },
+    {
+      "case_id": "a11-repeated-100",
+      "split": "test",
+      "modal_state": "cold|False",
+      "action": "hold",
+      "legacy_tie_break_action": "answer",
+      "realised_cost": 3,
+      "cost_aware_action": "answer",
+      "uniform_baseline_action": "answer"
+    }
+  ]
+}
