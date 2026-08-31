@@ -187,6 +187,29 @@ on the same scale. They do not. A missed handoff to a human is far more costly
 than a needless one, and some wrong answers are not a cost to trade off at all
 but a line that must not be crossed.
 
+The shape of that trade-off is easier to see on a decision with no agent in it.
+Suppose carrying an umbrella costs 2, getting caught in the rain costs 5, the
+forecast says 35\%, and on one particular morning getting caught costs 400 instead
+of 5. All four of those numbers are assumed for the illustration and none is
+measured. Leaving the umbrella behind is cheaper while $5p < 2(1-p)$, where $p$ is
+the chance of rain, so the break-even is $p^{\star} = 2/7 \approx 28.6\%$. At a
+forecast of 35\% you carry, but only just, and a small error in the forecast would
+flip the decision. Now hold the forecast and the cost of carrying fixed, and change
+only what getting caught costs. On the morning of a wedding the break-even moves to
+$2/402 \approx 0.5\%$. The forecast has not moved and the decision is no longer
+close, because nothing a forecast could plausibly say would bring it back.
+
+The general form is that the break-even is the cheap error's cost over the sum of
+both errors' costs, and it is the same expression
+Section~\ref{subsec:threshold} solves for
+this paper's threshold, on a cost matrix rather than on an umbrella. Carrying is the
+false positive, a small cost paid for nothing. Getting caught is the false negative,
+the expensive thing that was not prevented. Escalating a lead who did not need it is
+the umbrella, and answering one who needed a person is the rain. What the wedding
+shows is what the cost matrix shows: the operating point is set by the ratio of the
+two errors and not by the probability, and raising the cost of the expensive error
+on its own can take a decision that was marginal and make it not a question.
+
 This paper builds a small agent that makes the trade-off explicit. It maintains
 a belief over the lead's hidden state, split into readiness (hot, warm, cold)
 and a separate probability that the case needs a human, and at each message it
@@ -554,6 +577,7 @@ ask 2.60, answer 3.00, hold 3.68, escalate-pause 4.20, so the agent escalates,
 and the realised cost is 0 because the case truly needed a human.
 
 \subsection{Where the threshold comes from}
+\label{subsec:threshold}
 Because the readiness rows for \emph{answer} and \emph{escalate-notify} are flat
 across readiness (a false answer costs 10 in any readiness state where a human
 is needed; a needless notify costs 3 in any state where one is not), the choice
@@ -1882,6 +1906,30 @@ menu, at $b_h < 1/5$ on the hot ray, and Section~\ref{sec:unused} shows that
 region is empty here --- structurally so on the calibrated beliefs, whose
 reachable range starts above $1/5$, and contingently on the published ones.
 
+The condition is the one statement here that does not mention this dataset, and it
+is worth reading in the direction of a different deployment. It relates four prices
+and nothing else: the two fees on the \emph{ask} row, the cost of a needless
+escalation, and the cost of a false answer. Raise the cost of a false answer, which
+is what a higher-stakes deployment does, and the second term shrinks. Cheapen the
+question and the first shrinks, which Section~\ref{sec:unused} already notes.
+Either move can carry the sum below one, and on that side of the line the optimal
+policy is no longer never-ask but sometimes-ask, with the crossing given by the same
+inequality that fails here. Section~\ref{sec:boundary} sweeps that crossing
+directly, by scaling the \emph{ask} row rather than by repricing a false answer, so
+the two are one transition seen from opposite variables.
+
+None of this is measured, and the reason is worth stating rather than leaving to be
+noticed. The environment is held fixed throughout, and the three one-variable checks
+in \texttt{experiments/robustness.py} all move a variable inside it rather than
+across environments: one cell of the cost matrix perturbed with the ordering this
+paper claims is load-bearing held fixed, a single scalar threshold on the
+needs-human marginal tuned on the development half and reported on the other, and
+the case mix importance-reweighted to the author's own stated readiness prior. Each
+of those separates a property of the policy from a property of the sample. None of
+them crosses the condition, because crossing it takes a different cost matrix rather
+than a perturbed one, and the repricing named above is stated as what would put the
+ceiling at zero rather than run as an arm.
+
 The value-of-information analysis carries a boundary of its own, and it is worth
 saying exactly where it falls. Computing the continuation term needs an answer
 model: a distribution $P_b(u)$ over what the lead would reply and a posterior
@@ -1953,6 +2001,20 @@ in which the drift is not visible and the per-case comparison is the one in whic
 is. Table~\ref{tab:calibration} draws the same line for the same arm --- aggregate
 agreement, not a case-for-case replay --- and any summary that discards case identity
 discards exactly what that line preserves.
+
+One instrument for the same problem was considered and not built. If the concern is
+that the evidence pattern arriving this period differs from last period's, the
+natural alarm is a symmetric, bounded comparison of the two distributions, and
+Jensen--Shannon divergence is the standard one: it is defined even where the two
+distributions do not share support, it is symmetric in its arguments so neither
+period is privileged as the reference, and it is bounded by one bit, which is what
+makes a fixed alarm threshold on it mean anything. Nothing here implements it, and
+nothing here measures whether it would fire. It would also not have helped with the
+drift reported just above, for the reason given there: a divergence discards case
+identity, and case identity is where that drift's whole effect sits. It is recorded
+as a design option for a deployment that monitors an incoming stream, where the
+population and not the individual case is the object of comparison, and as a gap in
+this paper, which has no such monitor.
 
 Reproducibility has a boundary inside the artifact and another outside it. Inside:
 every number reported here is regenerated from the committed beliefs by the
@@ -2124,6 +2186,123 @@ of which was carried into this paper.
 The author affirms that no conversation in the discussion record is fabricated;
 that every reported result comes from a real run of the committed code over the
 committed data; and that no reference is cited that the author did not read.
+
+% --- Appendix --------------------------------------------------------------
+\appendix
+
+\section{Concept reference}
+\label{app:concepts}
+
+\subsection{Belief and inference}
+
+% concept: hidden state
+
+% concept: why a direct prediction is not enough
+
+% concept: belief as a distribution
+
+% concept: prior and posterior
+
+% concept: likelihood
+
+% concept: what uncertainty means for an agent
+
+\subsection{Entropy and information}
+
+% concept: entropy
+
+% concept: the bit
+
+% concept: information gain
+
+% concept: conditional entropy
+
+% concept: mutual information against correlation
+
+\subsection{Divergences}
+
+% concept: KL divergence, and why it is not a distance
+
+% concept: the asymmetry of KL
+
+% concept: Jensen--Shannon divergence
+
+\subsection{Calibration}
+
+% concept: calibration
+
+\subsection{Decision and the value of information}
+
+% concept: expected cost and where the threshold comes from
+
+% concept: value of information, and when more of it is not worth buying
+
+% concept: a question that is informative and still useless
+
+\subsection{Shift and stopping}
+
+% concept: distribution shift and how it would be detected
+
+% concept: when to stop and act
+
+\section{Concepts the results forced}
+\label{app:found}
+
+\subsection{The reachable-score floor}
+
+This one came from a number that looked wrong rather than from the reading list.
+After the held-out recalibration the calibrated arm escalates 41 of the 50 test
+cases, and a policy that routes most of its traffic to a human is not obviously an
+improvement on one that routes all of it. Calibration is usually treated as a fix, so
+the question was what a fix means when it moves the policy toward always-notify. The
+answer was not in the cost model. It was in the structure of the fitting algorithm:
+pool-adjacent-violators sets each pooled block's level to that block's own positive
+rate, which gives the fitted map a lowest value it can emit, and the threshold the
+belief has to fall below for \emph{answer} to win sits underneath it.
+
+Section~\ref{sec:calibration} computes that floor for the committed map, names it,
+and states the form that transfers, which is the one worth keeping: the bound is the
+positive rate of the lowest pooled block, so it is a property of the algorithm, while
+its value here is a property of this fit on this development split. Neither is
+restated in this appendix. What belongs here is only how it was reached, because the
+route is part of the concept. No scoring rule in use
+reports it. Cross-entropy fell and Brier fell while an action was being removed from
+the policy's reach, and the two facts are compatible because those rules are
+computed on the scores and the constraint is on the range the scores live in. Reading
+the loss would not have surfaced it. Asking why an action count went to zero did.
+
+\subsection{The calibration gap is a KL divergence}
+
+Calibration and cross-entropy were in the design from the start. Naming what the gap
+between them actually is came later, and from this project's own code rather than from
+the reading. Splitting cross-entropy over a set of reliability bins gives two terms:
+the label entropy inside a bin, which no predictor can remove, and the gap between the
+bin's observed frequency and the confidence stated for it, which a perfect
+recalibration would drive to zero. The second term is a Kullback-Leibler
+divergence. \texttt{ce\_decomposition} in \texttt{src/calibrate.py} computes it under
+that name, as a per-bin Bernoulli KL from the observed rate to the stated
+confidence, weighted by bin occupancy, and both terms are committed per arm in
+\texttt{results/logprob-elicitation.json}. No number from that decomposition is
+repeated here.
+
+Naming it changes how the reliability diagram reads.
+Figure~\ref{fig:reliability} plots stated confidence against observed frequency bin
+by bin, and the visible gap in the low bins is that divergence. KL is the right
+instrument for it rather than a symmetric distance, for two reasons that are
+properties of the decision and not of the plot. First, it is asymmetric, and the
+asymmetry runs the correct way: taking the observed frequency as the reference makes
+the penalty grow without bound as the stated confidence approaches certainty against
+a disagreeing observation, so confident and wrong is punished hardest, and confident
+and wrong in the needs-human direction is exactly what produces a missed escalation.
+The implementation clips only the stated side, which is what keeps the term finite.
+Second, it is the part of cross-entropy that recalibration can act on, held apart from
+the part no predictor can, rather than an extra diagnostic laid beside the loss. That
+separation is not an identity: the two terms recover the measured cross-entropy only
+if the scores are constant inside a bin, which they are not, so
+\texttt{ce\_decomposition} returns a residual next to them and the committed runs
+carry it. A symmetric distance would price the two directions of error the same,
+which is the assumption this paper is written against.
+
 \bibliographystyle{named}
 \bibliography{references}
 
