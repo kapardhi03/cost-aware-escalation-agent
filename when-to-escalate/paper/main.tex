@@ -2196,54 +2196,239 @@ committed data; and that no reference is cited that the author did not read.
 \subsection{Belief and inference}
 
 % concept: hidden state
+A hidden state is the part of the world a decision turns on and the agent cannot read
+off its input. Here it has two components, and they are separate variables rather
+than levels of one: \emph{readiness}, which is exactly one of hot, warm or cold, and
+\emph{needs-human}, which is a property of the moment rather than a fourth readiness
+level. The pair spans six joint states, and every expected cost in this paper is
+taken against those six. Section~\ref{sec:design} gives the argument for keeping them
+apart: folded into a single variable, evidence that a lead is hot would mechanically
+lower the estimated chance a person is needed, and the hot lead who needs a person is
+the case the design exists for.
 
 % concept: why a direct prediction is not enough
+A model that emitted the most likely state, or a single confidence score, would be
+cheaper to build and would not support this decision. Two of the situations the agent
+must handle are a ready buyer who needs a person and an unready message a bot should
+not touch; one score cannot separate them, because they differ on one component and
+agree on the other. The deeper reason is arithmetic. The action is chosen by expected
+cost under an asymmetric matrix (Table~\ref{tab:costs}), and an expectation needs a
+distribution over the states rather than a winner among them. A point prediction
+discards exactly the spread the matrix charges for.
 
 % concept: belief as a distribution
+The belief is what the agent holds over the hidden state given what it has seen: a
+distribution $b_r$ over hot, warm and cold that sums to one, and a separate scalar
+$b_h \in [0,1]$ for needs-human. Under the independence assumption of
+Section~\ref{sec:model} the two multiply into a distribution over the six joint
+states, which is the object expected cost is computed against. The representation
+carries a stated limit rather than an implied generality: a posterior that couples the
+two components is not a product of its marginals and cannot be written in this form,
+so Section~\ref{sec:boundary} works with the full six-state distribution wherever that
+arises.
 
 % concept: prior and posterior
+The belief before an answer arrives is the prior; the belief after a particular answer
+$u$ is the posterior $b^u$. In this agent the distinction is load-bearing in exactly
+one place, because the shipped policy never buys an answer and therefore acts only on
+priors. Where posteriors do appear, in the lookahead of Section~\ref{sec:boundary},
+the fact that carries the argument is that a posterior is itself a belief and so a
+point of the same space, which is what lets a bound proved over the whole space bind
+at every node of a tree nobody enumerates. The word has a second and unrelated sense
+here: the readiness mix the module assumes, used in the reweighting of
+Section~\ref{sec:limitations}.
 
 % concept: likelihood
+A likelihood is the probability of an observation given a hidden state, and it is the
+term a Bayes update multiplies the prior by. This agent computes none. The belief is
+produced by a language model reading the message, so the map from evidence to belief
+is learned and opaque rather than factored into a prior and a likelihood, which is why
+calibration and not the update rule is the load-bearing assumption
+(Section~\ref{sec:design}). The one likelihood-shaped object in the paper is the
+answer model of Section~\ref{sec:boundary}, supplying a distribution over replies and
+a posterior for each; it is simulated from the same model that produced the belief,
+and Section~\ref{sec:limitations} states what that does and does not support.
 
 % concept: what uncertainty means for an agent
+Uncertainty here is not a confidence figure attached to an output. It is the spread of
+the belief over the six states, and it reaches the behaviour only through the
+comparison of expected costs: two beliefs with different spreads that put the same
+expected cost on every action produce the same decision, and no report of uncertainty
+changes that. Hence the two scales the paper keeps apart, bits for the spread and cost
+points for the consequences, never compared to one another
+(Section~\ref{sec:method}). Uncertainty becomes actionable only when it moves which
+row of Table~\ref{tab:costs} is cheapest.
 
 \subsection{Entropy and information}
 
 % concept: entropy
+Entropy measures how spread a distribution is: zero when one outcome is certain,
+largest when all are equally likely. $H(b)$ in this paper is the entropy of the belief
+over the six joint states, so it compresses the agent's whole uncertainty into one
+number, and it is defined in Section~\ref{sec:method} rather than where it is used
+because a later section places a threshold on it. What it is not is a cost. It cannot
+say which action is cheapest, because it is blind to which states are expensive to be
+wrong about, and a belief concentrated on a costly state is low in entropy and high in
+risk at the same time.
 
 % concept: the bit
+The bit is the unit entropy is measured in when the logarithm is taken base two: one
+bit is the uncertainty of a fair coin. Fixing the unit fixes the scale, so $H(b)$ over
+six states has a ceiling, stated once with the definition in Section~\ref{sec:method}
+and not repeated here. The unit also does the discipline work. A threshold in bits is
+comparable only to another quantity in bits, which is why $\tau$ is the only thing
+$H(b)$ is ever compared against, and why the sweep of Section~\ref{sec:entropy} places
+$\tau$ at quantiles of the observed $H(b)$ instead of at evenly spaced absolute
+values.
 
 % concept: information gain
+Information gain scores a question by how much uncertainty its answer is expected to
+remove:
+\begin{equation}
+\mathrm{IG}(q \mid b) = H(b) - \sum_u P_b(u)\, H(b^u) ,
+\end{equation}
+starting uncertainty minus the uncertainty expected to remain once the answer arrives,
+averaged over the answers the question could receive. For Bayes posteriors the
+quantity is non-negative in expectation, though a particular answer can leave the
+agent less certain than before. This paper does not select questions with it. The
+ranking that decides anything here is by break-even price, in
+Section~\ref{sec:boundary}, and the ceiling of Section~\ref{sec:unused} is the reason:
+a question can be highly informative and still not worth its fee, so bits are the
+wrong currency for the choice this agent faces.
 
 % concept: conditional entropy
+The subtracted term above, $\sum_u P_b(u) H(b^u)$, is the conditional entropy
+$H(b \mid U)$: the entropy of the belief after the answer, averaged over which answer
+comes. Naming it that way makes the identity read as a difference of two
+uncertainties rather than as a formula. It is also the same shape as the continuation
+term in the value-of-information expression of Section~\ref{sec:unused}, with expected
+leftover uncertainty standing where expected cost of acting later stands. The shapes
+match and the units do not, and that difference is the whole of why one of the two
+decides anything.
 
 % concept: mutual information against correlation
+Mutual information is the information gain of learning one variable about another, and
+it is zero exactly when the two are independent. Correlation is the weaker instrument:
+it is zero whenever a linear relationship is absent, which can happen while a strong
+dependence remains. The distinction has a concrete place here. Readiness and
+needs-human are \emph{assumed} independent, and Section~\ref{sec:model} is explicit
+that the run never observes the joint and so cannot check the assumption; no mutual
+information is computed anywhere in this paper. What is observed is the neighbouring
+fact in Section~\ref{sec:boundary}: the question aimed at both halves of the state
+returns a posterior that is not a product of its own marginals, so an answer can couple
+two components a prior held apart.
 
 \subsection{Divergences}
 
 % concept: KL divergence, and why it is not a distance
+Kullback-Leibler divergence measures how far one distribution is from another by asking
+what it costs to describe samples from the first while believing the second. It is zero
+only when the two agree and positive otherwise, which is what makes it serviceable as a
+gap. It is not a distance: it is asymmetric, it obeys no triangle inequality, and it is
+unbounded, growing without limit as the believed distribution approaches certainty
+against an observation that disagrees. In this paper it appears as the miscalibration
+term of the cross-entropy split described in Appendix~\ref{app:found}, taken per
+reliability bin between the observed frequency and the confidence stated for that bin.
 
 % concept: the asymmetry of KL
+Because the two arguments are not interchangeable, using KL means choosing which
+distribution is the reference, and that choice is a modelling decision rather than a
+convention. Here the observed frequency is the reference and the stated confidence is
+the argument, so the penalty grows without bound as a confident claim meets a
+disagreeing observation. The direction is chosen to match the cost matrix: confident
+and wrong in the needs-human direction is precisely what produces a missed escalation,
+the error Table~\ref{tab:costs} prices highest. A symmetric measure would price both
+directions of error alike, which is the assumption this design is written against.
 
 % concept: Jensen--Shannon divergence
+Jensen--Shannon divergence is the symmetrised, bounded relative of KL: it compares each
+distribution against their mixture, is unchanged if the arguments swap, stays defined
+where the two do not share support, and is bounded by one bit. Those are the properties
+a fixed alarm threshold needs, which is why Section~\ref{sec:limitations} names it as
+the natural instrument for comparing one period's evidence against another's. Nothing
+here implements it, and the same section states why it would not have helped with the
+drift actually observed: a divergence is a function of the distribution of the values
+and is invariant to which case each value belongs to, and case identity is where that
+drift's whole effect sits.
 
 \subsection{Calibration}
 
 % concept: calibration
+A belief is calibrated when the frequencies match the claims: among the cases given a
+stated probability, about that fraction turn out positive. It is the load-bearing
+assumption of this design, because the policy compares expected costs computed from
+$b_h$, and a systematically low $b_h$ makes the automated actions look cheaper than
+they are. The paper measures it as expected calibration error on the needs-human
+marginal, that being the marginal the threshold acts on, with cross-entropy and Brier
+score reported alongside for the held-out fit of Section~\ref{sec:calibration}. What
+happens there is the reason the concept has to be stated carefully rather than assumed:
+a map fitted on one half improved all three of those measures on the other half while
+removing an action from the policy's reach, so a belief can be better calibrated by
+every rule named in advance and worse as an input to this decision.
+Appendix~\ref{app:found} takes up the mechanism.
 
 \subsection{Decision and the value of information}
 
 % concept: expected cost and where the threshold comes from
+The policy scores each feasible action by its expected cost under the current belief,
+summing that action's cost in each of the six joint states against the state's
+probability, and takes the cheapest. A threshold is not an extra parameter in such a
+scheme; it is where two of those expectations cross. Because the \emph{answer} and
+\emph{escalate-notify} rows of Table~\ref{tab:costs} are flat across readiness, their
+comparison reduces to a condition on $b_h$ alone, and Section~\ref{subsec:threshold}
+solves it for the crossing $b_h^{\star}$. The general shape is worth separating from
+this matrix: the break-even is the cheap error's cost over the sum of both errors'
+costs, so the threshold moves when the prices move and in no other way.
 
 % concept: value of information, and when more of it is not worth buying
+The value of information of a question is what knowing the answer saves, measured in
+the units of the decision rather than in bits: the cost of acting now, less the fee for
+asking and the expected cost of acting on whatever posterior the answer produces.
+Written that way it can be negative, and on this matrix it always is.
+Section~\ref{sec:unused} proves a negative ceiling at every belief, and because every
+cost in Table~\ref{tab:costs} is non-negative the bound survives any depth of
+lookahead, so the tree collapses to acting now. The form that transfers is the
+inequality $c_F/\nu + c_T/\alpha < 1$, relating the two fees on the \emph{ask} row to
+the cost of a needless escalation and to the cost of a false answer; it fails here, and
+Section~\ref{sec:boundary} sweeps the crossing directly. Information is worth buying
+when it is cheap against the errors it prevents, not because it is informative.
 
 % concept: a question that is informative and still useless
+The two properties come apart, and this paper contains the clean case.
+Section~\ref{sec:unused} reports case-question pairs on which the answer resolves the
+hidden state outright, leaving the continuation term at zero because whatever is done
+afterwards is free. Asking still loses on those pairs, and loses by the full ceiling
+rather than by a residue, because the fee is paid before the answer arrives. A question
+with maximal information gain is therefore turned down on price. The mirror case is
+measured too: the control question, whose answer cannot depend on the state, carries a
+break-even of exactly zero in Section~\ref{sec:boundary}, worth buying at no price
+above free. Between them they mark out why the selection rule in this agent compares
+costs and not bits.
 
 \subsection{Shift and stopping}
 
 % concept: distribution shift and how it would be detected
+Distribution shift is the case where the population the agent meets stops matching the
+one its thresholds were set against, and it disables a policy without breaking a line
+of its code. Two forms appear in this artifact and neither is monitored.
+Section~\ref{sec:limitations} reports a re-elicitation of the same beliefs from the
+same model returning a different value on some cases, where the totals cancel and the
+per-case comparison is the only view in which anything is visible; and it records a
+population-level alarm, considered and not built, together with the unit its threshold
+would have to be read in. The detection question is what the object of comparison is. A
+summary over a stream can see a population move and cannot see a case change identity,
+and a policy whose thresholds are fixed rationals is exposed to both.
 
 % concept: when to stop and act
+Stopping is a decision like the others here, priced rather than assumed. An agent that
+can ask, hold or act needs a rule for when further evidence stops being worth its cost,
+and the value-of-information expression is that rule: gather while the expected saving
+exceeds the fee, act once it does not. On this matrix the rule returns act-now
+everywhere, and Section~\ref{sec:unused} shows the answer does not depend on the
+horizon, so being myopic costs nothing here for a reason the policy itself never
+verifies. Section~\ref{sec:limitations} is explicit that this is a property of four
+prices rather than a general licence: on a matrix satisfying the asking condition the
+same rule would say gather, and this design would have nothing with which to do it.
 
 \section{Concepts the results forced}
 \label{app:found}
