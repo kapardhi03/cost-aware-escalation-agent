@@ -1,0 +1,298 @@
+{
+  "source": "results/run.json (unmodified)",
+  "n_cases": 100,
+  "metrics": {
+    "cost_aware": {
+      "n": 100,
+      "confusion": {
+        "tp": 26,
+        "fp": 17,
+        "fn": 16,
+        "tn": 41
+      },
+      "accuracy": 0.67,
+      "precision": 0.6047,
+      "recall": 0.619,
+      "missed_escalations": 16,
+      "mean_cost": 1.72,
+      "mean_decision_cost": 1.72,
+      "mean_info_cost": 0.0,
+      "human_count": 43,
+      "human_rate_pct": 43.0,
+      "asks": 0
+    },
+    "uniform_baseline": {
+      "n": 100,
+      "confusion": {
+        "tp": 18,
+        "fp": 6,
+        "fn": 24,
+        "tn": 52
+      },
+      "accuracy": 0.7,
+      "precision": 0.75,
+      "recall": 0.4286,
+      "missed_escalations": 24,
+      "mean_cost": 2.58,
+      "mean_decision_cost": 2.58,
+      "mean_info_cost": 0.0,
+      "human_count": 24,
+      "human_rate_pct": 24.0,
+      "asks": 0
+    },
+    "always_notify": {
+      "n": 100,
+      "confusion": {
+        "tp": 42,
+        "fp": 58,
+        "fn": 0,
+        "tn": 0
+      },
+      "accuracy": 0.42,
+      "precision": 0.42,
+      "recall": 1.0,
+      "missed_escalations": 0,
+      "mean_cost": 1.74,
+      "mean_decision_cost": 1.74,
+      "mean_info_cost": 0.0,
+      "human_count": 100,
+      "human_rate_pct": 100.0,
+      "asks": 0
+    },
+    "always_ask": {
+      "n": 100,
+      "confusion": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 42,
+        "tn": 58
+      },
+      "accuracy": 0.58,
+      "precision": null,
+      "recall": 0.0,
+      "missed_escalations": 42,
+      "mean_cost": 2.84,
+      "mean_decision_cost": 0.0,
+      "mean_info_cost": 2.84,
+      "human_count": 0,
+      "human_rate_pct": 0.0,
+      "asks": 100
+    },
+    "always_answer": {
+      "n": 100,
+      "confusion": {
+        "tp": 8,
+        "fp": 0,
+        "fn": 34,
+        "tn": 58
+      },
+      "accuracy": 0.66,
+      "precision": 1.0,
+      "recall": 0.1905,
+      "missed_escalations": 34,
+      "mean_cost": 3.4,
+      "mean_decision_cost": 3.4,
+      "mean_info_cost": 0.0,
+      "human_count": 8,
+      "human_rate_pct": 8.0,
+      "asks": 0
+    }
+  },
+  "identities": {
+    "label_base_rate": 0.42,
+    "always_notify_accuracy_equals_base_rate": true,
+    "always_notify_accuracy_equals_its_precision": true,
+    "always_ask_accuracy_equals_majority_class": true
+  },
+  "human_rate_check": {
+    "cost_aware": {
+      "committed_escalation_count": 43,
+      "recomputed_human_count": 43,
+      "human_rate_pct": 43.0,
+      "count_equals_pct_because_n_is_100": true,
+      "agrees": true
+    },
+    "uniform_baseline": {
+      "committed_escalation_count": 24,
+      "recomputed_human_count": 24,
+      "human_rate_pct": 24.0,
+      "count_equals_pct_because_n_is_100": true,
+      "agrees": true
+    },
+    "always_notify": {
+      "committed_escalation_count": 100,
+      "recomputed_human_count": 100,
+      "human_rate_pct": 100.0,
+      "count_equals_pct_because_n_is_100": true,
+      "agrees": true
+    },
+    "always_ask": {
+      "committed_escalation_count": 0,
+      "recomputed_human_count": 0,
+      "human_rate_pct": 0.0,
+      "count_equals_pct_because_n_is_100": true,
+      "agrees": true
+    },
+    "always_answer": {
+      "committed_escalation_count": 8,
+      "recomputed_human_count": 8,
+      "human_rate_pct": 8.0,
+      "count_equals_pct_because_n_is_100": true,
+      "agrees": true
+    }
+  },
+  "corrected_tie_break": {
+    "decisions_changed": [
+      {
+        "case_id": "a11-repeated-097",
+        "legacy": "answer",
+        "corrected": "hold"
+      }
+    ],
+    "columns_that_move": [
+      "mean_decision_cost"
+    ],
+    "only_decision_cost_moves": true,
+    "corrected": {
+      "n": 100,
+      "confusion": {
+        "tp": 26,
+        "fp": 17,
+        "fn": 16,
+        "tn": 41
+      },
+      "accuracy": 0.67,
+      "precision": 0.6047,
+      "recall": 0.619,
+      "missed_escalations": 16,
+      "mean_cost": 1.65,
+      "mean_decision_cost": 1.65,
+      "mean_info_cost": 0.0,
+      "human_count": 43,
+      "human_rate_pct": 43.0,
+      "asks": 0
+    },
+    "legacy": {
+      "n": 100,
+      "confusion": {
+        "tp": 26,
+        "fp": 17,
+        "fn": 16,
+        "tn": 41
+      },
+      "accuracy": 0.67,
+      "precision": 0.6047,
+      "recall": 0.619,
+      "missed_escalations": 16,
+      "mean_cost": 1.72,
+      "mean_decision_cost": 1.72,
+      "mean_info_cost": 0.0,
+      "human_count": 43,
+      "human_rate_pct": 43.0,
+      "asks": 0
+    },
+    "committed_mean_cost": 1.72
+  },
+  "committed_agreement": {
+    "cost_aware": {
+      "mean_cost": true,
+      "precision": true,
+      "recall": true,
+      "missed_escalations": true
+    },
+    "uniform_baseline": {
+      "mean_cost": true,
+      "precision": true,
+      "recall": true,
+      "missed_escalations": true
+    },
+    "always_notify": {
+      "mean_cost": true,
+      "precision": true,
+      "recall": true,
+      "missed_escalations": true
+    },
+    "always_ask": {
+      "mean_cost": true,
+      "precision": true,
+      "recall": true,
+      "missed_escalations": true
+    },
+    "always_answer": {
+      "mean_cost": true,
+      "precision": true,
+      "recall": true,
+      "missed_escalations": true
+    }
+  },
+  "preregistration": {
+    "accuracy": {
+      "cost_aware": 0.67,
+      "uniform_baseline": 0.7,
+      "always_notify": 0.42,
+      "always_ask": 0.58,
+      "always_answer": 0.66
+    },
+    "info_cost": {
+      "cost_aware": 0.0,
+      "uniform_baseline": 0.0,
+      "always_notify": 0.0,
+      "always_ask": 2.84,
+      "always_answer": 0.0
+    },
+    "decision_cost": {
+      "cost_aware": 1.72,
+      "uniform_baseline": 2.58,
+      "always_notify": 1.74,
+      "always_ask": 0.0,
+      "always_answer": 3.4
+    },
+    "human_rate": {
+      "cost_aware": 43,
+      "uniform_baseline": 24,
+      "always_notify": 100,
+      "always_ask": 0,
+      "always_answer": 8
+    },
+    "base_rate": 0.42,
+    "corrected_cost_aware_decision_cost": 1.65,
+    "corrected_changes_only_decision_cost": true
+  },
+  "preregistration_comparison": {
+    "status": "arithmetic check, not a prediction \u2014 the values were computed by hand from the committed rows first",
+    "checks": {
+      "accuracy": {
+        "cost_aware": true,
+        "uniform_baseline": true,
+        "always_notify": true,
+        "always_ask": true,
+        "always_answer": true
+      },
+      "info_cost": {
+        "cost_aware": true,
+        "uniform_baseline": true,
+        "always_notify": true,
+        "always_ask": true,
+        "always_answer": true
+      },
+      "decision_cost": {
+        "cost_aware": true,
+        "uniform_baseline": true,
+        "always_notify": true,
+        "always_ask": true,
+        "always_answer": true
+      },
+      "human_rate": {
+        "cost_aware": true,
+        "uniform_baseline": true,
+        "always_notify": true,
+        "always_ask": true,
+        "always_answer": true
+      },
+      "base_rate": true,
+      "corrected_cost_aware_decision_cost": true,
+      "corrected_changes_only_decision_cost": true
+    },
+    "all_match": true
+  }
+}

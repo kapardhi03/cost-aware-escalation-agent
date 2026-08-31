@@ -2136,3 +2136,103 @@ needed on 13 — because agreement on a tied case is an artifact of the tie-brea
 | AM11 | S4 stated as a transferable method with all five occurrences named; the tie-break instance never without its tie count | (Kaps-decided) | **confirmed** |
 | AM12 | Ethics closing rewritten in the paper's register; the last three non-ASCII characters removed and `main.tex` is now ASCII throughout | (Kaps-decided) | **confirmed** |
 | AM13 | `:1195`'s hardcoded "§7.3" pointed at the theorem subsection where it meant Calibration; replaced with a `\ref` | (AI-proposed) | **changed** |
+
+## After v2.0.0 — the five-step pass, Steps 0 to 3
+
+AM1–AM13 closed with the Gate 7 paper pass, and these steps land after the release
+tag. They extend the tagged paper rather than opening a v3, under one rule: a framing
+section references a number that already lives in a committed file and never restates
+it. What this block adds beyond the usual tags is three places where the decision
+taken was not the decision instructed. They are recorded as overrides because that is
+what they were — the plan overruled by an artifact or by an argument, not smoothly
+executed — and a log showing only the smooth version is the version a later reader
+would wrongly trust. The provenance column tags each row by where the decision was
+taken during execution; any row that was in fact Kaps's call should be retagged rather
+than left crediting the wrong party.
+
+**AN7 — the specified arm was not built, because the record already contained it.**
+The instruction specified a rung that plays the argmax on the belief. Under the
+uniform matrix that arm reproduces `uniform_baseline` on every case, and the agreement
+is already committed, as `threshold_rule.uniform_baseline_vs_half_threshold` in
+`results/robustness.json`. Building it would have added a second name for a baseline
+the record already has, and the ladder would have gained a rung that measures nothing.
+The modal-state plug-in under the real cost matrix was built instead: the same
+certainty-equivalence idea, against a matrix that expresses preferences, so the arm
+has somewhere to disagree with the baseline and does. The coincidence the literal spec
+would have re-labelled is not dropped — it is discharged as an executed identity, the
+five closed forms checked against `expected_cost` with the residual in
+`uniform_identity`, so the algebra is an assertion the code makes rather than a remark
+in prose.
+
+**AN19 — S4's count stays at five, and belief quantization is not the sixth.** The
+instruction was to name quantization as an instance of S4. It was not, and the reason
+is a distinction that complying would have lost. S4's five are numeric rules somebody
+authored in units nobody checked them against: Gate 2's collapse count, Gate 3's
+absolute sweep grid, the τ deciles, the `argmax_q VoI` tie-break, the figure's
+annotation offset. Belief quantization is not an authored rule at all — it is the
+granularity of an elicitation the harness inherited and never imposed, which Gate 0
+established by inspection. It has S4's shape, which is why the instruction is
+tempting, and it is not a member, which is why the count did not move. Step 2 had
+already found the sharper statement independently: quantization is the mechanism
+behind one of the five failures and the ten-name scheme has no entry for it, because a
+list of modelling and policy faults has no name for a limit of the representation.
+Folding it into S4 would have traded a gap the paper names for a membership the paper
+would then have to defend, and double-counted a mechanism already load-bearing
+elsewhere.
+
+**AN3 — the drift limitation took the committed ground and not the run.** Two options
+stood: emit a run computing the divergence between the two dates' belief distributions
+with the crossing cases split out, or rest the paragraph on the per-case count already
+committed and argue in prose that a divergence is the wrong instrument for it. The
+second was taken, and it is a scope call rather than an execution. The argument is that
+a divergence is a function of the distribution of the values and invariant to which
+case each value belongs to, while case identity is where this drift's whole effect
+sits — the decisions that changed moved in both directions and their realised costs
+cancel, so the totals are the one view in which the drift is invisible. A run producing
+the split would have been texture on a caveat rather than a finding, and would have put
+a file in the record that no claim in the paper needs. It is a decision to leave a
+number uncomputed, and it is recorded here precisely because nothing in the artifacts
+will ever show that it was considered.
+
+Two statuses in this block are about the standing of evidence rather than about a
+design, and they are tagged as decisions because deciding to label a check as the
+weaker thing it is, when the stronger label was available and would have read better,
+is a decision. AN12: Step 3b's "pre-registration" is an arithmetic check — values
+computed by hand from the committed rows before the script ran — so its match confirms
+that the script reproduces known arithmetic and predicts nothing, and the artifact's
+own `status` field says so. AN17: Step 3c's pre-registration is a genuine prediction
+that missed one field, `lambda_star_real_under_quarter`, and the miss is left in the
+artifact and named in the paper rather than absorbed into the fields that held. Step 3a
+splits into both kinds at once, which is why AN9 and AN10 are separate rows: the arm's
+own pre-registration was genuine and matched but buys only spec conformance, while the
+tie-break attribution that became the subsection's headline was found post-hoc, and
+does not acquire the pre-registration's standing by having turned out strong. All three
+labels were written into the artifacts during execution, which is why they are tagged
+AI-proposed; the standing rule they follow — that a check is reported at its actual
+strength — and the instruction that they survive into this record are Kaps's.
+
+| # | Decision | Provenance | Status |
+|---|---|---|---|
+| AN1 | Block prefixed AN; AM1–AM13 closed with the Gate 7 paper pass. Steps 0–3 land after `v2.0.0` and extend the tagged paper rather than opening a v3 | (AI-proposed) | **confirmed** |
+| AN2 | Step 0: `when-to-escalate/skill/` ignored as a directory, appended below the `figures/*` block rather than merged into it | (AI-proposed) | **confirmed** |
+| AN3 | Step 1: the drift limitation rests on the committed per-case count plus an argument about what a divergence cannot see; option (a), emit a run, declined. **Override** — a scope call, not an execution | (AI-proposed) | **changed** |
+| AN4 | Step 1: the paragraph points at `tab:calibration` for the same aggregate-versus-per-case line rather than restating it | (AI-proposed) | **confirmed** |
+| AN5 | Step 2: the ten-name scheme is fixed and two rows keep a dash; a blank secondary is not filled, because filling it asserts a mechanism the artifact does not show | (Kaps-decided) | **confirmed** |
+| AN6 | Step 2: quantization named as a mechanism the scheme has no entry for, rather than forced into the nearest name it has | (AI-proposed) | **confirmed** |
+| AN7 | Step 3a: the argmax-on-belief arm not built — under the uniform matrix it reproduces `uniform_baseline` on every case, already committed in `results/robustness.json`; the modal-state plug-in under the real matrix built instead. **Override** of the literal spec, by artifact | (AI-proposed) | **changed** |
+| AN8 | Step 3a: the coincidence the spec would have re-labelled is discharged as an executed identity — five closed forms against `expected_cost`, residual in `uniform_identity` — not as prose | (AI-proposed) | **confirmed** |
+| AN9 | Step 3a: the arm's pre-registration is genuine and matched, and what a match buys is spec conformance; the script's docstring states the limit rather than leaving it to be noticed | (AI-proposed) | **confirmed** |
+| AN10 | Step 3a: the tie-break attribution labelled post-hoc in both the artifact and the paper; it does not inherit the pre-registration's standing | (AI-proposed) | **confirmed** |
+| AN11 | Step 3b: a separate script and a separate artifact, because `results/run.json` is byte-compared by three test modules and a new summary key would break the reproduction claim | (AI-proposed) | **confirmed** |
+| AN12 | Step 3b: the "pre-registration" labelled an arithmetic check in the artifact's own `status`, not a passed blind test | (AI-proposed) | **changed** |
+| AN13 | Step 3b: the human-routing rate replaces the escalation count rather than joining it, with the equality asserted per policy so the replacement stops being safe the moment the case count changes | (AI-proposed) | **confirmed** |
+| AN14 | Step 3c: two versions of the one-step arm — the necessary-condition one the theorem bounds and the real one the answer model supports — reported together, never one alone | (AI-proposed) | **confirmed** |
+| AN15 | Step 3c: break-evens solved in closed form with the grid kept only as a cross-check the closed form can be contradicted by; tie-break held at the unscaled order and asking counted on a strict inequality, so no reported boundary rests on a tie | (AI-proposed) | **confirmed** |
+| AN16 | Step 3c: expected cost computed on the six-state joint and validated against `costs.expected_cost` on the factorising priors; the existing `NonFactorisingError` respected, not worked around | (AI-proposed) | **confirmed** |
+| AN17 | Step 3c: `lambda_star_real_under_quarter` recorded as a miss, named in the paper, and the exit status deliberately left unchanged by a divergence | (AI-proposed) | **changed** |
+| AN18 | Step 3c: the offset attributed only under three conditions, with "unexplained" as the alternative the script would have written, and separated from the existing sign claim rather than qualifying it | (AI-proposed) | **confirmed** |
+| AN19 | Step 3c: S4's count stays at five — quantization shares S4's shape but is not a member, the five being authored rules and this an inherited representation. **Override** of the instruction to name it as an instance | (AI-proposed) | **changed** |
+| AN20 | Step 3c: agreement measured against the corrected tie-break with the one divergent case reported by id, rather than the target quietly redefined to let a prediction pass | (AI-proposed) | **confirmed** |
+| — | Gate 8's design rows are owed and not written: V1 discharged by panel 1 with panels 2 and 3 resolved-not-built, the stale V1 row at `:944`, the `.gitignore` item at `:268-270` discharged, `v2.0.0` landing on a reconciliation merge against M5's `:874`, and G11 confirmed by the tag objects. Flagged in `build-log.md`'s Gate 8 entry, unedited here | (AI-proposed) | **noted** |
+
+

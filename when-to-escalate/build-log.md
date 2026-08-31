@@ -2018,3 +2018,237 @@ zero non-ASCII characters. Every number written traces to
 The paper is not compiled here — no TeX exists in this sandbox — so the fit of a
 nine-column tabular in a two-column layout is an estimate and the build is Kaps's to
 confirm.
+
+### Gate 8 — the two tags and the merge (2026-08-28)
+
+M5, and the correction at `decisions/v2-design-decisions.md:919`, left Gate 8 two
+items: the two tags and the single merge to `main`. Both tags exist, both are
+annotated, and both were created minutes apart. `v1.0.0` sits on `53e5ae3`, the PR #7
+merge that is v1's head, and reads "v1.0.0 — Week-1 cost-aware escalation preprint";
+G11 registered it as a retroactive tag placed before `v2.0.0`, and the tag objects
+show that ordering. `v2.0.0` reads "v2.0.0 — impossibility theorem, calibration
+floor, held-out recalibration".
+
+Where `v2.0.0` landed is not where M5's paragraph pictured it, and that earns a
+sentence. `a3d5470` is a merge of local `main` with `origin/main` after PR #12 — its
+parents are `ad7bf23` and `87020e4` — so the release tag names a reconciliation
+commit rather than the last commit that changed the paper. The tree it names is the
+right one, and it is the only one of the two parents carrying the refreshed PDF. But
+a reader looking for the release's content will find the entropy subsection behind
+one parent and the PDF on the other, and the tag on neither.
+
+The PDF was refreshed in the same pass, at `ad7bf23`, so the tracked `main.pdf`
+corresponds to the source `v2.0.0` names. That build was Kaps's and local: no TeX
+exists in this sandbox, so what is recorded here is that the commit claims the
+correspondence, not that the artifact was re-derived to confirm it.
+
+Epistemic status: nothing was measured and nothing computed, and Gate 8 produced no
+results artifact. Its whole checkable content is the two tag targets and the merge
+topology, which are git facts, read back from `refs/tags` and the parent list rather
+than inferred from the commit subjects.
+
+The read that accompanied the gate also turned up design-record work that is owed and
+NOT written, recorded here so the debt survives rather than being rediscovered later
+in a flattering form. V1 is discharged by panel 1 alone:
+`paper/figures/reliability-needs-human.pdf` is tracked and first landed at
+`b8c8209`, which closes the build fix that `decisions/v2-gate7-preregistration.md:35`
+argues V1 actually was, while panels 2 and 3 stay as `:41` describes them — computed
+and `--check`-verified with no rendering code at all. So V1's row at
+`decisions/v2-design-decisions.md:944` is now stale in both of its clauses, and it is
+flagged rather than edited, because it is a dated entry in an append-only record and
+G9/G12 make that a rule. The `.gitignore` conflict that `:268-270` calls Gate 8's one
+remaining technical item is discharged, and the `figures/*` line now carries its own
+comment against the plausible fix that would re-ignore the paper's figure. Whether
+Gate 7 met what `:35` and `:41` registered — a checkout that compiles, and three
+panels — needs a status rather than an assumption. None of this is settled here.
+
+---
+
+## After v2.0.0 — the five-step pass
+
+These commits land after the release tag, on `main` directly, and they extend the
+tagged paper rather than opening a v3. The rule the phase runs under is that a
+framing section references a number that already lives in a committed file and never
+restates it, because the project's one asset is that every number traces to one
+place. Provenance tags for these steps are in `decisions/v2-design-decisions.md`
+under the AN block, including the three places where a decision overrode the
+instruction it was given.
+
+### Step 0 — ignore the local authoring aids (2026-08-29, `cb60754`)
+
+`when-to-escalate/skill/` lives in the tree and is not part of the research record.
+Four lines in `.gitignore`, ignored as a directory so anything added beside it is
+covered, with the reason in a comment. It is deliberately appended below the
+`figures/*` block rather than merged into it: that block already carries a warning
+against the plausible "fix" that would re-ignore the figure the paper includes, and
+the new stanza has no business standing near it.
+
+Epistemic status: no artifact, no measurement, no claim. Tree hygiene.
+
+### Step 1 — the drift limitation rests on committed ground (2026-08-29, `9a10f86`)
+
+Limitations reports the re-elicitation drift as a per-case count already in the
+record. Two ways to strengthen it were available: (a) emit a run computing the
+divergence between the two dates' belief distributions and the split of the crossing
+cases, or (b) rest the paragraph on the committed count and say in prose why a
+divergence is the wrong instrument for it. (b) was taken. Eleven lines into
+`main.tex`, and the argument is that a divergence is a function of the distribution
+of the values and invariant to which case each value belongs to, while case identity
+is where this drift's whole effect sits — the decisions that changed moved in both
+directions and their realised costs cancel, so the totals are the one view in which
+the drift is invisible and the per-case comparison is the one in which it is not. It
+closes by pointing at `tab:calibration`, which draws the same line for the same arm.
+
+Epistemic status: no new number and no new artifact. Every quantity the paragraph
+leans on was already committed, and what the pass added is an argument about what a
+summary statistic cannot see. The choice between (a) and (b) is recorded as an
+override in the AN block, because it was a scope call and not an execution: the
+crossing-split numbers would have been texture on a caveat rather than a finding, and
+a run emitted for them would have put a file in the record that no claim needs.
+
+### Step 2 — failure tags, and what the scheme cannot name (2026-08-29, `6ddde08`)
+
+`tab:categories` gives each of the five failures a primary cause and, where the
+artifact shows two mechanisms, a secondary, against a fixed ten-name list declared in
+the prose. Two rows carry a dash, and the dash is load-bearing: filling it would
+assert a second mechanism the artifact does not show. The subsection then says what
+the scheme has no entry for. Quantization is the mechanism behind one of the five and
+appears in neither column, because a ten-name list of modelling and policy faults has
+no name for a limit of the representation; and the turn-boundary failure discussed
+later is not one of the five and cannot occur in this case set.
+
+Epistemic status: an interpretation of committed rows, not a measurement. Each tag is
+a judgment about mechanism, pinned to what the committed record shows for that case,
+and the paper says which of them is a reading rather than a reading-off. The one
+non-obvious tag is the row where the calibration error is the largest in the set and
+still not primary, because the decision was never reached by comparing expected costs
+at all: two actions tied and the declaration order of the action list settled it, so
+the calibration error there is real and non-binding. That the blank column would later
+become the anchor for the S4 override in Step 3c was not visible at this pass.
+
+### Step 3a — the plug-in rung, and where its margin comes from (2026-08-29)
+
+Four commits: `93acc2c` and `eebaa51` on the arm, `17598e5` and `3c37974` on the
+paper. The ladder was missing a policy that has the cost matrix but not the
+uncertainty. `experiments/policy_ladder.py` adds one arm — collapse the belief to its
+most likely joint state, play the cheapest action for that state under the real
+matrix — and derives the state-to-action map from `COST` by argmin rather than writing
+it down, so the map moves if the matrix does. It reads `results/run.json`, touches no
+provider, and writes `results/policy-ladder.json` and `.md`. The paper side is a
+subsection resting on the identity the arm sits beside: under the uniform matrix the
+five expected costs have closed forms, from which the baseline's whole behaviour
+follows without reference to any case set, and the agreement count against a plain
+threshold is referenced to `results/robustness.json` rather than restated.
+
+This step carries TWO epistemic statuses, and merging them would misreport it.
+
+The arm's own pre-registration was genuine — written before the run, carrying the
+corrected-configuration map and every count — and it matched: every field of
+`preregistration_comparison` in `results/policy-ladder.json` reads `match: true`.
+What a match there buys is narrower than it looks, and the script says so in its own
+docstring rather than leaving it to be noticed: every belief is committed and the arm
+is a deterministic function of them, so the numbers were fixed before the code ran,
+and the comparison verifies that the implementation matches the specification. It is
+not evidence about the arm's behaviour. A mismatch would have meant the spec was
+wrong.
+
+The attribution that became the subsection's headline was found POST-HOC and was
+never a pre-registered check. The arm was specified, pre-registered and run before
+that section existed; the attribution was computed afterwards, while checking whether
+the arm was comparable to a committed table generated under the other tie-break
+order. What it found is that the rung's margin over the baseline rests on a tie-break
+convention rather than on the cost magnitudes — the matrix expresses no preference at
+all in the column most of the disagreements turn on.
+`attribution_comparison.status` in the artifact reads "post-hoc, not a validated
+prediction", and the predicted-against-measured fields under it are an arithmetic
+check written after the fact, not a blind test. The finding is the strongest thing in
+the step. It does not acquire the pre-registration's standing by being strong, and
+nothing in it lends the pre-registered check credibility or takes any away.
+
+### Step 3b — the three columns the results table was missing (2026-08-29, `9ba10cf`)
+
+Accuracy, the information/decision cost split, and the human-routing rate.
+`experiments/table_metrics.py` computes them from `results/run.json` and writes
+`results/table-metrics.json` and `.md`. It is a separate script rather than a change
+to `run_policies.py` because `run.json` is byte-compared by three test modules, and a
+new key in its summaries would break the reproduction claim those tests exist to
+hold. The script also asserts the two identities that make two entries of the accuracy
+column forced rather than measured, so the table cannot be read as showing
+discrimination where it shows arithmetic; and it re-decides the cost-aware row under
+the corrected tie-break, because the footnote's claim about what moves was written
+when that row had fewer columns than it now has.
+
+Epistemic status: this step's "pre-registration" was an ARITHMETIC CHECK, and it is
+labelled as the weaker thing it is rather than as a passed blind test. The values were
+computed by hand from the committed rows before the script ran, so the match confirms
+that the script reproduces arithmetic already known; it predicts nothing.
+`preregistration_comparison.status` in `results/table-metrics.json` says exactly that
+in the artifact's own words. It is a regression test with an honest label. The checks
+in this pass with something to fail are the other two: that the recomputed old columns
+agree with the committed summary, which is what would catch this script and the run
+disagreeing about what an escalation is, and that the human-routing rate is the
+escalation count the table already carried, which is what lets the new column replace
+the old one instead of printing one number into two cells of one row.
+
+### Step 3c — running the lookahead the theorem collapses (2026-08-29)
+
+`2d7cb8c` carries the arm and its artifacts, `f40a2f0` the subsection. The theorem's
+collapse of the lookahead had never been executed, and the paper's one-step rule
+existed only as an inequality. `experiments/voi_boundary.py`
+runs it in two versions, and the pair is the point. The necessary-condition arm takes
+the post-answer act cost to be zero everywhere — not a policy anyone would ship, but
+exactly the quantity the theorem bounds — and the real arm prices an answer at the
+actual expected cost of acting on the actual posterior, question by question, from the
+committed answer model. The gap between the two is the distance between the bound and
+the answers that exist, and reporting either alone would hide it. Nothing is searched:
+each case's break-even is solved in closed form, one exact rational per case and
+question, and the grid sweep is kept only as a cross-check the closed form can be
+contradicted by. Expected cost is computed on the six-state joint, because the
+question aimed at both halves of the state produces a posterior that does not
+factorise and the paper's belief type cannot express one — the existing code raises
+rather than projecting, and the joint scorer is validated against
+`costs.expected_cost` on the priors, which do factorise. The artifacts are
+`results/voi-boundary.json` and `.md`, and `sec:boundary` in `main.tex` reports them.
+
+Epistemic status: a GENUINE prediction — none of the switch points were known when the
+pre-registration was written — that MISSED ONE FIELD, and the miss is recorded as a
+miss. `preregistration_comparison.fields` in `results/voi-boundary.json` carries
+predicted against measured for every field, and the one whose `match` reads false is
+`lambda_star_real_under_quarter`. The reasoning behind that prediction was that a
+single answer rarely moves the act decision; what happened is that the question aimed
+at the needs-human half changes the act decision on enough of its answers at the
+maximising case to beat that reasoning, which the per-case
+`questions.*.answer_changes_the_action` records show. A pre-registration divergence
+prints a note to stderr and deliberately does not change the script's exit status, and
+the paper's own closing paragraph names the miss rather than leaving it in the JSON.
+
+The offset is the part of this step most exposed to being tidied, so how it was kept
+honest belongs in the record. Theory predicted a boundary, the arm switched below it,
+and the gap is reported where it landed and attributed rather than rounded away:
+`offset_from_analytic` and `offset_cause` carry it, and `offset_diagnosis` carries the
+three conditions the script required before it would write a cause at all — the
+theorem's own witness belief reproducing the analytic value through this arm's
+expected-cost code, every committed value on the grid, and the maximising value off it
+— with "unexplained" as the alternative it would have written instead. The prose then
+separates that from the claim already in the paper that quantization is not the cause,
+which is about the sign of the ceiling and is not qualified by this: what quantization
+sets here is the margin, and a result about a sign and a result about a distance are
+not the same result.
+
+That attribution only stays honest because the missed field sits beside it. A step
+that reports a predicted offset, its exact size and its cause, and then summarises
+itself as "the prediction held", has laundered the miss. The summary is that the
+prediction held except where `lambda_star_real_under_quarter` says it did not.
+
+Verified after the pass: `python3 experiments/voi_boundary.py` exits 0 with every
+entry under `checks` true and the joint scorer agreeing with `costs.expected_cost`;
+`python3 -m pytest tests -q` 772 passing, so `results/run.json` and the three modules
+that byte-compare it are untouched by all four steps; `python3
+tests/paper_preflight.py paper/main.tex` PASS. The paper is not compiled here — no TeX
+exists in this sandbox — so float placement for the new subsection is unverified and
+the build is Kaps's to confirm, as it was at Gate 7.
+
+
+
+
+
