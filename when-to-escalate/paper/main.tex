@@ -1919,6 +1919,46 @@ inequality that fails here. Section~\ref{sec:boundary} sweeps that crossing
 directly, by scaling the \emph{ask} row rather than by repricing a false answer, so
 the two are one transition seen from opposite variables.
 
+\subsection{One environment change, three variables}
+The condition above is stated for this deployment; the brief's question is what it
+says about a different one. Take the move from an inbound sales inbox to a
+higher-stakes setting --- an enterprise or regulated channel where a wrong answer
+is not a lost lead but a compliance exposure --- and change one variable at a time,
+reading each change straight off $c_F/\nu + c_T/\alpha < 1$ rather than re-running
+anything.
+
+A false answer that costs a hundred times more is a rise in $\alpha$. It shrinks
+$c_T/\alpha$ toward zero and carries the sum below one, so the never-ask result of
+Theorem~\ref{thm:ceiling} is exactly the result that breaks: on that side of the
+line the optimal policy is sometimes-ask, and the crossing is the one
+Section~\ref{sec:boundary} already sweeps by scaling the \emph{ask} row, since
+raising $\alpha$ and cheapening the question move the same sum from opposite
+variables. This is the one change of the three that overturns a headline finding
+rather than shifting a magnitude.
+
+Evidence ten times more expensive to obtain is a rise in $c_F$ and $c_T$ together.
+It pushes the sum further above one, so asking stays dominated and stays dominated
+harder; the direction of the result is unchanged and only its margin grows. The two
+changes pull opposite ways on the same inequality, which is why a single number
+governs both and neither needs its own experiment.
+
+Historical data that no longer describes the incoming population is the case the
+paper does measure, under another name. It is the reweighting of
+Section~\ref{sec:limitations}: the case mix is not the mix the belief module
+assumes, and importance-weighting toward the assumed prior moves the cost-aware
+policy from 1.720 to 1.456 and the baseline from 2.580 to 2.526, widening the gap
+rather than closing it. The direction survives; the magnitude does not. What that
+buys for a shifted deployment is a bound, not a transfer: a result whose sign is
+stable under reweighting is one an unreliable historical mix cannot flip, but its
+size is a property of whichever weighting is chosen, and neither is authoritative.
+
+The three together mark the boundary of what a fixed cost matrix can be trusted to
+carry. Two of the changes leave the ordering of actions intact and move only what
+the paper already reports --- a margin, a reweighted mean. The third crosses the
+condition and turns a proof into its negation, and it does so through a single term,
+which is the whole reason the condition rather than any one experiment is the part
+worth carrying to another deployment.
+
 None of this is measured, and the reason is worth stating rather than leaving to be
 noticed. The environment is held fixed throughout, and the three one-variable checks
 in \texttt{experiments/robustness.py} all move a variable inside it rather than
