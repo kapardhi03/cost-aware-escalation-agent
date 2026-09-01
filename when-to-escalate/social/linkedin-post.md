@@ -1,21 +1,23 @@
-Published: https://www.linkedin.com/posts/kapardhi-kannekanti_when-to-escalate-a-cost-aware-belief-policy-ugcPost-7496717815702462464-7Ila/
+Published: https://lnkd.in/p/dzkemd7u
 
-I spent this week building a small agent for a problem I actually hit in production: a lead messages you, and you can't tell if they're a real buyer, a competitor fishing for pricing, or a bot. Answer them, ask a qualifying question, hold, or escalate to a human? Every wrong choice costs something different, and most agents treat those costs as equal. This one doesn't.
+Better calibration made my agent worse. Every metric said it got better.
  
-The approach: instead of one confidence score, the agent holds a two-part belief, a readiness distribution (hot/warm/cold) and a separate needs-human probability, then picks the action with the lowest expected cost under a matrix where a missed escalation is priced far above a needless one. A false claim on legal or land documents isn't priced at all, it's a hard constraint the policy can't cross.
+Continuing the research project from last week: an agent replying to inbound leads that has to act before it knows intent. Answer, ask a question, hold, or hand off to a human.
  
-Then I spent most of the week trying to break my own result, which is the part worth sharing:
+The belief it works from is a probability, so I did the obvious thing and calibrated it. Fit a map on half the cases, scored the other half.
  
-The cost-aware policy beats the cost-blind one, but the cost-blind baseline turned out to be nothing more than a 0.5 threshold in disguise. So part of that "win" is less than it looks, and the writeup says so.
+Cross-entropy down. ECE down. Brier down. Every calibration number moved the right way.
  
-Against an always-escalate policy, it doesn't win on cost at all. What it buys is human load, the same expected cost while escalating 43 conversations out of 100 instead of all 100.
+Then I looked at what it actually did. It stopped answering entirely and escalated 41 of 50 cases. Much worse at the real job.
  
-Every missed escalation traced to one under-confident marginal. But recalibrating it only halved the misses. The rest survive because the model emits probabilities at one decimal place, and 35% of cases sit pinned at exactly 0.2, just under the threshold. That quantization floor, not the recalibration, was the real finding.
+The reason is structural, not a bug. The map I fit can't output a probability below 6/23, and the threshold for answering sits underneath that. So after calibration the belief physically cannot enter the region where answering is the right call.
  
-And two of the five actions were selected zero times in 100 cases. The five-action design is a three-action policy in practice.
+Better calibrated. Blind to the one part of the space the decision needed.
  
-None of the numbers transfer to a live inbox, it's synthetic data, and I'm clear about that throughout.
+None of my scoring rules would have caught this. They grade the probabilities. The failure is in the range the probabilities can reach, and no proper scoring rule looks there.
  
-I learned more from what didn't hold than from what did. If you've run message agents or any human-in-the-loop system in production: where does a myopic one-step cost policy break in ways a synthetic test can't show? 
+It's synthetic data and I say so throughout. But the lesson holds: a metric improving is not the decision improving, and the gap between them can be a wall you don't see until you check the decisions themselves.
+
+#AIagents #MachineLearning #LLM #conversationalAI #humanintheloop
 
 
