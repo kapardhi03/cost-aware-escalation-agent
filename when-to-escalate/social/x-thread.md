@@ -16,3 +16,12 @@ The reason is structural, not a bug. The map can't output a probability below 6/
 Better calibrated. Blind to the one part of the space the decision needed.None of my scoring rules would catch it. They grade the probabilities. The failure is in the range the probabilities can reach, and no proper scoring rule looks there.
 
 Synthetic data, and I say so throughout. But the lesson holds: a metric improving is not the decision improving, and the gap can be a wall you don't see until you check the decisions themselves.
+
+
+
+Link to prev Threads: 
+[https://x.com/kapardhi200903/status/2090948515669381337?s=20]
+[https://x.com/kapardhi200903/status/2087843047048667263?s=20]
+[https://x.com/kapardhi200903/status/2086573388441735217?s=20]
+[https://x.com/kapardhi200903/status/2086467587278585969?s=20]
+[https://x.com/kapardhi200903/status/2086101541015204264?s=20]
