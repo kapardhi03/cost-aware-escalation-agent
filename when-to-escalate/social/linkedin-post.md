@@ -21,3 +21,7 @@ It's synthetic data and I say so throughout. But the lesson holds: a metric impr
 #AIagents #MachineLearning #LLM #conversationalAI #humanintheloop
 
 
+Links to perv posts: 
+[https://lnkd.in/p/dGgMvvmv]
+[https://lnkd.in/p/dARM362D]
+[https://lnkd.in/p/dJVNVkiy]
