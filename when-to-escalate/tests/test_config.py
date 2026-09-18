@@ -87,11 +87,12 @@ def test_non_boolean_is_rejected_or_defaulted(config, monkeypatch, token):
 # Provider validation
 # --------------------------------------------------------------------------- #
 
-@pytest.mark.parametrize("name", ["auto", "openai", "google", "rule"])
+@pytest.mark.parametrize("name", ["auto", "openai", "google", "typesafe", "rule"])
 def test_valid_providers_accepted(config, monkeypatch, name):
     monkeypatch.setenv("BELIEF_PROVIDER", name)
     monkeypatch.setenv("OPENAI_API_KEY", "sk-x")
     monkeypatch.setenv("GOOGLE_API_KEY", "g-x")
+    monkeypatch.setenv("TYPE_SAFE_AI_API", "ts-x")
     if name == "rule":
         # Pinning the keyword provider under a strict default is a contradiction,
         # and is reported as one rather than silently resolved either way.
@@ -409,3 +410,43 @@ def test_cache_only_is_shown_in_describe(config, monkeypatch):
     monkeypatch.setenv("BELIEF_CACHE_ONLY", "true")
     text = config.load_settings(reload=True, load_env_files=False).describe()
     assert "cache only" in text and "no LLM call" in text
+
+
+# --------------------------------------------------------------------------- #
+# TypeSafe key handling
+# --------------------------------------------------------------------------- #
+
+def test_typesafe_key_read_from_env(config, monkeypatch):
+    monkeypatch.setenv("TYPE_SAFE_AI_API", "apikey_from_env")
+    monkeypatch.setenv("BELIEF_ALLOW_RULE_FALLBACK", "true")
+    s = config.load_settings(reload=True, load_env_files=False)
+    assert s.typesafe_api_key == "apikey_from_env"
+
+
+def test_typesafe_key_in_live_providers(config, monkeypatch):
+    monkeypatch.setenv("TYPE_SAFE_AI_API", "ts-k")
+    monkeypatch.setenv("BELIEF_ALLOW_RULE_FALLBACK", "true")
+    s = config.load_settings(reload=True, load_env_files=False)
+    assert "typesafe" in s.live_providers
+
+
+def test_typesafe_pinned_without_key_rejected(config, monkeypatch):
+    monkeypatch.setenv("BELIEF_PROVIDER", "typesafe")
+    with pytest.raises(config.ConfigError, match="TYPE_SAFE_AI_API"):
+        config.load_settings(reload=True, load_env_files=False)
+
+
+def test_typesafe_key_not_leaked_in_repr(config, monkeypatch):
+    monkeypatch.setenv("TYPE_SAFE_AI_API", "apikey_secret_value")
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-x")
+    text = repr(config.load_settings(reload=True, load_env_files=False))
+    assert "apikey_secret_value" not in text
+    assert "<set:" in text
+
+
+def test_typesafe_key_not_leaked_in_describe(config, monkeypatch):
+    monkeypatch.setenv("TYPE_SAFE_AI_API", "apikey_secret_value")
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-x")
+    text = config.load_settings(reload=True, load_env_files=False).describe()
+    assert "apikey_secret_value" not in text
+    assert "key set" in text

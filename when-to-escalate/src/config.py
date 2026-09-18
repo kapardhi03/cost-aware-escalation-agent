@@ -204,6 +204,7 @@ class Settings:
     cache_path: Path               # absolute
     openai_api_key: Optional[str]
     google_api_key: Optional[str]
+    typesafe_api_key: Optional[str] = None
     cache_only: bool = False       # serve from cache; a miss is an error
     env_files: tuple[Path, ...] = ()
 
@@ -218,7 +219,8 @@ class Settings:
             f"cache_path={str(self.cache_path)!r}, "
             f"cache_only={self.cache_only}, "
             f"openai_api_key={self._mask(self.openai_api_key)}, "
-            f"google_api_key={self._mask(self.google_api_key)})"
+            f"google_api_key={self._mask(self.google_api_key)}, "
+            f"typesafe_api_key={self._mask(self.typesafe_api_key)})"
         )
 
     @staticmethod
@@ -231,19 +233,23 @@ class Settings:
 
     def has_key(self, provider: str) -> bool:
         return bool({"openai": self.openai_api_key,
-                     "google": self.google_api_key}.get(provider))
+                     "google": self.google_api_key,
+                     "typesafe": self.typesafe_api_key}.get(provider))
 
     @property
     def live_providers(self) -> tuple[str, ...]:
         """LLM providers with a key present, in chain order."""
-        return tuple(p for p in ("openai", "google") if self.has_key(p))
+        return tuple(p for p in ("openai", "google", "typesafe") if self.has_key(p))
 
     def require_key(self, provider: str) -> str:
         """Fetch a key or explain precisely what is missing."""
         key = {"openai": self.openai_api_key,
-               "google": self.google_api_key}.get(provider)
+               "google": self.google_api_key,
+               "typesafe": self.typesafe_api_key}.get(provider)
         if not key:
-            var = "OPENAI_API_KEY" if provider == "openai" else "GOOGLE_API_KEY"
+            var = {"openai": "OPENAI_API_KEY",
+                   "google": "GOOGLE_API_KEY",
+                   "typesafe": "TYPE_SAFE_AI_API"}.get(provider, provider.upper() + "_API_KEY")
             raise ConfigError(
                 f"Provider {provider!r} needs {var}, which is not set. "
                 f"Add it to .env (checked: "
@@ -263,6 +269,8 @@ class Settings:
             f"({'key set' if self.openai_api_key else 'NO KEY'})",
             f"  google model     : {self.google_model} "
             f"({'key set' if self.google_api_key else 'NO KEY'})",
+            f"  typesafe model   : jev "
+            f"({'key set' if self.typesafe_api_key else 'NO KEY'})",
             f"  cache path       : {self.cache_path}",
             f"  cache only       : {'YES (no LLM call will be made)' if self.cache_only else 'no'}",
         ])
@@ -298,7 +306,7 @@ def _validate(settings: Settings) -> Settings:
         )
 
     # A concrete LLM provider needs its key -- unless nothing will be generated.
-    if settings.provider in ("openai", "google") and not settings.cache_only:
+    if settings.provider in ("openai", "google", "typesafe") and not settings.cache_only:
         settings.require_key(settings.provider)
 
     # The failure mode worth catching early: a strict run with no way to satisfy
@@ -348,6 +356,7 @@ def load_settings(*, reload: bool = False, load_env_files: bool = True) -> Setti
         cache_path=_resolve_path(_read_str("BELIEF_CACHE_PATH", DEFAULT_CACHE_PATH)),
         openai_api_key=_read_secret("OPENAI_API_KEY"),
         google_api_key=_read_secret("GEMINI_API_KEY") or _read_secret("GOOGLE_API_KEY"),
+        typesafe_api_key=_read_secret("TYPE_SAFE_AI_API"),
         cache_only=_read_bool("BELIEF_CACHE_ONLY", DEFAULT_CACHE_ONLY),
         env_files=env_files,
     ))
