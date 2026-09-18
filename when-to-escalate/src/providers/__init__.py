@@ -16,6 +16,7 @@ from .base import Provider, ProviderError
 from .google_provider import GoogleProvider
 from .openai_provider import OpenAIProvider
 from .rule_provider import RuleProvider
+from .typesafe_provider import TypeSafeProvider
 
 _REGISTRY: dict[str, Provider] = {}
 
@@ -33,9 +34,10 @@ def register(provider: Provider) -> Provider:
 register(OpenAIProvider())
 register(GoogleProvider())
 register(RuleProvider())
+register(TypeSafeProvider())
 
 #: Real-model providers, in the order the automatic chain tries them.
-LLM_CHAIN_ORDER = ("openai", "google")
+LLM_CHAIN_ORDER = ("openai", "google", "typesafe")
 
 #: The rule provider's registry name, kept as a constant so nothing hardcodes it.
 RULE_PROVIDER = "rule"
@@ -60,6 +62,6 @@ def llm_chain() -> tuple[Provider, ...]:
 
 __all__ = [
     "Provider", "ProviderError", "OpenAIProvider", "GoogleProvider",
-    "RuleProvider", "register", "get_provider", "available_providers",
-    "llm_chain", "LLM_CHAIN_ORDER", "RULE_PROVIDER",
+    "RuleProvider", "TypeSafeProvider", "register", "get_provider",
+    "available_providers", "llm_chain", "LLM_CHAIN_ORDER", "RULE_PROVIDER",
 ]

@@ -39,6 +39,7 @@ PROJECT_VARS = (
     "LOGPROB_CACHE_PATH", "LOGPROB_CACHE_ONLY",
     "OPENAI_API_KEY", "OPENAI_MODEL", "GOOGLE_API_KEY", "GEMINI_API_KEY",
     "GOOGLE_MODEL",
+    "TYPE_SAFE_AI_API",
 )
 
 
@@ -100,6 +101,7 @@ def make_settings(tmp_path):
             cache_path=tmp_path / "cache.json",
             openai_api_key=None,
             google_api_key=None,
+            typesafe_api_key=None,
         )
         overrides.setdefault("cache_path", tmp_path / "cache.json")
         return config_mod._validate(dataclasses.replace(base, **overrides))
@@ -200,3 +202,49 @@ def no_sdks(monkeypatch):
         return real_import(name, *args, **kwargs)
 
     monkeypatch.setattr("builtins.__import__", _blocked)
+
+
+@pytest.fixture
+def fake_typesafe(monkeypatch):
+    """Monkeypatch urllib.request.urlopen to return a scripted TypeSafe response."""
+    import io
+    import urllib.request
+
+    def _install(payload=None, error=None):
+        rec = RecordingSDK()
+
+        default_payload = {
+            "model": "jev-latest",
+            "answers": {
+                "readiness": {
+                    "type": "choice",
+                    "choice": "warm",
+                    "confidence": 0.72,
+                    "probabilities": {"hot": 0.2, "warm": 0.5, "cold": 0.3},
+                },
+                "needs_human": {
+                    "type": "noul",
+                    "noul": 0.4,
+                    "confidence": 0.85,
+                },
+            },
+            "usage": {"input_tokens": 100, "output_tokens": 20},
+        }
+
+        def _urlopen(req, **kwargs):
+            rec.keys.append(req.get_header("Authorization"))
+            body = json.loads(req.data)
+            rec.messages.append(body.get("state", ""))
+            rec.models.append("jev")
+            if error is not None:
+                raise error
+            resp_bytes = json.dumps(payload or default_payload).encode()
+            resp = io.BytesIO(resp_bytes)
+            resp.read = resp.read  # already works
+            resp.__enter__ = lambda s: s
+            resp.__exit__ = lambda s, *a: None
+            return resp
+
+        monkeypatch.setattr(urllib.request, "urlopen", _urlopen)
+        return rec
+    return _install

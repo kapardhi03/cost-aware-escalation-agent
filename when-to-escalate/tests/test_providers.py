@@ -12,11 +12,11 @@ import pytest
 # --------------------------------------------------------------------------- #
 
 def test_expected_providers_are_registered(providers):
-    assert set(providers.available_providers()) == {"openai", "google", "rule"}
+    assert set(providers.available_providers()) == {"openai", "google", "rule", "typesafe"}
 
 
-def test_llm_chain_order_is_openai_then_google(providers):
-    assert [p.name for p in providers.llm_chain()] == ["openai", "google"]
+def test_llm_chain_order_is_openai_then_google_then_typesafe(providers):
+    assert [p.name for p in providers.llm_chain()] == ["openai", "google", "typesafe"]
 
 
 def test_rule_is_not_in_the_llm_chain(providers):
@@ -28,6 +28,7 @@ def test_rule_is_not_in_the_llm_chain(providers):
 def test_is_llm_flags(providers):
     assert providers.get_provider("openai").is_llm is True
     assert providers.get_provider("google").is_llm is True
+    assert providers.get_provider("typesafe").is_llm is True
     assert providers.get_provider("rule").is_llm is False
 
 
@@ -242,3 +243,43 @@ def test_none_output_raises(providers):
     from providers.json_utils import extract_json
     with pytest.raises(ValueError, match="no text"):
         extract_json(None)
+
+
+# --------------------------------------------------------------------------- #
+# TypeSafe provider
+# --------------------------------------------------------------------------- #
+
+def test_typesafe_availability_tracks_key(providers, make_settings):
+    p = providers.get_provider("typesafe")
+    assert p.is_available(make_settings(typesafe_api_key="ts-x")) is True
+    assert p.is_available(make_settings()) is False
+
+
+def test_typesafe_receives_key_and_message(providers, make_settings, fake_typesafe):
+    rec = fake_typesafe()
+    p = providers.get_provider("typesafe")
+    settings = make_settings(typesafe_api_key="apikey_test_123")
+    result = p.generate_raw("I want to buy now", settings)
+    assert result["hot"] == pytest.approx(0.2)
+    assert result["warm"] == pytest.approx(0.5)
+    assert result["cold"] == pytest.approx(0.3)
+    assert result["needs_human"] == pytest.approx(0.4)
+    assert rec.keys == ["Bearer apikey_test_123"]
+    assert "I want to buy now" in rec.messages[0]
+
+
+def test_typesafe_error_becomes_provider_error(providers, make_settings, fake_typesafe):
+    import urllib.error
+    fake_typesafe(error=urllib.error.URLError("network down"))
+    p = providers.get_provider("typesafe")
+    with pytest.raises(providers.ProviderError, match="connection failed"):
+        p.generate_raw("Hi", make_settings(typesafe_api_key="ts-x"))
+
+
+def test_typesafe_model_name(providers, make_settings):
+    assert providers.get_provider("typesafe").model_name(make_settings()) == "jev"
+
+
+def test_typesafe_is_last_in_chain(providers):
+    chain = [p.name for p in providers.llm_chain()]
+    assert chain[-1] == "typesafe"
